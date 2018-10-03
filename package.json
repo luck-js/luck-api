@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/dkarski/luck/issues"
   },
-  "homepage": "https://github.com/dkarski/luck#readme"
+  "homepage": "https://github.com/dkarski/luck#readme",
+  "dependencies": {
+    "mocha": "^5.2.0"
+  }
 }
