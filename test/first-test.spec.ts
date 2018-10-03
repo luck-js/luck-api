@@ -1,4 +1,5 @@
-var assert = require('assert');
+import 'mocha';
+import * as assert from 'assert';
 
 describe('first test', function(){
     it('should throw error', function(){
