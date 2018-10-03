@@ -4,7 +4,7 @@
   "description": "server application",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --colors \"./test/**/*.spec.js\""
+    "test": "mocha --colors -r ts-node/register \"./test/**/*.spec.ts\""
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,10 @@
   },
   "homepage": "https://github.com/dkarski/luck#readme",
   "dependencies": {
-    "mocha": "^5.2.0"
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.11.3",
+    "mocha": "^5.2.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.1"
   }
 }
