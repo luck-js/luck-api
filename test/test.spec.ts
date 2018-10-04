@@ -3,11 +3,15 @@ import * as assert from 'assert';
 import * as sinon from 'sinon';
 
 describe('Members of happening', function(){
+    const Happening = {
+        isPublish: sinon.spy(),
+        addMember: sinon.stub()
+    };
+
     it('Added member should be unique link ', function(){
-        const Happening = {
-            isPublish: false,
-            addMember: sinon.spy()
-        };
+        Happening.addMember.returns({
+            uniqueLink: 'ed3f768sa'
+        });
 
         const billMember = Happening.addMember('Bill');
 
@@ -16,10 +20,8 @@ describe('Members of happening', function(){
 
 
     it('Publishing happening should be closed on adding new members', function(){
-        const Happening = {
-            isPublish: true,
-            addMember: sinon.stub().throws()
-        };
+        Happening.isPublish.returned(false);
+        Happening.addMember.throws();
 
         assert.throws(function(){
             Happening.addMember('Bill');
