@@ -8,4 +8,8 @@ export class MemberRepository {
     public getList(): IMember[] {
         return null
     }
+
+    public updateMatchedMemberId(id: string, idMatched: string,) {
+
+    }
 }
