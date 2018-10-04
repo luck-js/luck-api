@@ -41,9 +41,23 @@ describe('Members of happening', function () {
     });
 
 
-    it('Publishing happening should match members', function () {
-        happening.getMembers().forEach((member) => {
-            assert.notStrictEqual(member.matchedMemberId, null)
+    describe('Get members', function () {
+        it('Publishing happening should match members ', function(){
+            happening.isPublish = true;
+
+            happening.getMembers().forEach((member) => {
+                assert.notStrictEqual(member.matchedMemberId, null)
+            })
+        });
+
+        it('Not Publishing happening shouldnt match members ', function(){
+            happening.isPublish = false;
+
+            happening.getMembers().forEach((member) => {
+                assert.strictEqual(member.matchedMemberId, null)
+            })
         })
+
+
     })
 });
