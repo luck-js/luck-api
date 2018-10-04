@@ -1,4 +1,4 @@
-import {MatchingService} from './matching.service';
+import {MatchingMemberService} from './matchingMemberService';
 import {MemberRepository} from './member.repository';
 import {IMember} from './member.model';
 
@@ -8,13 +8,9 @@ export class Member implements IMember {
     uniqueLink: string;
     matchedMemberId: string;
 
-    constructor(private memberRepository: MemberRepository,
-                private matchingService: MatchingService) {
+    constructor() {
 
     }
 
-    matchMember() {
-        this.matchedMemberId = this.matchingService.randomObject(this.id, this.memberRepository.getList());
-        this.memberRepository.updateMatchedMemberId(this.id, this.matchedMemberId)
-    }
+
 }
