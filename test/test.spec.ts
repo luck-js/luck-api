@@ -3,13 +3,26 @@ import * as assert from 'assert';
 import * as sinon from 'sinon';
 
 describe('Members of happening', function(){
-    it('Created member should be unique link ', function(){
+    it('Added member should be unique link ', function(){
         const Happening = {
-            createMember: sinon.spy()
+            isPublish: false,
+            addMember: sinon.spy()
         };
 
-        const billMember = Happening.createMember('Bill');
+        const billMember = Happening.addMember('Bill');
 
         assert.notStrictEqual(billMember.uniqueLink,null);
-    })
+    });
+
+
+    it('Publishing happening should be closed on adding new members', function(){
+        const Happening = {
+            isPublish: true,
+            addMember: sinon.stub().throws()
+        };
+
+        assert.throws(function(){
+            Happening.addMember('Bill');
+        })
+    });
 });
