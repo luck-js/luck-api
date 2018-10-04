@@ -2,19 +2,24 @@ import 'mocha';
 import * as assert from 'assert';
 import * as sinon from 'sinon';
 import {Happening} from '../happening/happening';
+import {MemberRepository} from '../member/member.repository';
 
 describe('Members of happening', function () {
     let happening;
 
     beforeEach(function () {
-        happening = new Happening(null);
+        const memberRepository = sinon.createStubInstance(MemberRepository, {
+            add: sinon.stub()
+        });
+
+        memberRepository.add.returns({
+            uniqueLink: 'ed3f768sa'
+        });
+
+        happening = new Happening(memberRepository);
     });
 
     it('Added member should be unique link ', function () {
-        /*sinon.stub(happening, 'addMember').returns({
-            uniqueLink: 'ed3f768sa'
-        });*/
-
         const billMember = happening.addMember('Bill');
 
         assert.notStrictEqual(billMember.uniqueLink, null);
