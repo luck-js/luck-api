@@ -1,42 +1,42 @@
 import 'mocha';
 import * as assert from 'assert';
 import * as sinon from 'sinon';
+import {Happening} from '../happening/happening';
 
-describe('Members of happening', function(){
-    const Happening = {
-        isPublish: sinon.spy(),
+describe('Members of happening', function () {
+    const happening = sinon.createStubInstance(Happening, {
         addMember: sinon.stub(),
         getMembers: sinon.stub(),
-    };
+    });
 
-    it('Added member should be unique link ', function(){
-        Happening.addMember.returns({
+    it('Added member should be unique link ', function () {
+        happening.addMember.returns({
             uniqueLink: 'ed3f768sa'
         });
 
-        const billMember = Happening.addMember('Bill');
+        const billMember = happening.addMember('Bill');
 
         assert.notStrictEqual(billMember.uniqueLink,null);
     });
 
 
-    it('Publishing happening should be closed on adding new members', function(){
-        Happening.isPublish.returned(false);
-        Happening.addMember.throws();
+    it('Publishing happening should be closed on adding new members', function () {
+        happening.isPublish = false;
+        happening.addMember.throws();
 
-        assert.throws(function(){
-            Happening.addMember('Bill');
+        assert.throws(function () {
+            happening.addMember('Bill');
         })
     });
 
 
-    it('Publishing happening should match members', function(){
+    it('Publishing happening should match members', function () {
         const billMember = {
             matchedMemberId: 'e2'
         };
 
-        Happening.getMembers.returns([billMember, billMember]);
-        Happening.getMembers().forEach((member) => {
+        happening.getMembers.returns([billMember, billMember]);
+        happening.getMembers().forEach((member) => {
             assert.notStrictEqual(member.matchedMemberId, null)
         })
     })
