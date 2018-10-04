@@ -5,7 +5,8 @@ import * as sinon from 'sinon';
 describe('Members of happening', function(){
     const Happening = {
         isPublish: sinon.spy(),
-        addMember: sinon.stub()
+        addMember: sinon.stub(),
+        getMembers: sinon.stub(),
     };
 
     it('Added member should be unique link ', function(){
@@ -27,4 +28,16 @@ describe('Members of happening', function(){
             Happening.addMember('Bill');
         })
     });
+
+
+    it('Publishing happening should match members', function(){
+        const billMember = {
+            matchedMemberId: 'e2'
+        };
+
+        Happening.getMembers.returns([billMember, billMember]);
+        Happening.getMembers().forEach((member) => {
+            assert.notStrictEqual(member.matchedMemberId, null)
+        })
+    })
 });
