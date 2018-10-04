@@ -20,6 +20,16 @@ export class Happening implements IHappening {
     }
 
     getMembers(): IMember[] {
-        return this.memberRepository.getList();
+        if (this.isPublish) {
+            return this.memberRepository.getList();
+
+        } else {
+            return this.memberRepository.getList()
+                .reduce((memberList, member) => {
+                    // @ts-ignore
+                    memberList.push(Object.assign({}, member, {matchedMemberId: null}));
+                    return memberList
+                },[]);
+        }
     }
 }
