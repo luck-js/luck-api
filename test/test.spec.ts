@@ -9,12 +9,18 @@ describe('Members of happening', function () {
 
     beforeEach(function () {
         const memberRepository = sinon.createStubInstance(MemberRepository, {
-            add: sinon.stub()
+            add: sinon.stub(),
+            getList: sinon.stub(),
         });
 
         memberRepository.add.returns({
             uniqueLink: 'ed3f768sa'
         });
+        const billMember = {
+            matchedMemberId: 'e2'
+        };
+
+        memberRepository.getList.returns([billMember, billMember]);
 
         happening = new Happening(memberRepository);
     });
@@ -36,11 +42,6 @@ describe('Members of happening', function () {
 
 
     it('Publishing happening should match members', function () {
-        /*const billMember = {
-            matchedMemberId: 'e2'
-        };
-
-        sinon.stub(happening, 'getMembers').returns([billMember, billMember]);*/
         happening.getMembers().forEach((member) => {
             assert.notStrictEqual(member.matchedMemberId, null)
         })
