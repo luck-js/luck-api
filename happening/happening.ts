@@ -12,6 +12,10 @@ export class Happening implements IHappening {
     }
 
     public addMember(name: string): IMember {
+        if(this.isPublish){
+            throw new Error('Happening is publishing')
+        }
+
         return this.memberRepository.add(this.id, name);
     }
 
