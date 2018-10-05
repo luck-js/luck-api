@@ -1,7 +1,7 @@
 import {IHappening} from './happening.model';
 import {MemberRepository} from '../member/member.repository';
 import {IMember} from '../member/member.model';
-import {MatchingMemberService} from '../member/matchingMemberService';
+import {MatchingMemberService} from '../member/matching-member.service';
 
 export class Happening implements IHappening {
     private id: string = 'test123';
