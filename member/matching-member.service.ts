@@ -5,21 +5,17 @@ export class MatchingMemberService {
     public randomMembers(membersList: IMember[]): IMember[] {
 
         return membersList.reduce((matchedMembersList, member, index) => {
-            const idsMemberToRandom = matchedMembersList
-                .reduce((previousState, matchedMember) => {
-                    return previousState
-                        .filter((el) => el.id !== member.id)
-                        .filter((el) => el.id !== matchedMember.matchedMemberId);
-
-                }, membersList)
-                .map((el) => el.id);
-
             let idMemberRandom;
-            const lastMember = membersList[index + 1] && membersList[index + 1];
-            if (lastMember && idsMemberToRandom.length < 2 && idsMemberToRandom.some((id) => lastMember.id === id)) {
-                idMemberRandom = lastMember.id;
+
+            const idsMemberToRandom = pullOutIdsToRandom(matchedMembersList, membersList, member.id);
+            const preLastMemberIndex = membersList.length - 2;
+
+            if (preLastMemberIndex === index && isChanceOfConflict(idsMemberToRandom, membersList[membersList.length - 1].id)) {
+                idMemberRandom = membersList[membersList.length - 1].id
+
             } else {
-                idMemberRandom = idsMemberToRandom[Math.floor(Math.random() * idsMemberToRandom.length)];
+                idMemberRandom = randomMemberId(idsMemberToRandom);
+
             }
 
             // @ts-ignore
@@ -30,3 +26,23 @@ export class MatchingMemberService {
     }
 
 }
+
+function randomMemberId(idsMemberToRandom) {
+    return idsMemberToRandom[Math.floor(Math.random() * idsMemberToRandom.length)];
+}
+
+function isChanceOfConflict(idsMemberToRandom, lastMemberId) {
+    return idsMemberToRandom.some((id) => id === lastMemberId);
+}
+
+function pullOutIdsToRandom(matchedMembersList, membersList, currentMemberId) {
+    return matchedMembersList
+        .reduce((previousState, matchedMember) => {
+            return previousState
+                .filter((el) => el.id !== matchedMember.matchedMemberId)
+
+        }, membersList)
+        .map((el) => el.id)
+        .filter((id) => id !== currentMemberId)
+}
+
