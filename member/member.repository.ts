@@ -8,7 +8,11 @@ export class MemberRepository {
     }
 
     public add(id: string, name: string): IMember {
-        return null
+        return {
+            id: '0',
+            matchedMemberId: null,
+            uniqueLink: ''
+        }
     }
 
     public getList(): IMember[] {
