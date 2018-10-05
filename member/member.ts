@@ -1,4 +1,4 @@
-import {MatchingMemberService} from './matchingMemberService';
+import {MatchingMemberService} from './matching-member.service';
 import {MemberRepository} from './member.repository';
 import {IMember} from './member.model';
 

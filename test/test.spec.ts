@@ -3,7 +3,7 @@ import * as assert from 'assert';
 import * as sinon from 'sinon';
 import {Happening} from '../happening/happening';
 import {MemberRepository} from '../member/member.repository';
-import {MatchingMemberService} from '../member/matchingMemberService';
+import {MatchingMemberService} from '../member/matching-member.service';
 
 describe('Members of happening', function () {
     let happening;
