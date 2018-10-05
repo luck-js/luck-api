@@ -9,9 +9,10 @@ export class MemberRepository {
 
     public add(id: string, name: string): IMember {
         return {
+            name,
             id: '0',
             matchedMemberId: null,
-            uniqueLink: ''
+            uniqueLink: '9ab65cf8-3113-4fe5-bd52-594d0e484464'
         }
     }
 
