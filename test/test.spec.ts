@@ -41,6 +41,20 @@ describe('Members of happening', function () {
             })
         });
     });
+
+    describe('Matching member', function(){
+        it('Every member has random matched member', function(){
+
+        });
+
+        it('Matched member has another id', function () {
+
+        });
+
+        it('Every matched is unique', function () {
+
+        });
+    })
 });
 
 /*
