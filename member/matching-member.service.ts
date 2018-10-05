@@ -3,36 +3,30 @@ import {IMember} from './member.model';
 export class MatchingMemberService {
 
     public randomMembers(membersList: IMember[]): IMember[] {
-        const idListToRandom = membersList.reduce((prevState, member) => {
-            prevState.push(member.id);
-            return prevState
+
+        return membersList.reduce((matchedMembersList, member, index) => {
+            const idsMemberToRandom = matchedMembersList
+                .reduce((previousState, matchedMember) => {
+                    return previousState
+                        .filter((el) => el.id !== member.id)
+                        .filter((el) => el.id !== matchedMember.matchedMemberId);
+
+                }, membersList)
+                .map((el) => el.id);
+
+            let idMemberRandom;
+            const lastMember = membersList[index + 1] && membersList[index + 1];
+            if (lastMember && idsMemberToRandom.length < 2 && idsMemberToRandom.some((id) => lastMember.id === id)) {
+                idMemberRandom = lastMember.id;
+            } else {
+                idMemberRandom = idsMemberToRandom[Math.floor(Math.random() * idsMemberToRandom.length)];
+            }
+
+            // @ts-ignore
+            matchedMembersList.push(Object.assign(member, {matchedMemberId: idMemberRandom}));
+
+            return matchedMembersList;
         }, []);
-
-        return idListToRandom.reduce((prevState, id, index) => {
-            const memberRandom = randomFromRangeUntilTrue(
-                (random) => {
-                    return prevState[index].id === random.id
-                        || prevState.some((member) => member.matchedMemberId === random.id)
-                },
-                () => membersList[Math.floor(Math.random() * idListToRandom.length)]
-            );
-
-            prevState[index].matchedMemberId = memberRandom.id;
-
-            return prevState;
-        }, membersList)
     }
 
-}
-
-function randomFromRangeUntilTrue(conditionFn, randomFn, i = 0) {
-    //broken recurrence function - throw max stack
-    const random = randomFn();
-
-    if (conditionFn(random) && i < 100) {
-        ++i;
-        return randomFromRangeUntilTrue(conditionFn, randomFn, i)
-    }
-
-    return random;
 }
