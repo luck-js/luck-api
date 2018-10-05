@@ -25,11 +25,13 @@ export class MatchingMemberService {
 
 }
 
-function randomFromRangeUntilTrue(conditionFn, randomFn) {
+function randomFromRangeUntilTrue(conditionFn, randomFn, i = 0) {
+    //broken recurrence function - throw max stack
     const random = randomFn();
 
-    if (conditionFn(random)) {
-        return randomFromRangeUntilTrue(conditionFn, randomFn)
+    if (conditionFn(random) && i < 100) {
+        ++i;
+        return randomFromRangeUntilTrue(conditionFn, randomFn, i)
     }
 
     return random;
