@@ -14,7 +14,7 @@ export class Happening implements IHappening {
     }
 
     public addMember(name: string): IMember {
-        if(this.isPublish){
+        if (this.isPublish) {
             throw new Error('Happening is publishing')
         }
 

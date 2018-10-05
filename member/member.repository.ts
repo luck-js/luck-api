@@ -1,9 +1,9 @@
 import {IMember} from './member.model';
 
 export class MemberRepository {
-    list:IMember[];
+    list: IMember[];
 
-    constructor(memberList:IMember[]){
+    constructor(memberList: IMember[]) {
         this.list = memberList;
     }
 
@@ -18,7 +18,8 @@ export class MemberRepository {
     public getList(): IMember[] {
         return [...this.list];
     }
-    public updateList(memberList: IMember[]){
+
+    public updateList(memberList: IMember[]) {
         this.list = memberList;
     }
 
