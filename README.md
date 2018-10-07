@@ -1,6 +1,14 @@
 # luck
 
-This application is created for learning unit tests. "Luck" will help you with your friends matched in pair on the christmas to give gifts.
+This application is created for learning unit tests. **Luck** will help you with your friends matched in pair on the christmas to give gifts.
+
+<p align="center">
+
+<a href="https://opensource.org/licenses/MIT">
+<img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License">
+</a>
+
+</p>
 
 ## Mock of views
 
@@ -18,6 +26,8 @@ This application is created for learning unit tests. "Luck" will help you with y
 
 [![img](https://image.ibb.co/hR10PK/received_279658222878021.jpg)](https://image.ibb.co/hR10PK/received_279658222878021.jpg)
 
-## License
+## Author and license
 
-[MIT](LICENSE)
+**Luck** is creating by [Daniel Karski](https://github.com/dkarski). Design views and mocks of application is [Mateusz Karski](https://www.behance.net/user/?username=MateuszKarski).
+
+Luck is available under the  [MIT](LICENSE) license
