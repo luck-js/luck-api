@@ -10,7 +10,7 @@ describe('Members of happening', function () {
     let happening;
 
     beforeEach(function () {
-        happening = new Happening(new MemberRepository(MEMBER_INITIAL_LIST_MOCK), new MatchingMemberService());
+        happening = new Happening(new MemberRepository([...MEMBER_INITIAL_LIST_MOCK]), new MatchingMemberService());
     });
 
     describe('Creating new members', function () {

@@ -17,7 +17,7 @@ export class MemberRepository {
     }
 
     public getList(): IMember[] {
-        return [...this.list];
+        return this.list;
     }
 
     public updateList(memberList: IMember[]) {
