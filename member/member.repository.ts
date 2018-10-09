@@ -3,7 +3,7 @@ import {IMember} from './member.model';
 export class MemberRepository {
     list: IMember[];
 
-    constructor(memberList: IMember[]) {
+    constructor(memberList: IMember[] = []) {
         this.list = memberList;
     }
 
