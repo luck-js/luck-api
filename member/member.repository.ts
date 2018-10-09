@@ -8,6 +8,8 @@ export class MemberRepository {
     }
 
     public add(member: IMember): IMember {
+        this.list.push(member);
+
         return member
     }
 
