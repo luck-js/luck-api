@@ -7,6 +7,8 @@ import {MatchingMemberService} from '../member/matching-member.service';
 import {MEMBER_INITIAL_LIST_MOCK} from '../member/member.mock';
 import {MemberFactory} from '../member/member.factory';
 import {UuidGenerationService} from '../member/uuid-generation.service';
+import {RelationMemberHappeningRepository} from '../relation-member-happening/relation-member-happening.repository';
+import {RelationMemberHappeningFactory} from '../relation-member-happening/relation-member-happening.factory';
 
 describe('Members of happening', function () {
     let happening;
@@ -14,8 +16,11 @@ describe('Members of happening', function () {
     beforeEach(function () {
         happening = new Happening(
             new MemberRepository([...MEMBER_INITIAL_LIST_MOCK]),
+            new RelationMemberHappeningRepository(),
             new MatchingMemberService(),
-            new MemberFactory(new UuidGenerationService()));
+            new UuidGenerationService(),
+            new RelationMemberHappeningFactory(),
+            new MemberFactory());
     });
 
     describe('Creating new members', function () {

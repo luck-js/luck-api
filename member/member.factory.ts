@@ -1,13 +1,12 @@
-import {UuidGenerationService} from './uuid-generation.service';
+
 import {IMember} from './member.model';
 
 export class MemberFactory {
 
-    constructor(private uuidGenerationService: UuidGenerationService){}
+    constructor(){}
 
-    create(idHappening, name):IMember{
-        const id = this.uuidGenerationService.createNewUuid();
-        const uniqueLink = this.uuidGenerationService.createNewUuidFromArguments([idHappening, id]);
+    create(id, relationId, name):IMember{
+        const uniqueLink = `www.luck.com/${relationId}`;
 
         return {
             id,
