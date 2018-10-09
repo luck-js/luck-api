@@ -8,16 +8,18 @@ import {UuidGenerationService} from '../member/uuid-generation.service';
 import {RelationMemberHappeningRepository} from '../relation-member-happening/relation-member-happening.repository';
 
 export class Happening implements IHappening {
-    private id: string = 'test123';
 
-    public isPublish = false;
-
-    constructor(private memberRepository: MemberRepository,
-                private relationMemberHappeningRepository: RelationMemberHappeningRepository,
-                private matchingMemberService: MatchingMemberService,
-                private uuidGenerationService: UuidGenerationService,
-                private relationMemberHappeningFactory: RelationMemberHappeningFactory,
-                private memberFactory: MemberFactory) {
+    constructor(
+        public id: string,
+        public name: string,
+        public description: string,
+        public isPublish: boolean,
+        private memberRepository: MemberRepository,
+        private relationMemberHappeningRepository: RelationMemberHappeningRepository,
+        private matchingMemberService: MatchingMemberService,
+        private uuidGenerationService: UuidGenerationService,
+        private relationMemberHappeningFactory: RelationMemberHappeningFactory,
+        private memberFactory: MemberFactory) {
 
     }
 
