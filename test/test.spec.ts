@@ -10,8 +10,11 @@ import {UuidGenerationService} from '../member/uuid-generation.service';
 import {RelationMemberHappeningRepository} from '../relation-member-happening/relation-member-happening.repository';
 import {RelationMemberHappeningFactory} from '../relation-member-happening/relation-member-happening.factory';
 import {HappeningFactory} from '../happening/happening.factory';
+import {HappeningRepository} from '../happening/happening.repository';
+import {MemberApi} from '../api/member.api';
+import {MemberService} from '../api/member.service';
 
-describe('Happening', function(){
+describe('Happening', function () {
     let happening;
     let happeningFactory;
 
@@ -28,13 +31,13 @@ describe('Happening', function(){
         happening = happeningFactory.create('initialHappening', '')
     });
 
-    describe('Creating new happening', function(){
+    describe('Creating new happening', function () {
 
-        it('Created happening should be set isPublish to false', function(){
+        it('Created happening should be set isPublish to false', function () {
             assert.strictEqual(false, happening.isPublish);
         });
 
-        it('Created happening should be unique id', function(){
+        it('Created happening should be unique id', function () {
             const happeningSecond = happeningFactory.create('', '');
 
             assert.notStrictEqual(happeningSecond.id, happening.id)
@@ -88,11 +91,11 @@ describe('Members of happening', function () {
         });
     });
 
-    describe('Matching member', function(){
+    describe('Matching member', function () {
         const matchingMemberService = new MatchingMemberService();
         const newMemberList = matchingMemberService.randomMembers(MEMBER_INITIAL_LIST_MOCK);
 
-        it('Every member has random matched member', function(){
+        it('Every member has random matched member', function () {
             newMemberList.forEach((member, index) => {
                 assert.strictEqual(true, typeof member.matchedMemberId === 'string')
             })
@@ -110,12 +113,12 @@ describe('Members of happening', function () {
                 assert.strictEqual(true, isUnique);
                 previousState.push(member.matchedMemberId);
                 return previousState;
-            },[])
+            }, [])
         });
     })
 });
 
-describe('Relation member happening', function(){
+describe('Relation member happening', function () {
     let happening;
     let happeningFactory;
     let relationMemberHappeningRepository = new RelationMemberHappeningRepository();
@@ -133,13 +136,56 @@ describe('Relation member happening', function(){
         happening = happeningFactory.create('initialHappening', '')
     });
 
-    describe('Created relation after add member', function(){
+    describe('Created relation after add member', function () {
 
-        it('Relation should be created member of happening to happening', function(){
+        it('Relation should be created member of happening to happening', function () {
             const billMember = happening.addMember('Bill');
             const relation = relationMemberHappeningRepository.get(billMember.relationId);
 
             assert.strictEqual(billMember.id, relation.memberId);
+        });
+    });
+});
+
+describe('Member API', function () {
+    let happening;
+    let happeningFactory;
+    let happeningRepository = new HappeningRepository();
+    let memberRepository = new MemberRepository();
+    let relationMemberHappeningRepository = new RelationMemberHappeningRepository();
+
+    let memberApi = new MemberApi(new MemberService(
+        relationMemberHappeningRepository,
+        memberRepository,
+        happeningRepository
+    ));
+
+    beforeEach(function () {
+        happeningFactory = new HappeningFactory(
+            memberRepository,
+            relationMemberHappeningRepository,
+            new MatchingMemberService(),
+            new UuidGenerationService(),
+            new RelationMemberHappeningFactory(),
+            new MemberFactory()
+        );
+    });
+
+    describe('Get data of member information view', function () {
+
+        it('Data should has correctly member and happening name', function () {
+            const HAPPENING_NAME = 'initialHappening';
+            const MEMBER_NAME = 'Bill';
+
+            happening = happeningFactory.create(HAPPENING_NAME, '');
+            happeningRepository.add(happening);
+
+            const billMember = happening.addMember(MEMBER_NAME);
+
+            const memberInformationView = memberApi.getMemberInformationView(billMember.relationId);
+
+            assert.strictEqual(billMember.name, memberInformationView.member.name);
+            assert.strictEqual(happening.name, memberInformationView.happening.name);
         });
     });
 });
