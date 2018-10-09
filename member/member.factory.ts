@@ -1,5 +1,6 @@
 
 import {IMember} from './member.model';
+import {Member} from './member';
 
 export class MemberFactory {
 
@@ -8,11 +9,11 @@ export class MemberFactory {
     create(id, relationId, name):IMember{
         const uniqueLink = `www.luck.com/${relationId}`;
 
-        return {
+        return new Member(
             id,
+            relationId,
             name,
             uniqueLink,
-            matchedMemberId: null,
-        }
+            null,)
     }
 }
