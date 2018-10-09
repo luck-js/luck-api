@@ -1,0 +1,9 @@
+import {MemberService} from './member.service';
+
+export class MemberApi {
+    constructor(private memberService: MemberService){}
+
+    public getMemberInformationView(id: string){
+        return this.memberService.getMemberInformationView(id);
+    }
+}
