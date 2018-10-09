@@ -9,18 +9,53 @@ import {MemberFactory} from '../member/member.factory';
 import {UuidGenerationService} from '../member/uuid-generation.service';
 import {RelationMemberHappeningRepository} from '../relation-member-happening/relation-member-happening.repository';
 import {RelationMemberHappeningFactory} from '../relation-member-happening/relation-member-happening.factory';
+import {HappeningFactory} from '../happening/happening.factory';
 
-describe('Members of happening', function () {
+describe('Happening', function(){
     let happening;
+    let happeningFactory;
 
     beforeEach(function () {
-        happening = new Happening(
+        happeningFactory = new HappeningFactory(
             new MemberRepository([...MEMBER_INITIAL_LIST_MOCK]),
             new RelationMemberHappeningRepository(),
             new MatchingMemberService(),
             new UuidGenerationService(),
             new RelationMemberHappeningFactory(),
-            new MemberFactory());
+            new MemberFactory()
+        );
+
+        happening = happeningFactory.create('initialHappening', '')
+    });
+
+    describe('Creating new happening', function(){
+
+        it('Created happening should be set isPublish to false', function(){
+            assert.strictEqual(false, happening.isPublish);
+        });
+
+        it('Created happening should be unique id', function(){
+            const happeningSecond = happeningFactory.create('', '');
+
+            assert.notStrictEqual(happeningSecond.id, happening.id)
+        });
+    });
+});
+
+describe('Members of happening', function () {
+    let happening;
+
+    beforeEach(function () {
+        const happeningFactory = new HappeningFactory(
+            new MemberRepository([...MEMBER_INITIAL_LIST_MOCK]),
+            new RelationMemberHappeningRepository(),
+            new MatchingMemberService(),
+            new UuidGenerationService(),
+            new RelationMemberHappeningFactory(),
+            new MemberFactory()
+        );
+
+        happening = happeningFactory.create('', '')
     });
 
     describe('Creating new members', function () {
