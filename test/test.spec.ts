@@ -114,3 +114,32 @@ describe('Members of happening', function () {
         });
     })
 });
+
+describe('Relation member happening', function(){
+    let happening;
+    let happeningFactory;
+    let relationMemberHappeningRepository = new RelationMemberHappeningRepository();
+
+    beforeEach(function () {
+        happeningFactory = new HappeningFactory(
+            new MemberRepository(),
+            relationMemberHappeningRepository,
+            new MatchingMemberService(),
+            new UuidGenerationService(),
+            new RelationMemberHappeningFactory(),
+            new MemberFactory()
+        );
+
+        happening = happeningFactory.create('initialHappening', '')
+    });
+
+    describe('Created relation after add member', function(){
+
+        it('Relation should be created member of happening to happening', function(){
+            const billMember = happening.addMember('Bill');
+            const relation = relationMemberHappeningRepository.get(billMember.relationId);
+
+            assert.strictEqual(billMember.id, relation.memberId);
+        });
+    });
+});
