@@ -150,17 +150,22 @@ describe('Relation member happening', function () {
 describe('Member API', function () {
     let happening;
     let happeningFactory;
-    let happeningRepository = new HappeningRepository();
-    let memberRepository = new MemberRepository();
-    let relationMemberHappeningRepository = new RelationMemberHappeningRepository();
-
-    let memberApi = new MemberApi(new MemberService(
-        relationMemberHappeningRepository,
-        memberRepository,
-        happeningRepository
-    ));
+    let happeningRepository;
+    let memberRepository;
+    let relationMemberHappeningRepository;
+    let memberApi;
 
     beforeEach(function () {
+        happeningRepository = new HappeningRepository();
+        memberRepository = new MemberRepository();
+        relationMemberHappeningRepository = new RelationMemberHappeningRepository();
+
+        memberApi = new MemberApi(new MemberService(
+            relationMemberHappeningRepository,
+            memberRepository,
+            happeningRepository
+        ));
+
         happeningFactory = new HappeningFactory(
             memberRepository,
             relationMemberHappeningRepository,
@@ -188,4 +193,24 @@ describe('Member API', function () {
             assert.strictEqual(happening.name, memberInformationView.happening.name);
         });
     });
+
+    describe('Get matched member', function () {
+
+        it('Should returned matched member if happening is published', function () {
+            const HAPPENING_NAME = 'initialHappening';
+            const MEMBER_NAMES = ['Bill', 'Victors'];
+
+            happening = happeningFactory.create(HAPPENING_NAME, '');
+            happeningRepository.add(happening);
+
+            const billMember = happening.addMember(MEMBER_NAMES[0]);
+            const victorsMember = happening.addMember(MEMBER_NAMES[1]);
+            happening.publishEvent();
+
+            const matchedMember = memberApi.getMatchedMember(billMember.id);
+
+            assert.strictEqual(victorsMember.id, matchedMember.id);
+        });
+    });
+
 });
