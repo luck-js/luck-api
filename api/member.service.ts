@@ -2,6 +2,7 @@ import {RelationMemberHappeningRepository} from '../relation-member-happening/re
 import {MemberRepository} from '../member/member.repository';
 import {HappeningRepository} from '../happening/happening.repository';
 import {IMemberInformationView} from './member-information-view.model';
+import {IMemberView} from './member-view.model';
 
 export class MemberService {
     constructor(
@@ -18,5 +19,10 @@ export class MemberService {
         return {
             member, happening
         }
+    }
+
+    public getMatchedMember(id: string): IMemberView {
+        const member = this.memberRepository.getByIndex(id);
+        return this.memberRepository.getByIndex(member.matchedMemberId);
     }
 }
