@@ -13,6 +13,11 @@ export class MemberRepository {
         return member
     }
 
+    public getByIndex(id: string) :IMember {
+        // @ts-ignore
+        return this.list.find((el) => el.id === id)
+    }
+
     public getList(): IMember[] {
         return this.list;
     }
