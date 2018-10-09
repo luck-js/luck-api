@@ -2,6 +2,7 @@ import {IHappening} from './happening.model';
 import {MemberRepository} from '../member/member.repository';
 import {IMember} from '../member/member.model';
 import {MatchingMemberService} from '../member/matching-member.service';
+import {MemberFactory} from '../member/member.factory';
 
 export class Happening implements IHappening {
     private id: string = 'test123';
@@ -9,7 +10,8 @@ export class Happening implements IHappening {
     public isPublish = false;
 
     constructor(private memberRepository: MemberRepository,
-                private matchingMemberService: MatchingMemberService) {
+                private matchingMemberService: MatchingMemberService,
+                private memberFactory: MemberFactory) {
 
     }
 
@@ -18,7 +20,9 @@ export class Happening implements IHappening {
             throw new Error('Happening is publishing')
         }
 
-        return this.memberRepository.add(this.id, name);
+        const member = this.memberFactory.create(this.id, name);
+
+        return this.memberRepository.add(member);
     }
 
     public getMembers(): IMember[] {
