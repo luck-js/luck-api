@@ -2,10 +2,8 @@ import {IHappening} from './happening.model';
 
 
 export class HappeningRepository {
-    list: IHappening[];
 
-    constructor(happeningList: IHappening[] = []) {
-        this.list = happeningList;
+    constructor(private list: IHappening[] = []) {
     }
 
     public add(happening: IHappening): IHappening {
