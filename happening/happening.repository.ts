@@ -1,9 +1,12 @@
 import {IHappening} from './happening.model';
+import {Happening} from './happening';
+import {HappeningFactory} from './happening.factory';
 
 
 export class HappeningRepository {
 
-    constructor(private list: IHappening[] = []) {
+    constructor(private list: IHappening[] = [],
+                private happeningFactory: HappeningFactory) {
     }
 
     public add(happening: IHappening): IHappening {
@@ -12,8 +15,9 @@ export class HappeningRepository {
         return happening
     }
 
-    public getByIndex(id: string): IHappening {
+    public getByIndex(id: string): Happening {
         // @ts-ignore
-        return this.list.find((el) => el.id === id)
+        const happening = this.list.find((el) => el.id === id);
+        return this.happeningFactory.recreate(happening);
     }
 }
