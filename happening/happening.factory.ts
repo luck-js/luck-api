@@ -18,21 +18,8 @@ export class HappeningFactory {
         public memberFactory: MemberFactory) {
     }
 
-    create(name, description): Happening {
-        const id = this.uuidGenerationService.createNewUuid();
-
-        return new Happening(
-            id,
-            name,
-            description,
-            false,
-            this.memberRepository,
-            this.relationMemberHappeningRepository,
-            this.matchingMemberService,
-            this.uuidGenerationService,
-            this.relationMemberHappeningFactory,
-            this.memberFactory
-        )
+    create(): string {
+        return this.uuidGenerationService.createNewUuid();
     }
 
     public recreate({id, name, description, isPublish}: IHappening): Happening {
