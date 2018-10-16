@@ -5,6 +5,7 @@ import {MatchingMemberService} from '../member/matching-member.service';
 import {UuidGenerationService} from '../member/uuid-generation.service';
 import {RelationMemberHappeningFactory} from '../relation-member-happening/relation-member-happening.factory';
 import {MemberFactory} from '../member/member.factory';
+import {IHappening} from './happening.model';
 
 
 export class HappeningFactory {
@@ -25,6 +26,21 @@ export class HappeningFactory {
             name,
             description,
             false,
+            this.memberRepository,
+            this.relationMemberHappeningRepository,
+            this.matchingMemberService,
+            this.uuidGenerationService,
+            this.relationMemberHappeningFactory,
+            this.memberFactory
+        )
+    }
+
+    public recreate({id, name, description, isPublish}: IHappening): Happening {
+        return new Happening(
+            id,
+            name,
+            description,
+            isPublish,
             this.memberRepository,
             this.relationMemberHappeningRepository,
             this.matchingMemberService,
