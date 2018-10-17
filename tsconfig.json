@@ -14,7 +14,9 @@
     ],
     "typeRoots": ["./node_modules/@types"],
     "types": [
-      "reflect-metadata"
+      "reflect-metadata",
+      "node",
+      "mocha"
     ],
     "moduleResolution": "node",
     "experimentalDecorators": true,
