@@ -1,80 +1,36 @@
 import 'mocha';
 import * as assert from 'assert';
 import * as sinon from 'sinon';
+import {Container} from 'inversify';
 import {Happening} from '../happening/happening';
 import {MemberRepository} from '../member/member.repository';
 import {MatchingMemberService} from '../member/matching-member.service';
 import {MEMBER_INITIAL_LIST_MOCK} from '../member/member.mock';
-import {MemberFactory} from '../member/member.factory';
-import {UuidGenerationService} from '../member/uuid-generation.service';
 import {RelationMemberHappeningRepository} from '../relation-member-happening/relation-member-happening.repository';
-import {RelationMemberHappeningFactory} from '../relation-member-happening/relation-member-happening.factory';
 import {HappeningFactory} from '../happening/happening.factory';
 import {HappeningRepository} from '../happening/happening.repository';
 import {RelationMemberHappeningApi} from '../relation-member-happening/relation-member-happening.api';
 import {RelationMemberHappeningService} from '../relation-member-happening/relation-member-happening.service';
 import {DIContainerProvider} from '../di-container';
 import IDENTIFIER from '../identifiers';
-import {IHappening} from '../happening/happening.model';
 
-interface IDependencies {
-    happeningFactory: HappeningFactory;
-    memberRepository: MemberRepository;
-    memberFactory: MemberFactory;
-    happeningRepository: HappeningRepository;
-    relationMemberHappeningFactory: RelationMemberHappeningFactory;
-    relationMemberHappeningRepository: RelationMemberHappeningRepository;
-    matchingMemberService: MatchingMemberService;
-    uuidGenerationService: UuidGenerationService
-}
-
-const initialDependencies = (MEMBER_INITIAL_LIST_MOCK?): IDependencies => {
-    const DIContainer = DIContainerProvider(MEMBER_INITIAL_LIST_MOCK);
-
-    const memberRepository = DIContainer.get<MemberRepository>(IDENTIFIER.MemberRepository);
-    const memberFactory = DIContainer.get<MemberFactory>(IDENTIFIER.MemberFactory);
-
-    const relationMemberHappeningFactory = DIContainer.get<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory);
-    const relationMemberHappeningRepository = DIContainer.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
-
-    const matchingMemberService = DIContainer.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
-    const uuidGenerationService = DIContainer.get<UuidGenerationService>(IDENTIFIER.UuidGenerationService);
-
-    const happeningFactory = new HappeningFactory(
-        memberRepository,
-        relationMemberHappeningRepository,
-        matchingMemberService,
-        uuidGenerationService,
-        relationMemberHappeningFactory,
-        memberFactory,
-    );
-
-    const happeningRepository = DIContainer.get<(happeningList: IHappening[], happeningFactory: HappeningFactory) => HappeningRepository>(IDENTIFIER.DIFactoryHappeningRepository)([], happeningFactory);
-
-    return {
-        happeningFactory,
-        memberRepository,
-        memberFactory,
-        happeningRepository,
-        relationMemberHappeningFactory,
-        relationMemberHappeningRepository,
-        matchingMemberService,
-        uuidGenerationService
-    }
+const initialDependencies = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_MOCK?): Container => {
+    return DIContainerProvider(MEMBER_INITIAL_LIST_MOCK, HAPPENING_INITIAL_LIST_MOCK);
 };
 
-function createHappening(dependencies: IDependencies, {name, description, isPublish}: any): Happening {
-    const id = dependencies.happeningFactory.create();
-    return dependencies.happeningFactory.recreate({id, name, description, isPublish});
+function createHappening(DIContainer: Container, {name, description, isPublish}: any): Happening {
+    const happeningFactory = DIContainer.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
+    const id = happeningFactory.create();
+    return happeningFactory.recreate({id, name, description, isPublish});
 }
 
 describe('Happening', function () {
-    let dependencies: IDependencies;
+    let DIContainer: Container;
     let happening: Happening;
 
     beforeEach(function () {
-        dependencies = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
-        happening = createHappening(dependencies, {name: 'Initial Happening'});
+        DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
+        happening = createHappening(DIContainer, {name: 'Initial Happening'});
     });
 
     describe('Creating new happening', function () {
@@ -84,7 +40,7 @@ describe('Happening', function () {
         });
 
         it('Created happening should be unique id', function () {
-            const happeningSecond = createHappening(dependencies, {name: 'Second Happening'});
+            const happeningSecond = createHappening(DIContainer, {name: 'Second Happening'});
 
             assert.notStrictEqual(happeningSecond.id, happening.id)
         });
@@ -92,12 +48,12 @@ describe('Happening', function () {
 });
 
 describe('Members of happening', function () {
-    let dependencies: IDependencies;
+    let DIContainer: Container;
     let happening: Happening;
 
     beforeEach(function () {
-        dependencies = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
-        happening = createHappening(dependencies, {name: 'Initial Happening'});
+        DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
+        happening = createHappening(DIContainer, {name: 'Initial Happening'});
     });
 
     describe('Creating new members', function () {
@@ -134,7 +90,8 @@ describe('Members of happening', function () {
         let newMemberList;
 
         before(function () {
-            newMemberList = dependencies.matchingMemberService.randomMembers(MEMBER_INITIAL_LIST_MOCK);
+            const matchingMemberService = DIContainer.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
+            newMemberList = matchingMemberService.randomMembers(MEMBER_INITIAL_LIST_MOCK);
         });
 
         it('Every member has random matched member', function () {
@@ -161,19 +118,21 @@ describe('Members of happening', function () {
 });
 
 describe('Relation member happening', function () {
-    let dependencies: IDependencies;
+    let DIContainer: Container;
     let happening: Happening;
 
     beforeEach(function () {
-        dependencies = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
-        happening = createHappening(dependencies, {name: 'Initial Happening'});
+        DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
+        happening = createHappening(DIContainer, {name: 'Initial Happening'});
     });
 
     describe('Created relation after add member', function () {
 
         it('Relation should be created member of happening to happening', function () {
+            const relationMemberHappeningRepository = DIContainer.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
+
             const billMember = happening.addMember('Bill');
-            const relation = dependencies.relationMemberHappeningRepository.get(billMember.relationId);
+            const relation = relationMemberHappeningRepository.get(billMember.relationId);
 
             assert.strictEqual(billMember.id, relation.memberId);
         });
@@ -181,19 +140,25 @@ describe('Relation member happening', function () {
 });
 
 describe('Member API', function () {
-    let dependencies: IDependencies;
+    let DIContainer: Container;
     let happening: Happening;
-
+    let relationMemberHappeningRepository: RelationMemberHappeningRepository;
+    let memberRepository: MemberRepository;
+    let happeningRepository: HappeningRepository;
     let memberApi;
 
     beforeEach(function () {
-        dependencies = initialDependencies();
-        happening = createHappening(dependencies, {name: 'Initial Happening'});
+        DIContainer = initialDependencies();
+        happening = createHappening(DIContainer, {name: 'Initial Happening'});
+
+        relationMemberHappeningRepository = DIContainer.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
+        memberRepository = DIContainer.get<MemberRepository>(IDENTIFIER.MemberRepository);
+        happeningRepository = DIContainer.get<HappeningRepository>(IDENTIFIER.HappeningRepository);
 
         memberApi = new RelationMemberHappeningApi(new RelationMemberHappeningService(
-            dependencies.relationMemberHappeningRepository,
-            dependencies.memberRepository,
-            dependencies.happeningRepository
+            relationMemberHappeningRepository,
+            memberRepository,
+            happeningRepository
         ));
     });
 
@@ -203,8 +168,8 @@ describe('Member API', function () {
             const HAPPENING_NAME = 'initialHappening';
             const MEMBER_NAME = 'Bill';
 
-            happening = createHappening(dependencies, {name: HAPPENING_NAME});
-            dependencies.happeningRepository.add(happening);
+            happening = createHappening(DIContainer, {name: HAPPENING_NAME});
+            happeningRepository.add(happening);
 
             const billMember = happening.addMember(MEMBER_NAME);
 
@@ -221,8 +186,8 @@ describe('Member API', function () {
             const HAPPENING_NAME = 'initialHappening';
             const MEMBER_NAMES = ['Bill', 'Victors'];
 
-            happening = createHappening(dependencies, {name: HAPPENING_NAME});
-            dependencies.happeningRepository.add(happening);
+            happening = createHappening(DIContainer, {name: HAPPENING_NAME});
+            happeningRepository.add(happening);
 
             const billMember = happening.addMember(MEMBER_NAMES[0]);
             const victorsMember = happening.addMember(MEMBER_NAMES[1]);
