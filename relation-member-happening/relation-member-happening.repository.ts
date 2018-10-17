@@ -2,7 +2,10 @@ import {IRelationMemberHappening} from './relation-member-happening.model';
 
 
 export class RelationMemberHappeningRepository {
-    list: IRelationMemberHappening[] = [];
+
+    constructor(private list: IRelationMemberHappening[] = []){
+
+    }
 
     public add(relationMemberHappening: IRelationMemberHappening): IRelationMemberHappening {
         this.list.push(relationMemberHappening);
