@@ -15,6 +15,7 @@ import {RelationMemberHappeningApi} from '../relation-member-happening/relation-
 import {RelationMemberHappeningService} from '../relation-member-happening/relation-member-happening.service';
 import {DIContainer} from '../di-container';
 import IDENTIFIER from '../identifiers';
+import {IMember} from '../member/member.model';
 
 interface IDependencies {
     happeningFactory: HappeningFactory;
@@ -28,7 +29,7 @@ interface IDependencies {
 }
 
 const initialDependencies = (MEMBER_INITIAL_LIST_MOCK?): IDependencies => {
-    const memberRepository = new MemberRepository(MEMBER_INITIAL_LIST_MOCK);
+    const memberRepository = DIContainer.get<(memberList: IMember[]) => MemberRepository>(IDENTIFIER.DIFactoryMemberRepository)(MEMBER_INITIAL_LIST_MOCK);
     const memberFactory = new MemberFactory();
     let happeningRepository: HappeningRepository;
 
@@ -61,7 +62,7 @@ const initialDependencies = (MEMBER_INITIAL_LIST_MOCK?): IDependencies => {
     }
 };
 
-function createHappening(dependencies: IDependencies, {name, description, isPublish}: any) : Happening{
+function createHappening(dependencies: IDependencies, {name, description, isPublish}: any): Happening {
     const id = dependencies.happeningFactory.create();
     return dependencies.happeningFactory.recreate({id, name, description, isPublish});
 }
