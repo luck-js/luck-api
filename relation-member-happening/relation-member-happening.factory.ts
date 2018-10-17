@@ -6,7 +6,7 @@ export class RelationMemberHappeningFactory {
     constructor() {
     }
 
-    create(id: string, memberId: string, happeningId: string): IRelationMemberHappening {
+    public create(id: string, memberId: string, happeningId: string): IRelationMemberHappening {
 
         return {
             id,
