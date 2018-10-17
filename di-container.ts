@@ -7,6 +7,7 @@ import {HappeningRepository} from './happening/happening.repository';
 import {IHappening} from './happening/happening.model';
 import {HappeningFactory} from './happening/happening.factory';
 import {MatchingMemberService} from './member/matching-member.service';
+import {UuidGenerationService} from './member/uuid-generation.service';
 
 const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?) : Container => {
     const DIContainer = new Container();
@@ -37,6 +38,7 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?) : Container => {
         });
 
     DIContainer.bind<MatchingMemberService>(IDENTIFIER.MatchingMemberService).to(MatchingMemberService);
+    DIContainer.bind<UuidGenerationService>(IDENTIFIER.UuidGenerationService).to(UuidGenerationService);
 
     return DIContainer;
 };
