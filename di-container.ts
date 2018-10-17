@@ -8,6 +8,7 @@ import {IHappening} from './happening/happening.model';
 import {HappeningFactory} from './happening/happening.factory';
 import {MatchingMemberService} from './member/matching-member.service';
 import {UuidGenerationService} from './member/uuid-generation.service';
+import {RelationMemberHappeningFactory} from './relation-member-happening/relation-member-happening.factory';
 
 const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?) : Container => {
     const DIContainer = new Container();
@@ -39,6 +40,7 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?) : Container => {
 
     DIContainer.bind<MatchingMemberService>(IDENTIFIER.MatchingMemberService).to(MatchingMemberService);
     DIContainer.bind<UuidGenerationService>(IDENTIFIER.UuidGenerationService).to(UuidGenerationService);
+    DIContainer.bind<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory).to(RelationMemberHappeningFactory);
 
     return DIContainer;
 };
