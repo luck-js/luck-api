@@ -7,7 +7,7 @@ export class MemberFactory {
 
     constructor(){}
 
-    create(id, relationId, name):IMember{
+    public create(id, relationId, name):IMember{
         const uniqueLink = `www.luck.com/${relationId}`;
 
         return new Member(

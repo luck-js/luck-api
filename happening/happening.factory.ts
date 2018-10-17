@@ -18,7 +18,7 @@ export class HappeningFactory {
         public memberFactory: MemberFactory) {
     }
 
-    create(): string {
+    public create(): string {
         return this.uuidGenerationService.createNewUuid();
     }
 
