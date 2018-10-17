@@ -14,7 +14,6 @@ export class MemberRepository {
     }
 
     public getByIndex(id: string) :IMember {
-        // @ts-ignore
         return this.list.find((el) => el.id === id)
     }
 

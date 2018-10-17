@@ -16,7 +16,6 @@ export class HappeningRepository {
     }
 
     public getByIndex(id: string): Happening {
-        // @ts-ignore
         const happening = this.list.find((el) => el.id === id);
         return this.happeningFactory.recreate(happening);
     }

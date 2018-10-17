@@ -18,7 +18,6 @@ export class MatchingMemberService {
 
             }
 
-            // @ts-ignore
             matchedMembersList.push(Object.assign({}, member, {matchedMemberId: idMemberRandom}));
 
             return matchedMembersList;

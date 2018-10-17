@@ -14,7 +14,6 @@ export class RelationMemberHappeningRepository {
     }
 
     public get(id: string): IRelationMemberHappening {
-        // @ts-ignore
         return this.list.find((el) => el.id === id)
     }
 }
