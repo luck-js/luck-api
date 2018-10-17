@@ -193,7 +193,7 @@ describe('Member API', function () {
 
             const billMember = happening.addMember(MEMBER_NAME);
 
-            const memberInformationView = memberApi.getMemberInformationView(billMember.relationId);
+            const memberInformationView = memberApi.getDataView(billMember.relationId);
 
             assert.strictEqual(billMember.name, memberInformationView.member.name);
             assert.strictEqual(happening.name, memberInformationView.happening.name);

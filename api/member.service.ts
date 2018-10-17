@@ -1,7 +1,7 @@
 import {RelationMemberHappeningRepository} from '../relation-member-happening/relation-member-happening.repository';
 import {MemberRepository} from '../member/member.repository';
 import {HappeningRepository} from '../happening/happening.repository';
-import {IMemberInformationView} from './member-information-view.model';
+import {IParticipationHappeningView} from './participation-happening-view.model';
 import {IMemberView} from './member-view.model';
 
 export class MemberService {
@@ -11,7 +11,7 @@ export class MemberService {
         private happeningRepository: HappeningRepository) {
     }
 
-    public getMemberInformationView(id: string): IMemberInformationView {
+    public getDataView(id: string): IParticipationHappeningView {
         const relation = this.relationMemberHappeningRepository.get(id);
         const member = this.memberRepository.getByIndex(relation.memberId);
         const happening = this.happeningRepository.getByIndex(relation.happeningId);
