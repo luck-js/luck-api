@@ -1,5 +1,7 @@
+import {injectable} from 'inversify';
 import {IMember} from './member.model';
 
+@injectable()
 export class MemberRepository {
     list: IMember[];
 
