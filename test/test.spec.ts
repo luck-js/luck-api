@@ -13,9 +13,8 @@ import {HappeningFactory} from '../happening/happening.factory';
 import {HappeningRepository} from '../happening/happening.repository';
 import {RelationMemberHappeningApi} from '../relation-member-happening/relation-member-happening.api';
 import {RelationMemberHappeningService} from '../relation-member-happening/relation-member-happening.service';
-import {DIContainer} from '../di-container';
+import {DIContainerProvider} from '../di-container';
 import IDENTIFIER from '../identifiers';
-import {IMember} from '../member/member.model';
 import {IHappening} from '../happening/happening.model';
 
 interface IDependencies {
@@ -30,7 +29,9 @@ interface IDependencies {
 }
 
 const initialDependencies = (MEMBER_INITIAL_LIST_MOCK?): IDependencies => {
-    const memberRepository = DIContainer.get<(memberList: IMember[]) => MemberRepository>(IDENTIFIER.DIFactoryMemberRepository)(MEMBER_INITIAL_LIST_MOCK);
+    const DIContainer = DIContainerProvider(MEMBER_INITIAL_LIST_MOCK);
+
+    const memberRepository = DIContainer.get<MemberRepository>(IDENTIFIER.MemberRepository);
     const memberFactory = new MemberFactory();
     let happeningRepository: HappeningRepository;
 
