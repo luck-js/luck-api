@@ -14,6 +14,11 @@ import {HappeningRepository} from '../happening/happening.repository';
 import {MemberApi} from '../api/member.api';
 import {MemberService} from '../api/member.service';
 
+function createHappening(happeningFactory: HappeningFactory, {name, description, isPublish}: any) : Happening{
+    const id = happeningFactory.create();
+    return happeningFactory.recreate({id, name, description, isPublish});
+}
+
 describe('Happening', function () {
     let happening;
     let happeningFactory;
@@ -28,7 +33,7 @@ describe('Happening', function () {
             new MemberFactory()
         );
 
-        happening = happeningFactory.create('initialHappening', '')
+        happening = createHappening(happeningFactory, {name: 'Initial Happening'})
     });
 
     describe('Creating new happening', function () {
@@ -58,7 +63,7 @@ describe('Members of happening', function () {
             new MemberFactory()
         );
 
-        happening = happeningFactory.create('', '')
+        happening = createHappening(happeningFactory, {name: 'Initial Happening'})
     });
 
     describe('Creating new members', function () {
@@ -133,7 +138,7 @@ describe('Relation member happening', function () {
             new MemberFactory()
         );
 
-        happening = happeningFactory.create('initialHappening', '')
+        happening = createHappening(happeningFactory, {name: 'Initial Happening'})
     });
 
     describe('Created relation after add member', function () {
@@ -156,15 +161,8 @@ describe('Member API', function () {
     let memberApi;
 
     beforeEach(function () {
-        happeningRepository = new HappeningRepository();
         memberRepository = new MemberRepository();
         relationMemberHappeningRepository = new RelationMemberHappeningRepository();
-
-        memberApi = new MemberApi(new MemberService(
-            relationMemberHappeningRepository,
-            memberRepository,
-            happeningRepository
-        ));
 
         happeningFactory = new HappeningFactory(
             memberRepository,
@@ -174,6 +172,14 @@ describe('Member API', function () {
             new RelationMemberHappeningFactory(),
             new MemberFactory()
         );
+
+        happeningRepository = new HappeningRepository([], happeningFactory);
+
+        memberApi = new MemberApi(new MemberService(
+            relationMemberHappeningRepository,
+            memberRepository,
+            happeningRepository
+        ));
     });
 
     describe('Get data of member information view', function () {
@@ -182,7 +188,7 @@ describe('Member API', function () {
             const HAPPENING_NAME = 'initialHappening';
             const MEMBER_NAME = 'Bill';
 
-            happening = happeningFactory.create(HAPPENING_NAME, '');
+            happening = createHappening(happeningFactory, {name: HAPPENING_NAME});
             happeningRepository.add(happening);
 
             const billMember = happening.addMember(MEMBER_NAME);
@@ -200,7 +206,7 @@ describe('Member API', function () {
             const HAPPENING_NAME = 'initialHappening';
             const MEMBER_NAMES = ['Bill', 'Victors'];
 
-            happening = happeningFactory.create(HAPPENING_NAME, '');
+            happening = createHappening(happeningFactory, {name: HAPPENING_NAME});
             happeningRepository.add(happening);
 
             const billMember = happening.addMember(MEMBER_NAMES[0]);
