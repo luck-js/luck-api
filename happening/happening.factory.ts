@@ -1,3 +1,4 @@
+import {injectable} from 'inversify';
 import {Happening} from './happening';
 import {MemberRepository} from '../member/member.repository';
 import {RelationMemberHappeningRepository} from '../relation-member-happening/relation-member-happening.repository';
@@ -7,7 +8,7 @@ import {RelationMemberHappeningFactory} from '../relation-member-happening/relat
 import {MemberFactory} from '../member/member.factory';
 import {IHappening} from './happening.model';
 
-
+@injectable()
 export class HappeningFactory {
     constructor(
         public memberRepository: MemberRepository,
