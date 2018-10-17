@@ -10,10 +10,10 @@ import {RelationMemberHappeningRepository} from '../relation-member-happening/re
 export class Happening implements IHappening {
 
     constructor(
-        public id: string,
-        public name: string,
-        public description: string,
-        public isPublish: boolean,
+        public id: string = '',
+        public name: string = '',
+        public description: string = '',
+        public isPublish: boolean = false,
         private memberRepository: MemberRepository,
         private relationMemberHappeningRepository: RelationMemberHappeningRepository,
         private matchingMemberService: MatchingMemberService,
