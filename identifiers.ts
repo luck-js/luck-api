@@ -6,7 +6,8 @@ const IDENTIFIER = {
 
     MatchingMemberService: Symbol.for('MatchingMemberService'),
     UuidGenerationService: Symbol.for('UuidGenerationService'),
-    RelationMemberHappeningFactory: Symbol.for('RelationMemberHappeningFactory')
+    RelationMemberHappeningFactory: Symbol.for('RelationMemberHappeningFactory'),
+    MemberFactory: Symbol.for('MemberFactory')
 };
 
 export default IDENTIFIER;
