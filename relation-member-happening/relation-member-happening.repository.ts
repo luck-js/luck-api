@@ -1,6 +1,7 @@
+import {injectable} from 'inversify';
 import {IRelationMemberHappening} from './relation-member-happening.model';
 
-
+@injectable()
 export class RelationMemberHappeningRepository {
 
     constructor(private list: IRelationMemberHappening[] = []){
