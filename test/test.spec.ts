@@ -38,7 +38,7 @@ const initialDependencies = (MEMBER_INITIAL_LIST_MOCK?): IDependencies => {
     const relationMemberHappeningFactory = new RelationMemberHappeningFactory();
     const relationMemberHappeningRepository = DIContainer.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
 
-    const matchingMemberService = new MatchingMemberService();
+    const matchingMemberService = DIContainer.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
     const uuidGenerationService = new UuidGenerationService();
 
     const happeningFactory = new HappeningFactory(

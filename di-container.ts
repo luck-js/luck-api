@@ -6,6 +6,7 @@ import {MemberRepository} from './member/member.repository';
 import {HappeningRepository} from './happening/happening.repository';
 import {IHappening} from './happening/happening.model';
 import {HappeningFactory} from './happening/happening.factory';
+import {MatchingMemberService} from './member/matching-member.service';
 
 const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?) : Container => {
     const DIContainer = new Container();
@@ -34,6 +35,8 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?) : Container => {
                     happeningFactory);
             };
         });
+
+    DIContainer.bind<MatchingMemberService>(IDENTIFIER.MatchingMemberService).to(MatchingMemberService);
 
     return DIContainer;
 };
