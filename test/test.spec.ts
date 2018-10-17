@@ -33,7 +33,6 @@ const initialDependencies = (MEMBER_INITIAL_LIST_MOCK?): IDependencies => {
 
     const memberRepository = DIContainer.get<MemberRepository>(IDENTIFIER.MemberRepository);
     const memberFactory = DIContainer.get<MemberFactory>(IDENTIFIER.MemberFactory);
-    let happeningRepository: HappeningRepository;
 
     const relationMemberHappeningFactory = DIContainer.get<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory);
     const relationMemberHappeningRepository = DIContainer.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
@@ -50,7 +49,7 @@ const initialDependencies = (MEMBER_INITIAL_LIST_MOCK?): IDependencies => {
         memberFactory,
     );
 
-    happeningRepository = DIContainer.get<(happeningList: IHappening[], happeningFactory: HappeningFactory) => HappeningRepository>(IDENTIFIER.DIFactoryHappeningRepository)([], happeningFactory);
+    const happeningRepository = DIContainer.get<(happeningList: IHappening[], happeningFactory: HappeningFactory) => HappeningRepository>(IDENTIFIER.DIFactoryHappeningRepository)([], happeningFactory);
 
     return {
         happeningFactory,
