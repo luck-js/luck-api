@@ -11,8 +11,8 @@ import {RelationMemberHappeningRepository} from '../relation-member-happening/re
 import {RelationMemberHappeningFactory} from '../relation-member-happening/relation-member-happening.factory';
 import {HappeningFactory} from '../happening/happening.factory';
 import {HappeningRepository} from '../happening/happening.repository';
-import {MemberApi} from '../api/member.api';
-import {MemberService} from '../api/member.service';
+import {RelationMemberHappeningApi} from '../relation-member-happening/relation-member-happening.api';
+import {RelationMemberHappeningService} from '../relation-member-happening/relation-member-happening.service';
 
 function createHappening(happeningFactory: HappeningFactory, {name, description, isPublish}: any) : Happening{
     const id = happeningFactory.create();
@@ -175,7 +175,7 @@ describe('Member API', function () {
 
         happeningRepository = new HappeningRepository([], happeningFactory);
 
-        memberApi = new MemberApi(new MemberService(
+        memberApi = new RelationMemberHappeningApi(new RelationMemberHappeningService(
             relationMemberHappeningRepository,
             memberRepository,
             happeningRepository

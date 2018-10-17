@@ -1,10 +1,10 @@
-import {RelationMemberHappeningRepository} from '../relation-member-happening/relation-member-happening.repository';
+import {RelationMemberHappeningRepository} from './relation-member-happening.repository';
 import {MemberRepository} from '../member/member.repository';
 import {HappeningRepository} from '../happening/happening.repository';
 import {IParticipationHappeningView} from './participation-happening-view.model';
 import {IMemberView} from './member-view.model';
 
-export class MemberService {
+export class RelationMemberHappeningService {
     constructor(
         private relationMemberHappeningRepository: RelationMemberHappeningRepository,
         private memberRepository: MemberRepository,
