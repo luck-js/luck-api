@@ -1,3 +1,6 @@
+import {injectable} from 'inversify';
+
+@injectable()
 export class UuidGenerationService {
     createNewUuid() : string {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {

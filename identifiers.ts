@@ -4,7 +4,8 @@ const IDENTIFIER = {
 
     DIFactoryHappeningRepository: Symbol.for('DIFactoryHappeningRepository'),
 
-    MatchingMemberService: Symbol.for('MatchingMemberService')
+    MatchingMemberService: Symbol.for('MatchingMemberService'),
+    UuidGenerationService: Symbol.for('UuidGenerationService')
 };
 
 export default IDENTIFIER;
