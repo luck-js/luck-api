@@ -142,22 +142,15 @@ describe('Relation member happening', function () {
 describe('Member API', function () {
     let DIContainer: Container;
     let happening: Happening;
-    let relationMemberHappeningRepository: RelationMemberHappeningRepository;
-    let memberRepository: MemberRepository;
     let happeningRepository: HappeningRepository;
-    let relationMemberHappeningService: RelationMemberHappeningService;
-    let memberApi;
+    let memberApi: RelationMemberHappeningApi;
 
     beforeEach(function () {
         DIContainer = initialDependencies();
         happening = createHappening(DIContainer, {name: 'Initial Happening'});
 
-        relationMemberHappeningRepository = DIContainer.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
-        memberRepository = DIContainer.get<MemberRepository>(IDENTIFIER.MemberRepository);
         happeningRepository = DIContainer.get<HappeningRepository>(IDENTIFIER.HappeningRepository);
-        relationMemberHappeningService = DIContainer.get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
-
-        memberApi = new RelationMemberHappeningApi(relationMemberHappeningService);
+        memberApi = DIContainer.get<RelationMemberHappeningApi>(IDENTIFIER.RelationMemberHappeningApi);
     });
 
     describe('Get data of member information view', function () {
