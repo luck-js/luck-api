@@ -145,6 +145,7 @@ describe('Member API', function () {
     let relationMemberHappeningRepository: RelationMemberHappeningRepository;
     let memberRepository: MemberRepository;
     let happeningRepository: HappeningRepository;
+    let relationMemberHappeningService: RelationMemberHappeningService;
     let memberApi;
 
     beforeEach(function () {
@@ -154,12 +155,9 @@ describe('Member API', function () {
         relationMemberHappeningRepository = DIContainer.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
         memberRepository = DIContainer.get<MemberRepository>(IDENTIFIER.MemberRepository);
         happeningRepository = DIContainer.get<HappeningRepository>(IDENTIFIER.HappeningRepository);
+        relationMemberHappeningService = DIContainer.get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
 
-        memberApi = new RelationMemberHappeningApi(new RelationMemberHappeningService(
-            relationMemberHappeningRepository,
-            memberRepository,
-            happeningRepository
-        ));
+        memberApi = new RelationMemberHappeningApi(relationMemberHappeningService);
     });
 
     describe('Get data of member information view', function () {
