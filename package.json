@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --colors -r ts-node/register \"./src/**/*.spec.ts\"",
-    "lint": "tslint --outputAbsolutePaths -c tslint.json \"./src/**/*.ts\""
+    "lint": "tslint --outputAbsolutePaths -c tslint.json \"./src/**/*.ts\"",
+    "lint-fix": "tslint --fix \"./src/**/*.ts\""
   },
   "repository": {
     "type": "git",

@@ -1,7 +1,7 @@
-import {injectable} from 'inversify';
-import {IHappening} from './happening.model';
-import {Happening} from './happening';
-import {HappeningFactory} from './happening.factory';
+import { injectable } from 'inversify';
+import { IHappening } from './happening.model';
+import { Happening } from './happening';
+import { HappeningFactory } from './happening.factory';
 
 @injectable()
 export class HappeningRepository {

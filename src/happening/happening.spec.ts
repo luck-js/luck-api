@@ -1,10 +1,10 @@
 import * as assert from 'assert';
-import {Container} from 'inversify';
+import { Container } from 'inversify';
 import IDENTIFIER from '../identifiers';
-import {createHappening, initialDependencies} from '../test/test.spec';
-import {Happening} from './happening';
-import {MEMBER_INITIAL_LIST_MOCK} from '../member/member.mock';
-import {MatchingMemberService} from '../member/matching-member.service';
+import { createHappening, initialDependencies } from '../test/test.spec';
+import { Happening } from './happening';
+import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
+import { MatchingMemberService } from '../member/matching-member.service';
 
 describe('Happening', function () {
     let DIContainer: Container;
@@ -12,7 +12,7 @@ describe('Happening', function () {
 
     beforeEach(function () {
         DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
-        happening = createHappening(DIContainer, {name: 'Initial Happening'});
+        happening = createHappening(DIContainer, { name: 'Initial Happening' });
     });
 
     describe('Creating new happening', function () {
@@ -22,7 +22,7 @@ describe('Happening', function () {
         });
 
         it('Created happening should be unique id', function () {
-            const happeningSecond = createHappening(DIContainer, {name: 'Second Happening'});
+            const happeningSecond = createHappening(DIContainer, { name: 'Second Happening' });
 
             assert.notStrictEqual(happeningSecond.id, happening.id)
         });
@@ -35,7 +35,7 @@ describe('Members of happening', function () {
 
     beforeEach(function () {
         DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
-        happening = createHappening(DIContainer, {name: 'Initial Happening'});
+        happening = createHappening(DIContainer, { name: 'Initial Happening' });
     });
 
     describe('Creating new members', function () {

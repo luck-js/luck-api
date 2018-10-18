@@ -1,7 +1,7 @@
-import {injectable} from 'inversify';
-import {Happening} from './happening';
-import {UuidGenerationService} from '../member/uuid-generation.service';
-import {IHappening} from './happening.model';
+import { injectable } from 'inversify';
+import { Happening } from './happening';
+import { UuidGenerationService } from '../member/uuid-generation.service';
+import { IHappening } from './happening.model';
 
 @injectable()
 export class HappeningFactory {
@@ -14,7 +14,7 @@ export class HappeningFactory {
         return this.uuidGenerationService.createNewUuid();
     }
 
-    public recreate({id, name, description, isPublish}: IHappening): Happening {
+    public recreate({ id, name, description, isPublish }: IHappening): Happening {
         return this.DIFactoryHappening(id, name, description, isPublish);
     }
 }
