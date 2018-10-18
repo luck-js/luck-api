@@ -7,11 +7,12 @@ import { Member } from './member';
 export class MemberFactory {
 
     constructor(
-        @inject(IDENTIFIER.DIFactoryMember) private DIFactoryMember: (id: string, relationId: string, name: string, uniqueLink: string, matchedMemberId: string) => Member) {}
+        @inject(IDENTIFIER.DIFactoryMember) private DIFactoryMember: (option: IMember) => Member) {}
 
-    public create(id, relationId, name): IMember {
+    public create(id: string, relationId: string, name: string): IMember {
         const uniqueLink = `www.luck.com/${relationId}`;
+        const matchedMemberId = null;
 
-        return this.DIFactoryMember(id, relationId, name, uniqueLink, null)
+        return this.DIFactoryMember({ id, relationId, name, uniqueLink, matchedMemberId })
     }
 }

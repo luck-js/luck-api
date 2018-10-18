@@ -13,6 +13,7 @@ import { Happening } from './happening/happening';
 import { Member } from './member/member';
 import { RelationMemberHappeningService } from './relation-member-happening/relation-member-happening.service';
 import { RelationMemberHappeningApi } from './relation-member-happening/relation-member-happening.api';
+import { IMember } from './member/member.model';
 
 const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_MOCK?): Container => {
     const DIContainer = new Container();
@@ -57,9 +58,9 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
             };
         });
 
-    DIContainer.bind <(id: string, relationId: string, name: string, uniqueLink: string, matchedMemberId: string) => Member>(IDENTIFIER.DIFactoryMember)
+    DIContainer.bind <(option: IMember) => Member>(IDENTIFIER.DIFactoryMember)
         .toFactory<Member>((context) => {
-            return (id: string, relationId: string, name: string, uniqueLink: string, matchedMemberId: string) => {
+            return ({ id, relationId, name, uniqueLink, matchedMemberId }: IMember) => {
 
                 return new Member(
                     id,
