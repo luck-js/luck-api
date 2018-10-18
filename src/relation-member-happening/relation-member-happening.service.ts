@@ -21,8 +21,11 @@ export class RelationMemberHappeningService {
         }
     }
 
-    public getMatchedMember(id: string): IMemberView {
-        const member = this.memberRepository.getByIndex(id);
-        return this.memberRepository.getByIndex(member.matchedMemberId);
+    public getMatchedMember(idRelation: string): IMemberView {
+        const relation = this.relationMemberHappeningRepository.get(idRelation);
+        const { matchedMemberId } = relation.getMember();
+        const { id, name } = this.memberRepository.getByIndex(matchedMemberId);
+
+        return { id, name };
     }
 }

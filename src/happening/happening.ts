@@ -29,12 +29,13 @@ export class Happening implements IHappening {
         }
         const memberId = this.uuidGenerationService.createNewUuid();
         const relationId = this.uuidGenerationService.createNewUuid();
+        const relationMemberHappeningArguments = { memberId, id: relationId, happeningId: this.id };
 
         const member = this.memberFactory.create(memberId, relationId, name);
-        const relation = this.relationMemberHappeningFactory.create(relationId, memberId, this.id);
+        const relation = this.relationMemberHappeningFactory.create(relationMemberHappeningArguments);
 
         this.memberRepository.add(member);
-        this.relationMemberHappeningRepository.add(relation);
+        this.relationMemberHappeningRepository.add(relationMemberHappeningArguments);
 
         return member
     }
