@@ -1,10 +1,10 @@
 import * as assert from 'assert';
-import {Container} from 'inversify';
+import { Container } from 'inversify';
 import IDENTIFIER from '../identifiers';
-import {createHappening, initialDependencies} from '../test/test.spec';
-import {Happening} from '../happening/happening';
-import {MEMBER_INITIAL_LIST_MOCK} from '../member/member.mock';
-import {RelationMemberHappeningRepository} from './relation-member-happening.repository';
+import { createHappening, initialDependencies } from '../test/test.spec';
+import { Happening } from '../happening/happening';
+import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
+import { RelationMemberHappeningRepository } from './relation-member-happening.repository';
 
 describe('Relation member happening', function () {
     let DIContainer: Container;
@@ -12,7 +12,7 @@ describe('Relation member happening', function () {
 
     beforeEach(function () {
         DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
-        happening = createHappening(DIContainer, {name: 'Initial Happening'});
+        happening = createHappening(DIContainer, { name: 'Initial Happening' });
     });
 
     describe('Created relation after add member', function () {

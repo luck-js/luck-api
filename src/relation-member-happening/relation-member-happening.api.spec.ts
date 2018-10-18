@@ -1,10 +1,10 @@
 import * as assert from 'assert';
-import {Container} from 'inversify';
+import { Container } from 'inversify';
 import IDENTIFIER from '../identifiers';
-import {createHappening, initialDependencies} from '../test/test.spec';
-import {Happening} from '../happening/happening';
-import {HappeningRepository} from '../happening/happening.repository';
-import {RelationMemberHappeningApi} from './relation-member-happening.api';
+import { createHappening, initialDependencies } from '../test/test.spec';
+import { Happening } from '../happening/happening';
+import { HappeningRepository } from '../happening/happening.repository';
+import { RelationMemberHappeningApi } from './relation-member-happening.api';
 
 describe('Relation Member Happening Api', function () {
     let DIContainer: Container;
@@ -14,7 +14,7 @@ describe('Relation Member Happening Api', function () {
 
     beforeEach(function () {
         DIContainer = initialDependencies();
-        happening = createHappening(DIContainer, {name: 'Initial Happening'});
+        happening = createHappening(DIContainer, { name: 'Initial Happening' });
 
         happeningRepository = DIContainer.get<HappeningRepository>(IDENTIFIER.HappeningRepository);
         memberApi = DIContainer.get<RelationMemberHappeningApi>(IDENTIFIER.RelationMemberHappeningApi);
@@ -26,7 +26,7 @@ describe('Relation Member Happening Api', function () {
             const HAPPENING_NAME = 'initialHappening';
             const MEMBER_NAME = 'Bill';
 
-            happening = createHappening(DIContainer, {name: HAPPENING_NAME});
+            happening = createHappening(DIContainer, { name: HAPPENING_NAME });
             happeningRepository.add(happening);
 
             const billMember = happening.addMember(MEMBER_NAME);
@@ -44,7 +44,7 @@ describe('Relation Member Happening Api', function () {
             const HAPPENING_NAME = 'initialHappening';
             const MEMBER_NAMES = ['Bill', 'Victors'];
 
-            happening = createHappening(DIContainer, {name: HAPPENING_NAME});
+            happening = createHappening(DIContainer, { name: HAPPENING_NAME });
             happeningRepository.add(happening);
 
             const billMember = happening.addMember(MEMBER_NAMES[0]);

@@ -1,5 +1,5 @@
-import {injectable} from 'inversify';
-import {IMember} from './member.model';
+import { injectable } from 'inversify';
+import { IMember } from './member.model';
 
 @injectable()
 export class MemberRepository {
@@ -15,7 +15,7 @@ export class MemberRepository {
         return member
     }
 
-    public getByIndex(id: string) :IMember {
+    public getByIndex(id: string): IMember {
         return this.list.find((el) => el.id === id)
     }
 
@@ -27,7 +27,7 @@ export class MemberRepository {
         this.list = memberList;
     }
 
-    public updateMatchedMemberId(id: string, idMatched: string,) {
+    public updateMatchedMemberId(id: string, idMatched: string ) {
 
     }
 }

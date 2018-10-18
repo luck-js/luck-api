@@ -1,11 +1,11 @@
-import {IHappening} from './happening.model';
-import {MemberRepository} from '../member/member.repository';
-import {IMember} from '../member/member.model';
-import {MatchingMemberService} from '../member/matching-member.service';
-import {MemberFactory} from '../member/member.factory';
-import {RelationMemberHappeningFactory} from '../relation-member-happening/relation-member-happening.factory';
-import {UuidGenerationService} from '../member/uuid-generation.service';
-import {RelationMemberHappeningRepository} from '../relation-member-happening/relation-member-happening.repository';
+import { IHappening } from './happening.model';
+import { MemberRepository } from '../member/member.repository';
+import { IMember } from '../member/member.model';
+import { MatchingMemberService } from '../member/matching-member.service';
+import { MemberFactory } from '../member/member.factory';
+import { RelationMemberHappeningFactory } from '../relation-member-happening/relation-member-happening.factory';
+import { UuidGenerationService } from '../member/uuid-generation.service';
+import { RelationMemberHappeningRepository } from '../relation-member-happening/relation-member-happening.repository';
 
 export class Happening implements IHappening {
 

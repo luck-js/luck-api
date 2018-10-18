@@ -1,4 +1,4 @@
-import {IMember} from './member.model';
+import { IMember } from './member.model';
 
 export class Member implements IMember {
 

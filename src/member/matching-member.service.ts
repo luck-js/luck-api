@@ -1,5 +1,5 @@
-import {injectable} from 'inversify';
-import {IMember} from './member.model';
+import { injectable } from 'inversify';
+import { IMember } from './member.model';
 
 @injectable()
 export class MatchingMemberService {
@@ -20,7 +20,7 @@ export class MatchingMemberService {
 
             }
 
-            matchedMembersList.push(Object.assign({}, member, {matchedMemberId: idMemberRandom}));
+            matchedMembersList.push(Object.assign({}, member, { matchedMemberId: idMemberRandom }));
 
             return matchedMembersList;
         }, []);
@@ -46,4 +46,3 @@ function pullOutIdsToRandom(matchedMembersList, membersList, currentMemberId) {
         .map((el) => el.id)
         .filter((id) => id !== currentMemberId)
 }
-
