@@ -24,7 +24,7 @@ describe('Relation member happening', function () {
             const billMember = happening.addMember('Bill');
             const relation = relationMemberHappeningRepository.get(billMember.relationId);
 
-            assert.strictEqual(billMember.id, relation.memberId);
+            assert.strictEqual(billMember.id, relation.getMember().id);
         });
     });
 });
