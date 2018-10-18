@@ -10,20 +10,21 @@ import {UuidGenerationService} from './member/uuid-generation.service';
 import {RelationMemberHappeningFactory} from './relation-member-happening/relation-member-happening.factory';
 import {MemberFactory} from './member/member.factory';
 import {Happening} from './happening/happening';
+import {Member} from './member/member';
 
-const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_MOCK?) : Container => {
+const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_MOCK?): Container => {
     const DIContainer = new Container();
 
 
     DIContainer.bind<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository)
         .toConstantValue(new RelationMemberHappeningRepository(
-                [])
+            [])
         );
 
     DIContainer.bind<MemberRepository>(IDENTIFIER.MemberRepository)
         .toConstantValue(new MemberRepository(
-                MEMBER_INITIAL_LIST_MOCK
-            ));
+            MEMBER_INITIAL_LIST_MOCK
+        ));
 
     DIContainer.bind<MatchingMemberService>(IDENTIFIER.MatchingMemberService).to(MatchingMemberService);
     DIContainer.bind<UuidGenerationService>(IDENTIFIER.UuidGenerationService).to(UuidGenerationService);
@@ -54,6 +55,19 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
             };
         });
 
+    DIContainer.bind <(id: string, relationId: string, name: string, uniqueLink: string, matchedMemberId: string) => Member>(IDENTIFIER.DIFactoryMember)
+        .toFactory<Member>((context) => {
+            return (id: string, relationId: string, name: string, uniqueLink: string, matchedMemberId: string) => {
+
+                return new Member(
+                    id,
+                    relationId,
+                    name,
+                    uniqueLink,
+                    matchedMemberId);
+            };
+        });
+
     DIContainer.bind<HappeningFactory>(IDENTIFIER.HappeningFactory)
         .toDynamicValue((context: interfaces.Context) => {
             const uuidGenerationService = context.container.get<UuidGenerationService>(IDENTIFIER.UuidGenerationService);
@@ -67,11 +81,11 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
 
     DIContainer.bind<HappeningRepository>(IDENTIFIER.HappeningRepository)
         .toDynamicValue((context: interfaces.Context) => {
-                const happeningFactory = context.container.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
+            const happeningFactory = context.container.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
 
-                return new HappeningRepository(
-                    HAPPENING_INITIAL_LIST_MOCK,
-                    happeningFactory);
+            return new HappeningRepository(
+                HAPPENING_INITIAL_LIST_MOCK,
+                happeningFactory);
         });
 
     return DIContainer;
