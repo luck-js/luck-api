@@ -9,8 +9,7 @@ export const initialDependencies = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL
     return DIContainerProvider(MEMBER_INITIAL_LIST_MOCK, HAPPENING_INITIAL_LIST_MOCK);
 };
 
-export function createHappening(DIContainer: Container, { name, description, isPublish }: any): Happening {
+export function createHappening(DIContainer: Container, { name, description }: any): Happening {
     const happeningFactory = DIContainer.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
-    const id = happeningFactory.create();
-    return happeningFactory.recreate({ id, name, description, isPublish });
+    return happeningFactory.create({ name, description });
 }
