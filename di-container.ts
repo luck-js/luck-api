@@ -9,6 +9,7 @@ import {MatchingMemberService} from './member/matching-member.service';
 import {UuidGenerationService} from './member/uuid-generation.service';
 import {RelationMemberHappeningFactory} from './relation-member-happening/relation-member-happening.factory';
 import {MemberFactory} from './member/member.factory';
+import {Happening} from './happening/happening';
 
 const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_MOCK?) : Container => {
     const DIContainer = new Container();
@@ -29,22 +30,38 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
     DIContainer.bind<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory).to(RelationMemberHappeningFactory);
     DIContainer.bind<MemberFactory>(IDENTIFIER.MemberFactory).to(MemberFactory);
 
+    DIContainer.bind <(id: string, name: string, description: string, isPublish: boolean) => Happening>(IDENTIFIER.DIFactoryHappening)
+        .toFactory<Happening>((context) => {
+            return (id: string, name: string, description: string, isPublish: boolean) => {
+                const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
+                const relationMemberHappeningRepository = context.container.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
+                const matchingMemberService = context.container.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
+                const uuidGenerationService = context.container.get<UuidGenerationService>(IDENTIFIER.UuidGenerationService);
+                const relationMemberHappeningFactory = context.container.get<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory);
+                const memberFactory = context.container.get<MemberFactory>(IDENTIFIER.MemberFactory);
+
+                return new Happening(
+                    id,
+                    name,
+                    description,
+                    isPublish,
+                    memberRepository,
+                    relationMemberHappeningRepository,
+                    matchingMemberService,
+                    uuidGenerationService,
+                    relationMemberHappeningFactory,
+                    memberFactory);
+            };
+        });
+
     DIContainer.bind<HappeningFactory>(IDENTIFIER.HappeningFactory)
         .toDynamicValue((context: interfaces.Context) => {
-            const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
-            const relationMemberHappeningRepository = context.container.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
-            const matchingMemberService = context.container.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
             const uuidGenerationService = context.container.get<UuidGenerationService>(IDENTIFIER.UuidGenerationService);
-            const relationMemberHappeningFactory = context.container.get<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory);
-            const memberFactory = context.container.get<MemberFactory>(IDENTIFIER.MemberFactory);
+            const DIFactoryHappening = context.container.get<(id: string, name: string, description: string, isPublish: boolean) => Happening>(IDENTIFIER.DIFactoryHappening);
 
             return new HappeningFactory(
-                memberRepository,
-                relationMemberHappeningRepository,
-                matchingMemberService,
                 uuidGenerationService,
-                relationMemberHappeningFactory,
-                memberFactory
+                DIFactoryHappening
             )
         });
 

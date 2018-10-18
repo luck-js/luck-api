@@ -1,22 +1,13 @@
 import {injectable} from 'inversify';
 import {Happening} from './happening';
-import {MemberRepository} from '../member/member.repository';
-import {RelationMemberHappeningRepository} from '../relation-member-happening/relation-member-happening.repository';
-import {MatchingMemberService} from '../member/matching-member.service';
 import {UuidGenerationService} from '../member/uuid-generation.service';
-import {RelationMemberHappeningFactory} from '../relation-member-happening/relation-member-happening.factory';
-import {MemberFactory} from '../member/member.factory';
 import {IHappening} from './happening.model';
 
 @injectable()
 export class HappeningFactory {
     constructor(
-        public memberRepository: MemberRepository,
-        public relationMemberHappeningRepository: RelationMemberHappeningRepository,
-        public matchingMemberService: MatchingMemberService,
-        public uuidGenerationService: UuidGenerationService,
-        public relationMemberHappeningFactory: RelationMemberHappeningFactory,
-        public memberFactory: MemberFactory) {
+        private uuidGenerationService: UuidGenerationService,
+        private DIFactoryHappening: (id: string, name: string, description: string, isPublish: boolean) => Happening) {
     }
 
     public create(): string {
@@ -24,17 +15,6 @@ export class HappeningFactory {
     }
 
     public recreate({id, name, description, isPublish}: IHappening): Happening {
-        return new Happening(
-            id,
-            name,
-            description,
-            isPublish,
-            this.memberRepository,
-            this.relationMemberHappeningRepository,
-            this.matchingMemberService,
-            this.uuidGenerationService,
-            this.relationMemberHappeningFactory,
-            this.memberFactory
-        )
+        return this.DIFactoryHappening(id, name, description, isPublish);
     }
 }
