@@ -4,6 +4,7 @@ const IDENTIFIER = {
     HappeningRepository: Symbol.for('HappeningRepository'),
 
     DIFactoryHappeningRepository: Symbol.for('DIFactoryHappeningRepository'),
+    DIFactoryHappening: Symbol.for('DIFactoryHappening'),
 
     MatchingMemberService: Symbol.for('MatchingMemberService'),
     UuidGenerationService: Symbol.for('UuidGenerationService'),
