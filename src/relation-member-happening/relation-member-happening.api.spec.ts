@@ -22,7 +22,7 @@ describe('Relation Member Happening Api', function () {
 
     describe('Get data of member information view', function () {
 
-        it('Data should has correctly member and happening name', function () {
+        it('Data should have correct member and happening name', function () {
             const HAPPENING_NAME = 'initialHappening';
             const MEMBER_NAME = 'Bill';
 
