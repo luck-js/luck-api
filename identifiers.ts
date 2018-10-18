@@ -3,7 +3,6 @@ const IDENTIFIER = {
     MemberRepository: Symbol.for('MemberRepository'),
     HappeningRepository: Symbol.for('HappeningRepository'),
 
-    DIFactoryHappeningRepository: Symbol.for('DIFactoryHappeningRepository'),
     DIFactoryHappening: Symbol.for('DIFactoryHappening'),
     DIFactoryMember: Symbol.for('DIFactoryMember'),
 
