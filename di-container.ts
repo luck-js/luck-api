@@ -87,7 +87,7 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
             return new HappeningRepository(
                 HAPPENING_INITIAL_LIST_MOCK,
                 happeningFactory);
-        });
+        }).inSingletonScope();
 
     DIContainer.bind<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService)
         .toDynamicValue((context: interfaces.Context) => {
