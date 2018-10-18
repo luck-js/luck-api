@@ -14,6 +14,7 @@ import { Member } from './member/member';
 import { RelationMemberHappeningService } from './relation-member-happening/relation-member-happening.service';
 import { RelationMemberHappeningApi } from './relation-member-happening/relation-member-happening.api';
 import { IMember } from './member/member.model';
+import { IHappening } from './happening/happening.model';
 
 const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_MOCK?): Container => {
     const DIContainer = new Container();
@@ -34,9 +35,9 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
     DIContainer.bind<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory).to(RelationMemberHappeningFactory);
     DIContainer.bind<MemberFactory>(IDENTIFIER.MemberFactory).to(MemberFactory);
 
-    DIContainer.bind <(id: string, name: string, description: string, isPublish: boolean) => Happening>(IDENTIFIER.DIFactoryHappening)
+    DIContainer.bind <(option: IHappening) => Happening>(IDENTIFIER.DIFactoryHappening)
         .toFactory<Happening>((context) => {
-            return (id: string, name: string, description: string, isPublish: boolean) => {
+            return ({ id, name, description, isPublish }: IHappening) => {
                 const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
                 const relationMemberHappeningRepository = context.container.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
                 const matchingMemberService = context.container.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
@@ -74,7 +75,7 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
     DIContainer.bind<HappeningFactory>(IDENTIFIER.HappeningFactory)
         .toDynamicValue((context: interfaces.Context) => {
             const uuidGenerationService = context.container.get<UuidGenerationService>(IDENTIFIER.UuidGenerationService);
-            const DIFactoryHappening = context.container.get<(id: string, name: string, description: string, isPublish: boolean) => Happening>(IDENTIFIER.DIFactoryHappening);
+            const DIFactoryHappening = context.container.get<(option: IHappening) => Happening>(IDENTIFIER.DIFactoryHappening);
 
             return new HappeningFactory(
                 uuidGenerationService,

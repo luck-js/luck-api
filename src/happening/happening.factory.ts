@@ -7,14 +7,14 @@ import { IHappening } from './happening.model';
 export class HappeningFactory {
     constructor(
         private uuidGenerationService: UuidGenerationService,
-        private DIFactoryHappening: (id: string, name: string, description: string, isPublish: boolean) => Happening) {
+        private DIFactoryHappening: (option: IHappening) => Happening) {
     }
 
     public create(): string {
         return this.uuidGenerationService.createNewUuid();
     }
 
-    public recreate({ id, name, description, isPublish }: IHappening): Happening {
-        return this.DIFactoryHappening(id, name, description, isPublish);
+    public recreate(option: IHappening): Happening {
+        return this.DIFactoryHappening(option);
     }
 }
