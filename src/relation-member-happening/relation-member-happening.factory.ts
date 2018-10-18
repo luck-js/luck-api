@@ -1,17 +1,20 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
+import IDENTIFIER from '../identifiers';
 import { IRelationMemberHappening } from './relation-member-happening.model';
+import { RelationMemberHappening } from './relation-member-happening';
 
 @injectable()
 export class RelationMemberHappeningFactory {
-    constructor() {
+    constructor(
+        @inject(IDENTIFIER.DIFactoryRelationMemberHappening)
+        private DIFactoryRelationMemberHappening: (option: IRelationMemberHappening) => RelationMemberHappening) {
     }
 
-    public create(id: string, memberId: string, happeningId: string): IRelationMemberHappening {
+    public create(option: IRelationMemberHappening): RelationMemberHappening {
+        return this.recreate(option)
+    }
 
-        return {
-            id,
-            memberId,
-            happeningId,
-        }
+    public recreate(option: IRelationMemberHappening): RelationMemberHappening {
+        return this.DIFactoryRelationMemberHappening(option)
     }
 }

@@ -15,15 +15,22 @@ import { RelationMemberHappeningService } from './relation-member-happening/rela
 import { RelationMemberHappeningApi } from './relation-member-happening/relation-member-happening.api';
 import { IMember } from './member/member.model';
 import { IHappening } from './happening/happening.model';
+import { RelationMemberHappening } from './relation-member-happening/relation-member-happening';
+import { IRelationMemberHappening } from './relation-member-happening/relation-member-happening.model';
 
 const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_MOCK?): Container => {
     const DIContainer = new Container();
 
 
     DIContainer.bind<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository)
-        .toConstantValue(new RelationMemberHappeningRepository(
-            [])
-        );
+        .toDynamicValue((context: interfaces.Context) => {
+            const relationMemberHappeningFactory = context
+                .container.get<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory);
+
+            return new RelationMemberHappeningRepository(
+                [],
+                relationMemberHappeningFactory)
+        }).inSingletonScope();
 
     DIContainer.bind<MemberRepository>(IDENTIFIER.MemberRepository)
         .toConstantValue(new MemberRepository(
@@ -76,6 +83,22 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
             };
         });
 
+    DIContainer.bind <(option: IRelationMemberHappening) => RelationMemberHappening>(IDENTIFIER.DIFactoryRelationMemberHappening)
+        .toFactory<RelationMemberHappening>((context) => {
+            return ({ id, memberId, happeningId }: IRelationMemberHappening) => {
+                const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
+                const happeningRepository = context.container.get<HappeningRepository>(IDENTIFIER.HappeningRepository);
+
+                return new RelationMemberHappening(
+                    id,
+                    memberId,
+                    happeningId,
+                    memberRepository,
+                    happeningRepository
+                );
+            };
+        });
+
     DIContainer.bind<HappeningFactory>(IDENTIFIER.HappeningFactory)
         .toDynamicValue((context: interfaces.Context) => {
             const uuidGenerationService = context.container.get<UuidGenerationService>(IDENTIFIER.UuidGenerationService);
@@ -102,12 +125,10 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
                 .container.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
 
             const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
-            const happeningRepository = context.container.get<HappeningRepository>(IDENTIFIER.HappeningRepository);
 
             return new RelationMemberHappeningService(
                 relationMemberHappeningRepository,
-                memberRepository,
-                happeningRepository);
+                memberRepository);
         });
 
     DIContainer.bind<RelationMemberHappeningApi>(IDENTIFIER.RelationMemberHappeningApi)
