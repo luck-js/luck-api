@@ -51,7 +51,7 @@ describe('Relation Member Happening Api', function () {
             const victorsMember = happening.addMember(MEMBER_NAMES[1]);
             happening.publishEvent();
 
-            const matchedMember = memberApi.getMatchedMember(billMember.id);
+            const matchedMember = memberApi.getMatchedMember(billMember.relationId);
 
             assert.strictEqual(victorsMember.id, matchedMember.id);
         });
