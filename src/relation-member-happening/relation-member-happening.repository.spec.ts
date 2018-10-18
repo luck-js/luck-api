@@ -18,7 +18,8 @@ describe('Relation member happening', function () {
     describe('Created relation after add member', function () {
 
         it('Relation should be created member of happening to happening', function () {
-            const relationMemberHappeningRepository = DIContainer.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
+            const relationMemberHappeningRepository = DIContainer
+                .get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
 
             const billMember = happening.addMember('Bill');
             const relation = relationMemberHappeningRepository.get(billMember.relationId);

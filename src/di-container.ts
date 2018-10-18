@@ -39,10 +39,14 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
         .toFactory<Happening>((context) => {
             return ({ id, name, description, isPublish }: IHappening) => {
                 const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
-                const relationMemberHappeningRepository = context.container.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
+                const relationMemberHappeningRepository = context
+                    .container.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
+
                 const matchingMemberService = context.container.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
                 const uuidGenerationService = context.container.get<UuidGenerationService>(IDENTIFIER.UuidGenerationService);
-                const relationMemberHappeningFactory = context.container.get<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory);
+                const relationMemberHappeningFactory = context
+                    .container.get<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory);
+
                 const memberFactory = context.container.get<MemberFactory>(IDENTIFIER.MemberFactory);
 
                 return new Happening(
@@ -94,7 +98,9 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
 
     DIContainer.bind<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService)
         .toDynamicValue((context: interfaces.Context) => {
-            const relationMemberHappeningRepository = context.container.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
+            const relationMemberHappeningRepository = context
+                .container.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
+
             const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
             const happeningRepository = context.container.get<HappeningRepository>(IDENTIFIER.HappeningRepository);
 
@@ -106,7 +112,8 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
 
     DIContainer.bind<RelationMemberHappeningApi>(IDENTIFIER.RelationMemberHappeningApi)
         .toDynamicValue((context: interfaces.Context) => {
-            const relationMemberHappeningService = context.container.get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
+            const relationMemberHappeningService = context
+                .container.get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
 
             return new RelationMemberHappeningApi(relationMemberHappeningService);
         });
