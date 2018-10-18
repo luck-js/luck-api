@@ -5,6 +5,7 @@ const IDENTIFIER = {
 
     DIFactoryHappening: Symbol.for('DIFactoryHappening'),
     DIFactoryMember: Symbol.for('DIFactoryMember'),
+    DIFactoryRelationMemberHappening: Symbol.for('DIFactoryRelationMemberHappening'),
 
     MatchingMemberService: Symbol.for('MatchingMemberService'),
     UuidGenerationService: Symbol.for('UuidGenerationService'),
