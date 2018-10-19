@@ -40,7 +40,7 @@ export class Happening implements IHappening {
         return member
     }
 
-    public getMembers(): IMember[] {
+    public getMemberList(): IMember[] {
         return this.memberRepository.getList();
     }
 
