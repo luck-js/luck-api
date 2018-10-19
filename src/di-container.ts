@@ -60,7 +60,6 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
                     .container.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
 
                 const matchingMemberService = context.container.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
-                const uuidGenerationService = context.container.get<UuidGenerationService>(IDENTIFIER.UuidGenerationService);
                 const relationMemberHappeningFactory = context
                     .container.get<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory);
 
@@ -74,7 +73,6 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
                     memberRepository,
                     relationMemberHappeningRepository,
                     matchingMemberService,
-                    uuidGenerationService,
                     relationMemberHappeningFactory,
                     memberFactory);
             };
