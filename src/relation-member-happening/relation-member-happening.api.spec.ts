@@ -1,23 +1,26 @@
 import * as assert from 'assert';
 import { Container } from 'inversify';
 import IDENTIFIER from '../identifiers';
-import { createHappening, initialDependencies } from '../test/test.spec';
+import { initialDependencies } from '../test/test.spec';
 import { Happening } from '../happening/happening';
-import { HappeningRepository } from '../happening/happening.repository';
 import { RelationMemberHappeningApi } from './relation-member-happening.api';
+import { RelationMemberHappeningService } from './relation-member-happening.service';
 
 describe('Relation Member Happening Api', function () {
     const HAPPENING_NAME = 'initialHappening';
+    let relationId: string;
     let DIContainer: Container;
     let happening: Happening;
-    let happeningRepository: HappeningRepository;
+    let relationMemberHappeningService: RelationMemberHappeningService;
     let memberApi: RelationMemberHappeningApi;
 
     beforeEach(function () {
         DIContainer = initialDependencies();
-        happening = createHappening(DIContainer, { name: 'Initial Happening' });
 
-        happeningRepository = DIContainer.get<HappeningRepository>(IDENTIFIER.HappeningRepository);
+        relationMemberHappeningService = DIContainer.get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
+        relationId = relationMemberHappeningService.createHappening();
+        happening = relationMemberHappeningService.editHappening(relationId, { name: HAPPENING_NAME });
+
         memberApi = DIContainer.get<RelationMemberHappeningApi>(IDENTIFIER.RelationMemberHappeningApi);
     });
 
@@ -26,10 +29,7 @@ describe('Relation Member Happening Api', function () {
         it('Data should has correctly member and happening name', function () {
             const MEMBER_NAME = 'Bill';
 
-            happening = createHappening(DIContainer, { name: HAPPENING_NAME });
-            happeningRepository.add(happening);
-
-            const billMember = happening.addMember(MEMBER_NAME);
+            const billMember = relationMemberHappeningService.addMember(relationId, MEMBER_NAME);
 
             const memberInformationView = memberApi.getDataView(billMember.relationId);
 
@@ -43,13 +43,9 @@ describe('Relation Member Happening Api', function () {
         it('Should returned matched member if happening is published', function () {
             const MEMBER_NAMES = ['Bill', 'Victors'];
 
-            happening = createHappening(DIContainer, { name: HAPPENING_NAME });
-            happeningRepository.add(happening);
-
-            const billMember = happening.addMember(MEMBER_NAMES[0]);
-            const victorsMember = happening.addMember(MEMBER_NAMES[1]);
+            const billMember = relationMemberHappeningService.addMember(relationId, MEMBER_NAMES[0]);
+            const victorsMember = relationMemberHappeningService.addMember(relationId, MEMBER_NAMES[1]);
             happening.publishEvent();
-
             const matchedMember = memberApi.getMatchedMember(billMember.relationId);
 
             assert.strictEqual(victorsMember.id, matchedMember.id);
