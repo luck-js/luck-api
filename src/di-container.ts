@@ -132,8 +132,16 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
             const relationMemberHappeningRepository = context
                 .container.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
 
+            const happeningFactory = context.container.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
+            const happeningRepository = context.container.get<HappeningRepository>(IDENTIFIER.HappeningRepository);
+            const relationMemberHappeningFactory = context
+                .container.get<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory);
+
             return new RelationMemberHappeningService(
-                relationMemberHappeningRepository);
+                relationMemberHappeningRepository,
+                happeningRepository,
+                happeningFactory,
+                relationMemberHappeningFactory);
         });
 
     DIContainer.bind<RelationMemberHappeningApi>(IDENTIFIER.RelationMemberHappeningApi)
