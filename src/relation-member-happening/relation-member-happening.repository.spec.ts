@@ -1,18 +1,24 @@
 import * as assert from 'assert';
 import { Container } from 'inversify';
 import IDENTIFIER from '../identifiers';
-import { createHappening, initialDependencies } from '../test/test.spec';
+import { initialDependencies } from '../test/test.spec';
 import { Happening } from '../happening/happening';
 import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
 import { RelationMemberHappeningRepository } from './relation-member-happening.repository';
+import { RelationMemberHappeningService } from './relation-member-happening.service';
 
 describe('Relation member happening', function () {
+    const HAPPENING_NAME = 'initialHappening';
+    let relationId: string;
     let DIContainer: Container;
     let happening: Happening;
+    let relationMemberHappeningService: RelationMemberHappeningService;
 
     beforeEach(function () {
         DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
-        happening = createHappening(DIContainer, { name: 'Initial Happening' });
+        relationMemberHappeningService = DIContainer.get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
+        relationId = relationMemberHappeningService.createHappening();
+        happening = relationMemberHappeningService.editHappening(relationId, { name: HAPPENING_NAME });
     });
 
     describe('Created relation after add member', function () {
@@ -21,10 +27,12 @@ describe('Relation member happening', function () {
             const relationMemberHappeningRepository = DIContainer
                 .get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
 
-            const billMember = happening.addMember('Bill');
+            const MEMBER_NAME = 'Bill';
+
+            const billMember = relationMemberHappeningService.addMember(relationId, MEMBER_NAME);
             const relation = relationMemberHappeningRepository.get(billMember.relationId);
 
-            assert.strictEqual(billMember.id, relation.memberId);
+            assert.strictEqual(billMember.id, relation.getMember().id);
         });
     });
 });

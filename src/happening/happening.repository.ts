@@ -20,4 +20,14 @@ export class HappeningRepository {
         const happening = this.list.find((el) => el.id === id);
         return this.happeningFactory.recreate(happening);
     }
+
+    public update(id: string, happening: IHappening): Happening {
+        this.list = this.list.reduce((previousValue, currentValue) => {
+            currentValue.id === id ? previousValue.push(happening) : previousValue.push(currentValue);
+
+            return previousValue;
+        }, []);
+
+        return this.happeningFactory.recreate(happening);
+    }
 }

@@ -54,7 +54,7 @@ describe('Members of happening', function () {
 
     describe('Publish happening event', function () {
         it('members shoudnt has matched when happening wasnt publishing', function () {
-            happening.getMembers().forEach((member, index) => {
+            happening.getMemberList().forEach((member, index) => {
                 assert.strictEqual(false, typeof member.matchedMemberId === 'string')
             })
         });
@@ -62,7 +62,7 @@ describe('Members of happening', function () {
         it('publishing should matched members', function () {
             happening.publishEvent();
 
-            happening.getMembers().forEach((member, index) => {
+            happening.getMemberList().forEach((member, index) => {
                 assert.strictEqual(true, typeof member.matchedMemberId === 'string')
             })
         });
