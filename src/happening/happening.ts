@@ -40,6 +40,10 @@ export class Happening implements IHappening {
         return member
     }
 
+    public getMember(id: string): IMember {
+        return this.memberRepository.getByIndex(id);
+    }
+
     public getMemberList(): IMember[] {
         return this.memberRepository.getList();
     }
