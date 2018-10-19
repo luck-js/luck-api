@@ -2,13 +2,11 @@ import { injectable } from 'inversify';
 import { RelationMemberHappeningRepository } from './relation-member-happening.repository';
 import { IParticipationHappeningView } from './participation-happening-view.model';
 import { IMemberView } from './member-view.model';
-import { MemberRepository } from '../member/member.repository';
 
 @injectable()
 export class RelationMemberHappeningService {
     constructor(
-        private relationMemberHappeningRepository: RelationMemberHappeningRepository,
-        private memberRepository: MemberRepository) {
+        private relationMemberHappeningRepository: RelationMemberHappeningRepository) {
     }
 
     public getDataView(id: string): IParticipationHappeningView {
@@ -24,7 +22,7 @@ export class RelationMemberHappeningService {
     public getMatchedMember(idRelation: string): IMemberView {
         const relation = this.relationMemberHappeningRepository.get(idRelation);
         const { matchedMemberId } = relation.getMember();
-        const { id, name } = this.memberRepository.getByIndex(matchedMemberId);
+        const { id, name }  = relation.getHappening().getMember(matchedMemberId);
 
         return { id, name };
     }
