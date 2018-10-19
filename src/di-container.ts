@@ -39,7 +39,18 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
 
     DIContainer.bind<MatchingMemberService>(IDENTIFIER.MatchingMemberService).to(MatchingMemberService);
     DIContainer.bind<UuidGenerationService>(IDENTIFIER.UuidGenerationService).to(UuidGenerationService);
-    DIContainer.bind<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory).to(RelationMemberHappeningFactory);
+
+    DIContainer.bind<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory)
+        .toDynamicValue((context: interfaces.Context) => {
+            const uuidGenerationService = context.container.get<UuidGenerationService>(IDENTIFIER.UuidGenerationService);
+            const DIFactoryRelationMemberHappening = context
+                .container.get<(option: IRelationMemberHappening) => RelationMemberHappening>(IDENTIFIER.DIFactoryRelationMemberHappening);
+
+            return new RelationMemberHappeningFactory(
+                uuidGenerationService,
+                DIFactoryRelationMemberHappening
+            )
+        });
 
     DIContainer.bind<MemberFactory>(IDENTIFIER.MemberFactory)
         .toDynamicValue((context: interfaces.Context) => {
