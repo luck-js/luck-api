@@ -10,8 +10,13 @@ export class HappeningFactory {
         private DIFactoryHappening: (option: IHappening) => Happening) {
     }
 
-    public create(): string {
-        return this.uuidGenerationService.createNewUuid();
+    public create(): Happening {
+        const id = this.uuidGenerationService.createNewUuid();
+        const name = '';
+        const description = '';
+        const isPublish = false;
+
+        return this.recreate({ id, name, description, isPublish })
     }
 
     public recreate(option: IHappening): Happening {
