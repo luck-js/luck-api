@@ -14,6 +14,10 @@ export class RelationMemberHappening {
 
     }
 
+    public get Id() {
+        return this.id;
+    }
+
     public getMember(): IMember {
         return this.memberRepository.getByIndex(this.memberId);
     }
