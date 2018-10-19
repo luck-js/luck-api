@@ -26,7 +26,7 @@ export class RelationMemberHappeningService {
 
         this.happeningRepository.add(happening);
 
-        this.relationMemberHappeningRepository.add({ id: relation.Id, happeningId: happening.id, memberId: member.id });
+        this.relationMemberHappeningRepository.add(relation);
 
         return relation.Id;
     }

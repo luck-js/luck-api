@@ -3,12 +3,13 @@ import { HappeningRepository } from '../happening/happening.repository';
 import { MemberRepository } from '../member/member.repository';
 import { IMember } from '../member/member.model';
 import { Happening } from '../happening/happening';
+import { IRelationMemberHappening } from './relation-member-happening.model';
 
 @injectable()
-export class RelationMemberHappening {
-    constructor(private id: string,
-                private memberId: string,
-                private happeningId: string,
+export class RelationMemberHappening implements IRelationMemberHappening{
+    constructor(public id: string,
+                public memberId: string,
+                public happeningId: string,
                 private memberRepository: MemberRepository,
                 private happeningRepository: HappeningRepository) {
 
