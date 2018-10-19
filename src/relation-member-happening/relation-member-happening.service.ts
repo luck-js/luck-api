@@ -6,6 +6,7 @@ import { HappeningFactory } from '../happening/happening.factory';
 import { RelationMemberHappeningFactory } from './relation-member-happening.factory';
 import { HappeningRepository } from '../happening/happening.repository';
 import { Happening } from '../happening/happening';
+import { Member } from '../member/member';
 
 @injectable()
 export class RelationMemberHappeningService {
@@ -36,6 +37,19 @@ export class RelationMemberHappeningService {
         const happening = relation.getHappening();
         const editedHappening = Object.assign({}, happening, { name, description });
         return this.happeningRepository.update(happening.id, editedHappening);
+    }
+
+    public addMember(ownerRelationId: string, name: string): Member {
+        const ownerRelation = this.relationMemberHappeningRepository.get(ownerRelationId);
+        const happening = ownerRelation.getHappening();
+        const newRelationId = this.relationMemberHappeningFactory.generateUuid();
+        const member = happening.addMember(newRelationId, name);
+
+        const relation = this.relationMemberHappeningFactory.create(newRelationId, happening, member);
+
+        this.relationMemberHappeningRepository.add(relation);
+
+        return member;
     }
 
     public getDataView(id: string): IParticipationHappeningView {
