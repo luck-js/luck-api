@@ -32,7 +32,8 @@ export class RelationMemberHappeningService {
         return relation.Id;
     }
 
-    public editHappening(relationId: string, { name, description }): Happening {
+    public editHappening(relationId: string, option): Happening {
+        const { name, description } = option;
         const relation = this.relationMemberHappeningRepository.get(relationId);
         const happening = relation.getHappening();
         const editedHappening = Object.assign({}, happening, { name, description });
