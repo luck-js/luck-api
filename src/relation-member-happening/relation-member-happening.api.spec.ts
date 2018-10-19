@@ -7,6 +7,7 @@ import { HappeningRepository } from '../happening/happening.repository';
 import { RelationMemberHappeningApi } from './relation-member-happening.api';
 
 describe('Relation Member Happening Api', function () {
+    const HAPPENING_NAME = 'initialHappening';
     let DIContainer: Container;
     let happening: Happening;
     let happeningRepository: HappeningRepository;
@@ -23,7 +24,6 @@ describe('Relation Member Happening Api', function () {
     describe('Get data of member information view', function () {
 
         it('Data should has correctly member and happening name', function () {
-            const HAPPENING_NAME = 'initialHappening';
             const MEMBER_NAME = 'Bill';
 
             happening = createHappening(DIContainer, { name: HAPPENING_NAME });
@@ -41,7 +41,6 @@ describe('Relation Member Happening Api', function () {
     describe('Get matched member', function () {
 
         it('Should returned matched member if happening is published', function () {
-            const HAPPENING_NAME = 'initialHappening';
             const MEMBER_NAMES = ['Bill', 'Victors'];
 
             happening = createHappening(DIContainer, { name: HAPPENING_NAME });
