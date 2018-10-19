@@ -22,7 +22,7 @@ export class HappeningRepository {
     }
 
     public update(id: string, happening: IHappening): Happening {
-        this.list.reduce((previousValue, currentValue) => {
+        this.list = this.list.reduce((previousValue, currentValue) => {
             currentValue.id === id ? previousValue.push(happening) : previousValue.push(currentValue);
 
             return previousValue;
