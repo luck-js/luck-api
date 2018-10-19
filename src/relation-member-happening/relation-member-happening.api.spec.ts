@@ -26,7 +26,7 @@ describe('Relation Member Happening Api', function () {
 
     describe('Get data of member information view', function () {
 
-        it('Data should has correctly member and happening name', function () {
+        it('Data should has correct member and happening name', function () {
             const MEMBER_NAME = 'Bill';
 
             const billMember = relationMemberHappeningService.addMember(relationId, MEMBER_NAME);
