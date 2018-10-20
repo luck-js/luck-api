@@ -41,6 +41,13 @@ export class RelationMemberHappeningService {
         return this.happeningRepository.update(happening.id, editedHappening);
     }
 
+    public publish(relationId: string): Happening {
+        const relation = this.relationMemberHappeningRepository.get(relationId);
+        const happening = relation.getHappening();
+        happening.publishEvent();
+        return this.happeningRepository.update(happening.id, happening);
+    }
+
     public addParticipant(ownerRelationId: string, name: string): Member {
         const ownerRelation = this.relationMemberHappeningRepository.get(ownerRelationId);
         const happening = ownerRelation.getHappening();
@@ -68,7 +75,7 @@ export class RelationMemberHappeningService {
         const relation = this.relationMemberHappeningRepository.get(idRelation);
         const member = relation.getMember();
         const matchedMemberId = member.MatchedMemberId;
-        const { id, name }  = relation.getHappening().getMember(matchedMemberId);
+        const { id, name } = relation.getHappening().getMember(matchedMemberId);
 
         return { id, name };
     }
