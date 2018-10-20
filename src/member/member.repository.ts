@@ -21,8 +21,8 @@ export class MemberRepository {
         return this.memberFactory.recreate(member);
     }
 
-    public getList(): IMember[] {
-        return this.list;
+    public getList(): Member[] {
+        return this.list.map((member) => this.memberFactory.recreate(member));
     }
 
     public updateList(memberList: IMember[]) {
