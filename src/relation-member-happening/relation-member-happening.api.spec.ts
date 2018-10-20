@@ -18,7 +18,7 @@ describe('Relation Member Happening Api', function () {
         DIContainer = initialDependencies();
 
         relationMemberHappeningService = DIContainer.get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
-        relationId = relationMemberHappeningService.createHappening();
+        relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
         happening = relationMemberHappeningService.editHappening(relationId, { name: HAPPENING_NAME });
 
         memberApi = DIContainer.get<RelationMemberHappeningApi>(IDENTIFIER.RelationMemberHappeningApi);

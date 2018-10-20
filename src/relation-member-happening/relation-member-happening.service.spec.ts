@@ -21,7 +21,7 @@ describe('Relation Member Happening Service', function () {
             const relationMemberHappeningRepository = DIContainer
                 .get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
 
-            const relationId = relationMemberHappeningService.createHappening();
+            const relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
             const relation = relationMemberHappeningRepository.get(relationId);
 
             assert.strictEqual(relation.Id, relationId);
