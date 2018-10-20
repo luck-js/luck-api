@@ -3,8 +3,11 @@ import { RoleType } from '../event-member-role.model';
 
 export class Participant implements EventMemberRole {
     type = RoleType.PARTICIPANT;
-    abilityToRandom = true;
-    matchedMemberId: string;
+
+    constructor(public abilityToRandom: boolean = true,
+                public matchedMemberId: string = null) {
+
+    }
 
     public get MatchedMemberId(): string {
         return this.matchedMemberId;
