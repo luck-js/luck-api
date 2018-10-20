@@ -48,11 +48,9 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
     DIContainer.bind<MatchingMemberService>(IDENTIFIER.MatchingMemberService)
         .toDynamicValue((context: interfaces.Context) => {
             const matchingService = context.container.get<MatchingService>(IDENTIFIER.MatchingService);
-            const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
 
             return new MatchingMemberService(
-                matchingService,
-                memberRepository
+                matchingService
             )
         });
 

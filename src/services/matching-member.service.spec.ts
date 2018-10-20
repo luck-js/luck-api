@@ -20,8 +20,7 @@ describe('Matching member', function () {
         memberRepository = DIContainer.get<MemberRepository>(IDENTIFIER.MemberRepository);
 
         const matchingMemberService = DIContainer.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
-        matchingMemberService.matchMemberList();
-        newMemberList = memberRepository.getList();
+        newMemberList = matchingMemberService.matchMemberList(memberRepository.getList());
     });
 
     it('Every member has random matched member', function () {
