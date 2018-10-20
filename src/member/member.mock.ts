@@ -1,18 +1,23 @@
 /*
 *   generate by https://www.json-generator.com/#
 */
-export const MEMBER_INITIAL_LIST_MOCK = [
-    {
-        'id': '0',
-        'name': 'Janet',
-        'uniqueLink': 'e2f28c6b-997c-4351-bdf7-613b1d548c3c',
-        'relationId': '53ae0bde-1c3c-4db7-90f7-14366243cdb9',
-        'eventMemberRole': {
-            'type': 'ORGANISER',
-            'matchedMemberId': null,
-            'abilityToRandom': false
-        }
-    },
+/*
+*   generate by https://www.json-generator.com/#
+*/
+
+export const ORGANISER_INITIAL_MOCK = {
+    'id': '0',
+    'name': 'Janet',
+    'uniqueLink': 'e2f28c6b-997c-4351-bdf7-613b1d548c3c',
+    'relationId': '53ae0bde-1c3c-4db7-90f7-14366243cdb9',
+    'eventMemberRole': {
+        'type': 'ORGANISER',
+        'matchedMemberId': null,
+        'abilityToRandom': false
+    }
+};
+
+export const PARTICIPANT_INITIAL_LIST_MOCK = [
     {
         'id': '1',
         'name': 'Kline',
@@ -69,3 +74,5 @@ export const MEMBER_INITIAL_LIST_MOCK = [
         }
     }
 ];
+
+export const MEMBER_INITIAL_LIST_MOCK = [ORGANISER_INITIAL_MOCK, ...PARTICIPANT_INITIAL_LIST_MOCK];
