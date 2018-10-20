@@ -1,12 +1,11 @@
 import { IHappening } from './happening.model';
 import { MemberRepository } from '../member/member.repository';
 import { IMember } from '../member/member.model';
-import { MemberFactory } from '../member/member.factory';
 import { MatchingMemberService } from '../services/matching-member.service';
+import { MemberFactory } from '../member/member.factory';
 import { RelationMemberHappeningFactory } from '../relation-member-happening/relation-member-happening.factory';
 import { RelationMemberHappeningRepository } from '../relation-member-happening/relation-member-happening.repository';
 import { Member } from '../member/member';
-import { RoleType } from '../member/event-member-role/event-member-role.model';
 
 export class Happening implements IHappening {
 
@@ -23,28 +22,35 @@ export class Happening implements IHappening {
 
     }
 
-    public addMember(relationId: string, type: RoleType, name?: string): Member {
+    public addMember(relationId: string, name?: string): Member {
         if (this.isPublish) {
             throw new Error('Happening is publishing')
         }
 
-        const member = this.memberFactory.create(relationId, type, name);
+        const member = this.memberFactory.create(relationId, name);
 
         this.memberRepository.add(member);
 
         return member
     }
 
-    public getMember(id: string): Member {
+    public getMember(id: string): IMember {
         return this.memberRepository.getByIndex(id);
     }
 
-    public getMemberList(): Member[] {
+    public getMemberList(): IMember[] {
         return this.memberRepository.getList();
     }
 
     public publishEvent() {
         this.isPublish = true;
-        this.matchingMemberService.matchMemberList();
+        this.matchMember();
+    }
+
+    private matchMember() {
+        const memberList = this.memberRepository.getList();
+        const newMemberList = this.matchingMemberService.matchMemberList(memberList);
+        this.memberRepository.updateList(newMemberList)
+
     }
 }

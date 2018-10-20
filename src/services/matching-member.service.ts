@@ -7,19 +7,12 @@ import { Member } from '../member/member';
 @injectable()
 export class MatchingMemberService {
 
-    constructor(private matchingService: MatchingService,
-                private memberRepository: MemberRepository) {
+    constructor(private matchingService: MatchingService) {
 
     }
 
-    public matchMemberList() {
-        const memberList = this.getMemberToMatching();
-        const newMemberList = this.matchMembersWhoAbleToRandom(memberList);
-        this.updateNewMemberList(newMemberList);
-    }
-
-    private getMemberToMatching(): Member[] {
-        return this.memberRepository.getList();
+    public matchMemberList(memberList: Member[]): Member[] {
+        return this.matchMembersWhoAbleToRandom(memberList);
     }
 
     private matchMembersWhoAbleToRandom(memberList: Member[]): Member[] {
@@ -27,10 +20,6 @@ export class MatchingMemberService {
         const matchedElementList = this.mapMemberListToMatchingElementList(participantList);
         const newMatchedElementList = this.matchingService.randomElements(matchedElementList);
         return this.mapMatchingElementListToElementList(memberList, newMatchedElementList);
-    }
-
-    private updateNewMemberList(memberList: Member[]) {
-        this.memberRepository.updateList(memberList)
     }
 
     private filterMembersWhoAbleToRandom(memberList: Member[]): Member[] {
