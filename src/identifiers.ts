@@ -16,6 +16,7 @@ const IDENTIFIER = {
 
     RelationMemberHappeningService: Symbol.for('RelationMemberHappeningService'),
     ParticipationHappeningApi: Symbol.for('ParticipationHappeningApi'),
+    HappeningApi: Symbol.for('HappeningApi'),
 };
 
 export default IDENTIFIER;

@@ -18,6 +18,7 @@ import { IHappening } from './happening/happening.model';
 import { RelationMemberHappening } from './relation-member-happening/relation-member-happening';
 import { IRelationMemberHappening } from './relation-member-happening/relation-member-happening.model';
 import { MatchingMemberService } from './services/matching-member.service';
+import { HappeningApi } from './routes/happening.api';
 
 const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_MOCK?): Container => {
     const DIContainer = new Container();
@@ -177,6 +178,14 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
                 .container.get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
 
             return new ParticipationHappeningApi(relationMemberHappeningService);
+        });
+
+    DIContainer.bind<HappeningApi>(IDENTIFIER.HappeningApi)
+        .toDynamicValue((context: interfaces.Context) => {
+            const relationMemberHappeningService = context
+                .container.get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
+
+            return new HappeningApi(relationMemberHappeningService);
         });
 
     return DIContainer;
