@@ -15,9 +15,11 @@ export class MatchingService {
 
             const idListOfElementToRandom = pullOutIdsToRandom(matchedElementList, matchedElementList, element.id);
             const preLastElementIndex = matchedElementList.length - 2;
-            const isChanceOfConflictFlag = isChanceOfConflict(idListOfElementToRandom, matchedElementList[matchedElementList.length - 1].id)
+            const isChanceOfConflictFlagFn = () => {
+                return isChanceOfConflict(idListOfElementToRandom, matchedElementList[matchedElementList.length - 1].id)
+            };
 
-            if (preLastElementIndex === index && isChanceOfConflictFlag) {
+            if (preLastElementIndex === index && isChanceOfConflictFlagFn()) {
                 idElementRandom = matchedElementList[matchedElementList.length - 1].id
 
             } else {
