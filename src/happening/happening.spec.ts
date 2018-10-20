@@ -3,6 +3,7 @@ import { Container } from 'inversify';
 import { createHappening, initialDependencies } from '../test/test.spec';
 import { Happening } from './happening';
 import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
+import { RoleType } from '../member/event-member-role/event-member-role.model';
 
 describe('Happening', function () {
     let DIContainer: Container;
@@ -38,7 +39,7 @@ describe('Members of happening', function () {
 
     describe('Creating new members', function () {
         it('Added member should be unique link ', function () {
-            const billMember = happening.addMember('Bill');
+            const billMember = happening.addMember('Bill', RoleType.PARTICIPANT);
 
             assert.notStrictEqual(billMember.uniqueLink, null);
         });
@@ -46,14 +47,14 @@ describe('Members of happening', function () {
         it('Publishing happening should be closed on adding new members', function () {
             happening.isPublish = true;
 
-            assert.throws(() => happening.addMember('Bill'))
+            assert.throws(() => happening.addMember('Bill', RoleType.PARTICIPANT))
         });
     });
 
     describe('Publish happening event', function () {
         it('members shoudnt has matched when happening wasnt publishing', function () {
             happening.getMemberList().forEach((member, index) => {
-                assert.strictEqual(false, typeof member.matchedMemberId === 'string')
+                assert.strictEqual(false, typeof member.MatchedMemberId === 'string')
             })
         });
 
@@ -61,7 +62,7 @@ describe('Members of happening', function () {
             happening.publishEvent();
 
             happening.getMemberList().forEach((member, index) => {
-                assert.strictEqual(true, typeof member.matchedMemberId === 'string')
+                assert.strictEqual(true, typeof member.MatchedMemberId === 'string')
             })
         });
     });

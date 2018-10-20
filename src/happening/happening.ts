@@ -35,11 +35,11 @@ export class Happening implements IHappening {
         return member
     }
 
-    public getMember(id: string): IMember {
+    public getMember(id: string): Member {
         return this.memberRepository.getByIndex(id);
     }
 
-    public getMemberList(): IMember[] {
+    public getMemberList(): Member[] {
         return this.memberRepository.getList();
     }
 
