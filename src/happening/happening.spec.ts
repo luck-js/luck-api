@@ -4,6 +4,7 @@ import { createHappening, initialDependencies } from '../test/test.spec';
 import { Happening } from './happening';
 import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
+import { MatchingMemberService } from '../services/matching-member.service';
 
 describe('Happening', function () {
     let DIContainer: Container;
@@ -37,7 +38,7 @@ describe('Happening', function () {
 
     describe('Publish happening event', function () {
         it('members shoudnt has matched when happening wasnt publishing', function () {
-            happening.getMemberList().forEach((member, index) => {
+            MatchingMemberService.filterMembersWhoAbleToRandom(happening.getMemberList()).forEach((member, index) => {
                 assert.strictEqual(false, typeof member.MatchedMemberId === 'string')
             })
         });
@@ -45,7 +46,7 @@ describe('Happening', function () {
         it('publishing should matched members', function () {
             happening.publishEvent();
 
-            happening.getMemberList().forEach((member, index) => {
+            MatchingMemberService.filterMembersWhoAbleToRandom(happening.getMemberList()).forEach((member, index) => {
                 assert.strictEqual(true, typeof member.MatchedMemberId === 'string')
             })
         });
