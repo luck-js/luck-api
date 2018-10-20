@@ -33,9 +33,14 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
         }).inSingletonScope();
 
     DIContainer.bind<MemberRepository>(IDENTIFIER.MemberRepository)
-        .toConstantValue(new MemberRepository(
-            MEMBER_INITIAL_LIST_MOCK
-        ));
+        .toDynamicValue((context: interfaces.Context) => {
+            const memberFactory = context.container.get<MemberFactory>(IDENTIFIER.MemberFactory);
+
+            return new MemberRepository(
+                MEMBER_INITIAL_LIST_MOCK,
+                memberFactory
+            )
+        }).inSingletonScope();
 
     DIContainer.bind<MatchingMemberService>(IDENTIFIER.MatchingMemberService).to(MatchingMemberService);
     DIContainer.bind<UuidGenerationService>(IDENTIFIER.UuidGenerationService).to(UuidGenerationService);

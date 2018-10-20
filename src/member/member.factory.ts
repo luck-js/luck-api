@@ -18,4 +18,8 @@ export class MemberFactory {
 
         return this.DIFactoryMember({ id, relationId, name, uniqueLink, matchedMemberId })
     }
+
+    public recreate(option: IMember): Member {
+        return this.DIFactoryMember(option);
+    }
 }
