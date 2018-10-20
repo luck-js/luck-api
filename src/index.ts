@@ -37,10 +37,10 @@ export class Server {
      * @method api
      */
     public api() {
-        this.app.use('/participation-happening', api);
+        this.app.use('/api', api);
 
         this.app.get('*', (req, res) => {
-            res.json({ 'message': 'Welcome to Wordy REST Api' });
+            res.json({ 'message': 'Welcome to Luck REST Api' });
         });
     }
 
