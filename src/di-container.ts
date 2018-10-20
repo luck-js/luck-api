@@ -17,6 +17,7 @@ import { IMember } from './member/member.model';
 import { IHappening } from './happening/happening.model';
 import { RelationMemberHappening } from './relation-member-happening/relation-member-happening';
 import { IRelationMemberHappening } from './relation-member-happening/relation-member-happening.model';
+import { MatchingMemberService } from './services/matching-member.service';
 
 const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_MOCK?): Container => {
     const DIContainer = new Container();
@@ -43,6 +44,18 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
         }).inSingletonScope();
 
     DIContainer.bind<MatchingService>(IDENTIFIER.MatchingService).to(MatchingService);
+
+    DIContainer.bind<MatchingMemberService>(IDENTIFIER.MatchingMemberService)
+        .toDynamicValue((context: interfaces.Context) => {
+            const matchingService = context.container.get<MatchingService>(IDENTIFIER.MatchingService);
+            const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
+
+            return new MatchingMemberService(
+                matchingService,
+                memberRepository
+            )
+        });
+
     DIContainer.bind<UuidGenerationService>(IDENTIFIER.UuidGenerationService).to(UuidGenerationService);
 
     DIContainer.bind<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory)
@@ -75,7 +88,7 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
                 const relationMemberHappeningRepository = context
                     .container.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
 
-                const matchingService = context.container.get<MatchingService>(IDENTIFIER.MatchingService);
+                const matchingMemberService = context.container.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
                 const relationMemberHappeningFactory = context
                     .container.get<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory);
 
@@ -88,7 +101,7 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
                     isPublish,
                     memberRepository,
                     relationMemberHappeningRepository,
-                    matchingService,
+                    matchingMemberService,
                     relationMemberHappeningFactory,
                     memberFactory);
             };
