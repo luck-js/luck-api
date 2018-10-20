@@ -7,6 +7,7 @@ import { RelationMemberHappeningFactory } from './relation-member-happening.fact
 import { HappeningRepository } from '../happening/happening.repository';
 import { Happening } from '../happening/happening';
 import { Member } from '../member/member';
+import { RoleType } from '../member/event-member-role/event-member-role.model';
 
 @injectable()
 export class RelationMemberHappeningService {
@@ -21,7 +22,7 @@ export class RelationMemberHappeningService {
         const relationId = this.relationMemberHappeningFactory.generateUuid();
 
         const happening = this.happeningFactory.create();
-        const member = happening.addMember(relationId);
+        const member = happening.addMember(relationId, RoleType.ORGANISER);
 
         const relation = this.relationMemberHappeningFactory.create(relationId, happening, member);
 
@@ -40,11 +41,11 @@ export class RelationMemberHappeningService {
         return this.happeningRepository.update(happening.id, editedHappening);
     }
 
-    public addMember(ownerRelationId: string, name: string): Member {
+    public addParticipant(ownerRelationId: string, name: string): Member {
         const ownerRelation = this.relationMemberHappeningRepository.get(ownerRelationId);
         const happening = ownerRelation.getHappening();
         const newRelationId = this.relationMemberHappeningFactory.generateUuid();
-        const member = happening.addMember(newRelationId, name);
+        const member = happening.addMember(newRelationId, RoleType.PARTICIPANT, name);
 
         const relation = this.relationMemberHappeningFactory.create(newRelationId, happening, member);
 
