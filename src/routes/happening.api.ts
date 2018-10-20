@@ -1,25 +1,65 @@
+import { Request, Response } from 'express';
 import { RelationMemberHappeningService } from '../relation-member-happening/relation-member-happening.service';
 
 export class HappeningApi {
-    constructor(private relationMemberHappeningService: RelationMemberHappeningService) {}
-
-    public create() {
-        return this.relationMemberHappeningService.createOwnerRelationOfHappening();
+    constructor(private relationMemberHappeningService: RelationMemberHappeningService) {
     }
 
-    public edit(id: string, option) {
-        return this.relationMemberHappeningService.editHappening(id, option);
+    public create(req: Request, res: Response) {
+        try {
+            const relationId = this.relationMemberHappeningService.createOwnerRelationOfHappening();
+
+            res.send(relationId);
+        } catch (err) {
+            res.send(err);
+        }
     }
 
-    public publish(id: string) {
-        return this.relationMemberHappeningService.publish(id);
+    public edit(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const option = req.body;
+            const happening = this.relationMemberHappeningService.editHappening(id, option);
+
+            res.send(happening);
+        } catch (err) {
+            res.send(err);
+        }
     }
 
-    public addParticipant(id: string, name: string) {
-        return this.relationMemberHappeningService.addParticipant(id, name);
+    public publish(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const option = req.body;
+            const happening = this.relationMemberHappeningService.publish(id);
+
+            res.send(happening);
+        } catch (err) {
+            res.send(err);
+        }
     }
 
-    public getDetailedParticipantListInformation(id: string) {
-        return this.relationMemberHappeningService.getDetailedParticipantListInformation(id);
+    public addParticipant(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const { name } = req.body;
+            const participant = this.relationMemberHappeningService.addParticipant(id, name);
+
+            res.send(participant);
+        } catch (err) {
+            res.send(err);
+        }
+
+    }
+
+    public getDetailedParticipantListInformation(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const memberUniqueLinkDataList = this.relationMemberHappeningService.getDetailedParticipantListInformation(id);
+
+            res.send(memberUniqueLinkDataList);
+        } catch (err) {
+            res.send(err);
+        }
     }
 }
