@@ -65,7 +65,8 @@ export class RelationMemberHappeningService {
 
     public getMatchedMember(idRelation: string): IMemberView {
         const relation = this.relationMemberHappeningRepository.get(idRelation);
-        const { matchedMemberId } = relation.getMember();
+        const member = relation.getMember();
+        const matchedMemberId = member.getMatchedMemberId();
         const { id, name }  = relation.getHappening().getMember(matchedMemberId);
 
         return { id, name };
