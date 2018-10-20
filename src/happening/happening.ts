@@ -1,7 +1,7 @@
 import { IHappening } from './happening.model';
 import { MemberRepository } from '../member/member.repository';
 import { IMember } from '../member/member.model';
-import { MatchingMemberService } from '../member/matching-member.service';
+import { MatchingService } from '../services/matching.service';
 import { MemberFactory } from '../member/member.factory';
 import { RelationMemberHappeningFactory } from '../relation-member-happening/relation-member-happening.factory';
 import { RelationMemberHappeningRepository } from '../relation-member-happening/relation-member-happening.repository';
@@ -17,7 +17,7 @@ export class Happening implements IHappening {
         public isPublish: boolean = false,
         private memberRepository: MemberRepository,
         private relationMemberHappeningRepository: RelationMemberHappeningRepository,
-        private matchingMemberService: MatchingMemberService,
+        private matchingService: MatchingService,
         private relationMemberHappeningFactory: RelationMemberHappeningFactory,
         private memberFactory: MemberFactory) {
 
@@ -50,7 +50,7 @@ export class Happening implements IHappening {
 
     private matchMember() {
         const memberList = this.memberRepository.getList();
-        const newMemberList = this.matchingMemberService.randomMembers(memberList);
+        const newMemberList = this.matchingService.randomElements(memberList);
         this.memberRepository.updateList(newMemberList)
 
     }
