@@ -30,9 +30,7 @@ export class HappeningApi {
     public publish(req: Request, res: Response) {
         try {
             const { id } = req.params;
-            const option = req.body;
             const happening = this.relationMemberHappeningService.publish(id);
-
             res.send(happening);
         } catch (err) {
             res.send(err);
