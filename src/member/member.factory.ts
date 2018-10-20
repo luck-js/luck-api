@@ -30,7 +30,9 @@ export class MemberFactory {
     }
 
     private createEventMemberRole(type: RoleType, option?): EventMemberRole {
-        const { abilityToRandom, matchedMemberId } = option;
+        const abilityToRandom = option && option.abilityToRandom,
+            matchedMemberId = option && option.matchedMemberId;
+
         if (type === RoleType.ORGANISER) {
             return new Organiser(abilityToRandom, matchedMemberId);
         }
