@@ -5,7 +5,7 @@ import { RelationMemberHappeningRepository } from './relation-member-happening/r
 import { MemberRepository } from './member/member.repository';
 import { HappeningRepository } from './happening/happening.repository';
 import { HappeningFactory } from './happening/happening.factory';
-import { MatchingMemberService } from './member/matching-member.service';
+import { MatchingService } from './services/matching.service';
 import { UuidGenerationService } from './member/uuid-generation.service';
 import { RelationMemberHappeningFactory } from './relation-member-happening/relation-member-happening.factory';
 import { MemberFactory } from './member/member.factory';
@@ -42,7 +42,7 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
             )
         }).inSingletonScope();
 
-    DIContainer.bind<MatchingMemberService>(IDENTIFIER.MatchingMemberService).to(MatchingMemberService);
+    DIContainer.bind<MatchingService>(IDENTIFIER.MatchingService).to(MatchingService);
     DIContainer.bind<UuidGenerationService>(IDENTIFIER.UuidGenerationService).to(UuidGenerationService);
 
     DIContainer.bind<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory)
@@ -75,7 +75,7 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
                 const relationMemberHappeningRepository = context
                     .container.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
 
-                const matchingMemberService = context.container.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
+                const matchingService = context.container.get<MatchingService>(IDENTIFIER.MatchingService);
                 const relationMemberHappeningFactory = context
                     .container.get<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory);
 
@@ -88,7 +88,7 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
                     isPublish,
                     memberRepository,
                     relationMemberHappeningRepository,
-                    matchingMemberService,
+                    matchingService,
                     relationMemberHappeningFactory,
                     memberFactory);
             };

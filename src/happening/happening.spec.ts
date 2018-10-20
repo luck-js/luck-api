@@ -4,7 +4,7 @@ import IDENTIFIER from '../identifiers';
 import { createHappening, initialDependencies } from '../test/test.spec';
 import { Happening } from './happening';
 import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
-import { MatchingMemberService } from '../member/matching-member.service';
+import { MatchingService } from '../services/matching.service';
 
 describe('Happening', function () {
     let DIContainer: Container;
@@ -72,8 +72,8 @@ describe('Members of happening', function () {
         let newMemberList;
 
         before(function () {
-            const matchingMemberService = DIContainer.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
-            newMemberList = matchingMemberService.randomMembers(MEMBER_INITIAL_LIST_MOCK);
+            const matchingService = DIContainer.get<MatchingService>(IDENTIFIER.MatchingService);
+            newMemberList = matchingService.randomElements(MEMBER_INITIAL_LIST_MOCK);
         });
 
         it('Every member has random matched member', function () {
