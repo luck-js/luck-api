@@ -1,10 +1,8 @@
 import * as assert from 'assert';
 import { Container } from 'inversify';
-import IDENTIFIER from '../identifiers';
 import { createHappening, initialDependencies } from '../test/test.spec';
 import { Happening } from './happening';
 import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
-import { MatchingService } from '../services/matching.service';
 
 describe('Happening', function () {
     let DIContainer: Container;
@@ -67,34 +65,4 @@ describe('Members of happening', function () {
             })
         });
     });
-
-    describe('Matching member', function () {
-        let newMemberList;
-
-        before(function () {
-            const matchingService = DIContainer.get<MatchingService>(IDENTIFIER.MatchingService);
-            newMemberList = matchingService.randomElements(MEMBER_INITIAL_LIST_MOCK);
-        });
-
-        it('Every member has random matched member', function () {
-            newMemberList.forEach((member, index) => {
-                assert.strictEqual(true, typeof member.matchedMemberId === 'string')
-            })
-        });
-
-        it('Matched member has another id', function () {
-            newMemberList.forEach((member, index) => {
-                assert.strictEqual(true, member.id !== member.matchedMemberId)
-            })
-        });
-
-        it('Every matched is unique', function () {
-            newMemberList.reduce((previousState, member) => {
-                const isUnique = !previousState.some((matchedMemberId) => matchedMemberId === member.matchedMemberId);
-                assert.strictEqual(true, isUnique);
-                previousState.push(member.matchedMemberId);
-                return previousState;
-            }, [])
-        });
-    })
 });
