@@ -1,6 +1,6 @@
-import { RelationMemberHappeningService } from './relation-member-happening.service';
+import { RelationMemberHappeningService } from '../relation-member-happening/relation-member-happening.service';
 
-export class RelationMemberHappeningApi {
+export class ParticipationHappeningApi {
     constructor(private relationMemberHappeningService: RelationMemberHappeningService) {}
 
     public getDataView(id: string) {
