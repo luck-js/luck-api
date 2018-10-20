@@ -1,13 +1,13 @@
 import { injectable } from 'inversify';
 import { IMember } from './member.model';
 import { Member } from './member';
+import { MemberFactory } from './member.factory';
 
 @injectable()
 export class MemberRepository {
-    list: IMember[];
 
-    constructor(memberList: IMember[] = []) {
-        this.list = memberList;
+    constructor(private list: IMember[] = [],
+                private memberFactory: MemberFactory) {
     }
 
     public add(member: IMember): IMember {
@@ -17,7 +17,8 @@ export class MemberRepository {
     }
 
     public getByIndex(id: string): Member {
-        return this.list.find((el) => el.id === id)
+        const member = this.list.find((el) => el.id === id)
+        return this.memberFactory.recreate(member);
     }
 
     public getList(): IMember[] {
