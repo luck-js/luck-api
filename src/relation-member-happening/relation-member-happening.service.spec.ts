@@ -4,6 +4,7 @@ import IDENTIFIER from '../identifiers';
 import { initialDependencies } from '../test/test.spec';
 import { RelationMemberHappeningService } from './relation-member-happening.service';
 import { RelationMemberHappeningRepository } from './relation-member-happening.repository';
+import { PARTICIPANT_INITIAL_LIST_MOCK } from '../member/member.mock';
 
 describe('Relation Member Happening Service', function () {
     let DIContainer: Container;
@@ -38,5 +39,20 @@ describe('Relation Member Happening Service', function () {
 
             assert.strictEqual(true, happening.isPublish);
         })
-    })
+    });
+
+    describe('Getter of IParticipantUniqueLinkData', function () {
+        it('Returned list should be less by 1 member by ORGANISER', function () {
+            const relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
+            const relation = relationMemberHappeningRepository.get(relationId);
+            const happening = relation.getHappening();
+
+            PARTICIPANT_INITIAL_LIST_MOCK
+                .map(({ name }) => relationMemberHappeningService.addParticipant(relationId, name));
+
+            const participantUniqueLinkData = relationMemberHappeningService.getDetailedParticipantListInformation(relationId);
+
+            assert.strictEqual(participantUniqueLinkData.length, happening.getMemberList().length - 1);
+        })
+    });
 });
