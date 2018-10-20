@@ -3,5 +3,5 @@ import { RoleType } from '../event-member-role.model';
 
 export class Participant implements EventMemberRole {
     type: RoleType;
-    public matchedMemberId: string;
+    matchedMemberId: string;
 }

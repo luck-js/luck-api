@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { HappeningRepository } from '../happening/happening.repository';
 import { MemberRepository } from '../member/member.repository';
-import { IMember } from '../member/member.model';
+import { Member } from '../member/member';
 import { Happening } from '../happening/happening';
 import { IRelationMemberHappening } from './relation-member-happening.model';
 
@@ -19,7 +19,7 @@ export class RelationMemberHappening implements IRelationMemberHappening{
         return this.id;
     }
 
-    public getMember(): IMember {
+    public getMember(): Member {
         return this.memberRepository.getByIndex(this.memberId);
     }
 
