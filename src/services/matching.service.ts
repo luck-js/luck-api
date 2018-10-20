@@ -8,19 +8,21 @@ export interface MatchedElement {
 @injectable()
 export class MatchingService {
 
-    public randomElements(matchedElementList: MatchedElement[]): MatchedElement[] {
+    public randomElements(elementList: MatchedElement[]): MatchedElement[] {
 
-        return matchedElementList.reduce((matchedElementList, element, index) => {
+        return elementList.reduce((matchedElementList, element, index) => {
             let idElementRandom;
 
-            const idListOfElementToRandom = pullOutIdsToRandom(matchedElementList, matchedElementList, element.id);
-            const preLastElementIndex = matchedElementList.length - 2;
+            const idListOfElementToRandom = pullOutIdsToRandom(matchedElementList, elementList, element.id);
+            const preLastElementIndex = elementList.length - 2;
             const isChanceOfConflictFlagFn = () => {
-                return isChanceOfConflict(idListOfElementToRandom, matchedElementList[matchedElementList.length - 1].id)
+                const lastElement = elementList[elementList.length - 1];
+                const id = lastElement && lastElement.id;
+                return isChanceOfConflict(idListOfElementToRandom, id)
             };
 
             if (preLastElementIndex === index && isChanceOfConflictFlagFn()) {
-                idElementRandom = matchedElementList[matchedElementList.length - 1].id
+                idElementRandom = elementList[elementList.length - 1].id
 
             } else {
                 idElementRandom = randomElementId(idListOfElementToRandom);
