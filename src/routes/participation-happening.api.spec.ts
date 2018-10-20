@@ -3,16 +3,16 @@ import { Container } from 'inversify';
 import IDENTIFIER from '../identifiers';
 import { initialDependencies } from '../test/test.spec';
 import { Happening } from '../happening/happening';
-import { RelationMemberHappeningApi } from './relation-member-happening.api';
-import { RelationMemberHappeningService } from './relation-member-happening.service';
+import { ParticipationHappeningApi } from './participation-happening.api';
+import { RelationMemberHappeningService } from '../relation-member-happening/relation-member-happening.service';
 
-describe('Relation Member Happening Api', function () {
+describe('Participation Happening Api', function () {
     const HAPPENING_NAME = 'initialHappening';
     let relationId: string;
     let DIContainer: Container;
     let happening: Happening;
     let relationMemberHappeningService: RelationMemberHappeningService;
-    let memberApi: RelationMemberHappeningApi;
+    let memberApi: ParticipationHappeningApi;
 
     beforeEach(function () {
         DIContainer = initialDependencies();
@@ -21,7 +21,7 @@ describe('Relation Member Happening Api', function () {
         relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
         happening = relationMemberHappeningService.editHappening(relationId, { name: HAPPENING_NAME });
 
-        memberApi = DIContainer.get<RelationMemberHappeningApi>(IDENTIFIER.RelationMemberHappeningApi);
+        memberApi = DIContainer.get<ParticipationHappeningApi>(IDENTIFIER.ParticipationHappeningApi);
     });
 
     describe('Get data of member information view', function () {
