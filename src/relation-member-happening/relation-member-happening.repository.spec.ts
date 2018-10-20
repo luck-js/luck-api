@@ -29,7 +29,7 @@ describe('Relation member happening', function () {
 
             const MEMBER_NAME = 'Bill';
 
-            const billMember = relationMemberHappeningService.addMember(relationId, MEMBER_NAME);
+            const billMember = relationMemberHappeningService.addParticipant(relationId, MEMBER_NAME);
             const relation = relationMemberHappeningRepository.get(billMember.relationId);
 
             assert.strictEqual(billMember.id, relation.getMember().id);

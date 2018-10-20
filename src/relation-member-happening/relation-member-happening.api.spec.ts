@@ -29,7 +29,7 @@ describe('Relation Member Happening Api', function () {
         it('Data should has correct member and happening name', function () {
             const MEMBER_NAME = 'Bill';
 
-            const billMember = relationMemberHappeningService.addMember(relationId, MEMBER_NAME);
+            const billMember = relationMemberHappeningService.addParticipant(relationId, MEMBER_NAME);
 
             const memberInformationView = memberApi.getDataView(billMember.relationId);
 
@@ -43,8 +43,8 @@ describe('Relation Member Happening Api', function () {
         it('Should returned matched member if happening is published', function () {
             const MEMBER_NAMES = ['Bill', 'Victors'];
 
-            const billMember = relationMemberHappeningService.addMember(relationId, MEMBER_NAMES[0]);
-            const victorsMember = relationMemberHappeningService.addMember(relationId, MEMBER_NAMES[1]);
+            const billMember = relationMemberHappeningService.addParticipant(relationId, MEMBER_NAMES[0]);
+            const victorsMember = relationMemberHappeningService.addParticipant(relationId, MEMBER_NAMES[1]);
             happening.publishEvent();
             const matchedMember = memberApi.getMatchedMember(billMember.relationId);
 
