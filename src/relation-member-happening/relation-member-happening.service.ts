@@ -8,6 +8,7 @@ import { HappeningRepository } from '../happening/happening.repository';
 import { Happening } from '../happening/happening';
 import { Member } from '../member/member';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
+import { IParticipantUniqueLinkData } from './participant-unique-link-data';
 
 @injectable()
 export class RelationMemberHappeningService {
@@ -69,6 +70,15 @@ export class RelationMemberHappeningService {
         return {
             member, happening
         }
+    }
+
+    public getDetailedParticipantListInformation(relationId: string): IParticipantUniqueLinkData[] {
+        const relation = this.relationMemberHappeningRepository.get(relationId);
+        const happening = relation.getHappening();
+
+        return happening.getMemberList()
+            .filter((member) => member.eventMemberRole.type !== RoleType.ORGANISER)
+            .map(({ name, uniqueLink }) => ({ name, uniqueLink }));
     }
 
     public getMatchedMember(idRelation: string): IMemberView {
