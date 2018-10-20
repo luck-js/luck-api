@@ -3,11 +3,19 @@ import { RoleType } from '../event-member-role.model';
 
 export class Organiser implements EventMemberRole {
     type = RoleType.ORGANISER;
-    abilityToRandom = false;
-    matchedMemberId: string;
+
+    constructor(public abilityToRandom: boolean = false,
+                public matchedMemberId: string = null) {
+
+    }
 
     public get MatchedMemberId(): string {
-        throw new Error('Organiser does not take part in the matching yet')
+        if (!this.abilityToRandom) {
+            throw new Error('Organiser isn\'t ability to random')
+        } else {
+            return this.matchedMemberId;
+        }
+
     }
 
     public set MatchedMemberId(id: string) {

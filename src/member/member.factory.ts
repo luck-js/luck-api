@@ -24,17 +24,19 @@ export class MemberFactory {
         return this.DIFactoryMember({ id, relationId, name, uniqueLink, eventMemberRole })
     }
 
-    public recreate(option: IMember): Member {
-        return this.DIFactoryMember(option);
+    public recreate({ eventMemberRole, ...rest }: IMember): Member {
+        const type = this.createEventMemberRole(eventMemberRole.type, eventMemberRole);
+        return this.DIFactoryMember(Object.assign({}, rest, { eventMemberRole: type }));
     }
 
-    private createEventMemberRole(type: RoleType): EventMemberRole {
+    private createEventMemberRole(type: RoleType, option?): EventMemberRole {
+        const { abilityToRandom, matchedMemberId } = option;
         if (type === RoleType.ORGANISER) {
-            return new Organiser();
+            return new Organiser(abilityToRandom, matchedMemberId);
         }
 
         if (type === RoleType.PARTICIPANT) {
-            return new Participant();
+            return new Participant(abilityToRandom, matchedMemberId);
         }
     }
 }
