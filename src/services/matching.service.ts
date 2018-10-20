@@ -35,15 +35,15 @@ export class MatchingService {
 
 }
 
-function randomElementId(idListOfElementToRandom) {
+function randomElementId(idListOfElementToRandom: string[]): string {
     return idListOfElementToRandom[Math.floor(Math.random() * idListOfElementToRandom.length)];
 }
 
-function isChanceOfConflict(idListOfElementToRandom, lastElementId): boolean {
+function isChanceOfConflict(idListOfElementToRandom: string[], lastElementId: string): boolean {
     return idListOfElementToRandom.some((id) => id === lastElementId);
 }
 
-function pullOutIdsToRandom(matchedElementList, elementList, currentElementId) {
+function pullOutIdsToRandom(matchedElementList: MatchedElement[], elementList: MatchedElement[], currentElementId: string): string[] {
     return matchedElementList
         .reduce((previousState, matchedElement) => {
             return previousState
