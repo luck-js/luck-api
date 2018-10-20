@@ -5,39 +5,43 @@ import { initialDependencies } from '../test/test.spec';
 import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
 import { MatchingMemberService } from './matching-member.service';
 import { MemberRepository } from '../member/member.repository';
+import { Member } from '../member/member';
 
 
-describe('Matching member', function () {
+describe('Matching Member Service', function () {
     let DIContainer: Container;
     let memberRepository: MemberRepository;
-    let newMemberList;
+    let newMemberList: Member[];
 
-    before(function () {
-        DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
-        memberRepository = DIContainer.get<MemberRepository>(IDENTIFIER.MemberRepository);
+    describe('Testing member list when organiser isn\'t ability to random', function () {
 
-        const matchingMemberService = DIContainer.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
-        newMemberList = matchingMemberService.matchMemberList(memberRepository.getList());
-    });
+        before(function () {
+            DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
+            memberRepository = DIContainer.get<MemberRepository>(IDENTIFIER.MemberRepository);
 
-    it('Every member has random matched member', function () {
-        newMemberList.forEach((member, index) => {
-            assert.strictEqual(true, typeof member.MatchedMemberId === 'string')
-        })
-    });
+            const matchingMemberService = DIContainer.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
+            newMemberList = matchingMemberService.matchMemberList(memberRepository.getList());
+        });
 
-    it('Matched member has another id', function () {
-        newMemberList.forEach((member, index) => {
-            assert.strictEqual(true, member.id !== member.MatchedMemberId)
-        })
-    });
+        it('Every member has random matched member', function () {
+            MatchingMemberService.filterMembersWhoAbleToRandom(newMemberList).forEach((member, index) => {
+                assert.strictEqual(true, typeof member.MatchedMemberId === 'string')
+            })
+        });
 
-    it('Every matched is unique', function () {
-        newMemberList.reduce((previousState, member) => {
-            const isUnique = !previousState.some((matchedMemberId) => matchedMemberId === member.MatchedMemberId);
-            assert.strictEqual(true, isUnique);
-            previousState.push(member.matchedMemberId);
-            return previousState;
-        }, [])
-    });
+        it('Matched member has another id', function () {
+            MatchingMemberService.filterMembersWhoAbleToRandom(newMemberList).forEach((member, index) => {
+                assert.strictEqual(true, member.id !== member.MatchedMemberId)
+            })
+        });
+
+        it('Every matched is unique', function () {
+            MatchingMemberService.filterMembersWhoAbleToRandom(newMemberList).reduce((previousState, member) => {
+                const isUnique = !previousState.some((matchedMemberId) => matchedMemberId === member.MatchedMemberId);
+                assert.strictEqual(true, isUnique);
+                previousState.push(member.MatchedMemberId);
+                return previousState;
+            }, [])
+        });
+    })
 });
