@@ -7,24 +7,36 @@ import { RelationMemberHappeningRepository } from './relation-member-happening.r
 
 describe('Relation Member Happening Service', function () {
     let DIContainer: Container;
+    let relationMemberHappeningService: RelationMemberHappeningService;
+    let relationMemberHappeningRepository: RelationMemberHappeningRepository;
 
     beforeEach(function () {
         DIContainer = initialDependencies();
+        relationMemberHappeningService = DIContainer
+            .get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
+
+        relationMemberHappeningRepository = DIContainer
+            .get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
     });
 
     describe('Creating new happening', function () {
 
         it('Created should returned id relation between member and happening', function () {
-            const relationMemberHappeningService = DIContainer
-                .get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
-
-            const relationMemberHappeningRepository = DIContainer
-                .get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
-
             const relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
             const relation = relationMemberHappeningRepository.get(relationId);
 
             assert.strictEqual(relation.Id, relationId);
         });
     });
+
+    describe('Publishing', function () {
+        it('Should changed state happening after event', function () {
+            const relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
+
+            relationMemberHappeningService.publish(relationId);
+            const happening = relationMemberHappeningRepository.get(relationId).getHappening();
+
+            assert.strictEqual(true, happening.isPublish);
+        })
+    })
 });
