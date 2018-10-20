@@ -26,24 +26,8 @@ describe('Happening', function () {
             assert.notStrictEqual(happeningSecond.id, happening.id)
         });
     });
-});
-
-describe('Members of happening', function () {
-    let DIContainer: Container;
-    let happening: Happening;
-
-    beforeEach(function () {
-        DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
-        happening = createHappening(DIContainer, { name: 'Initial Happening' });
-    });
 
     describe('Creating new members', function () {
-        it('Added member should be unique link ', function () {
-            const billMember = happening.addMember('Bill', RoleType.PARTICIPANT);
-
-            assert.notStrictEqual(billMember.uniqueLink, null);
-        });
-
         it('Publishing happening should be closed on adding new members', function () {
             happening.isPublish = true;
 
