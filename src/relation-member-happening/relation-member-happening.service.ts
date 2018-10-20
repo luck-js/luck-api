@@ -17,7 +17,7 @@ export class RelationMemberHappeningService {
         private relationMemberHappeningFactory: RelationMemberHappeningFactory) {
     }
 
-    public createHappening(): string {
+    public createOwnerRelationOfHappening(): string {
         const relationId = this.relationMemberHappeningFactory.generateUuid();
 
         const happening = this.happeningFactory.create();

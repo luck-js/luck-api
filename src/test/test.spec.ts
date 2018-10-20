@@ -11,6 +11,6 @@ export const initialDependencies = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL
 
 export function createHappening(DIContainer: Container, { name, description }: any): Happening {
     const relationMemberHappeningService = DIContainer.get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
-    const relationId = relationMemberHappeningService.createHappening();
+    const relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
     return relationMemberHappeningService.editHappening(relationId, { name, description });
 }

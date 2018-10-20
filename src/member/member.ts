@@ -1,4 +1,5 @@
 import { IMember } from './member.model';
+import { EventMemberRole } from './event-member-role/event-member-role';
 
 export class Member implements IMember {
 
@@ -7,7 +8,7 @@ export class Member implements IMember {
         public relationId: string,
         public name: string,
         public uniqueLink: string,
-        public matchedMemberId: string
+        public eventMemberRole: EventMemberRole
     ) {
 
     }

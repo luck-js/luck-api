@@ -17,7 +17,7 @@ describe('Relation member happening', function () {
     beforeEach(function () {
         DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
         relationMemberHappeningService = DIContainer.get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
-        relationId = relationMemberHappeningService.createHappening();
+        relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
         happening = relationMemberHappeningService.editHappening(relationId, { name: HAPPENING_NAME });
     });
 
