@@ -20,7 +20,7 @@ import { IRelationMemberHappening } from './relation-member-happening/relation-m
 import { MatchingMemberService } from './services/matching-member.service';
 import { HappeningApi } from './routes/happening.api';
 
-const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_MOCK?): Container => {
+const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_MOCK?, RELATION_INITIAL_LIST_MOCK?): Container => {
     const DIContainer = new Container();
 
 
@@ -30,7 +30,7 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
                 .container.get<RelationMemberHappeningFactory>(IDENTIFIER.RelationMemberHappeningFactory);
 
             return new RelationMemberHappeningRepository(
-                [],
+                RELATION_INITIAL_LIST_MOCK,
                 relationMemberHappeningFactory)
         }).inSingletonScope();
 
