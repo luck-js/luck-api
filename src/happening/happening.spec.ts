@@ -8,6 +8,8 @@ import { RoleType } from '../member/event-member-role/event-member-role.model';
 import { MatchingMemberService } from '../services/matching-member.service';
 import { HappeningFactory } from './happening.factory';
 
+const RELATION_ID = 'a0a1522b-76d3-467d-9491-d16102216e10';
+
 describe('Happening', function () {
     let DIContainer: Container;
     let happeningFactory: HappeningFactory;
@@ -36,7 +38,7 @@ describe('Happening', function () {
         it('Publishing happening should be closed on adding new members', function () {
             happening.publishEvent();
 
-            assert.throws(() => happening.addMember('Bill', RoleType.PARTICIPANT))
+            assert.throws(() => happening.addMember(RELATION_ID, RoleType.PARTICIPANT))
         });
     });
 
