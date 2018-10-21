@@ -14,7 +14,7 @@ export class Happening implements IHappening {
         public name: string = '',
         public description: string = '',
         public isPublish: boolean = false,
-        public memberIdList: string[],
+        public memberIdList: string[] = [],
         private memberRepository: MemberRepository,
         private relationMemberHappeningRepository: RelationMemberHappeningRepository,
         private matchingMemberService: MatchingMemberService,
