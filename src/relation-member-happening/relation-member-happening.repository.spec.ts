@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import { Container } from 'inversify';
 import IDENTIFIER from '../identifiers';
-import { initialDependencies } from '../test/test.spec';
+import { DIContainerProvider } from '../di-container';
 import { Happening } from '../happening/happening';
 import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
 import { RelationMemberHappeningRepository } from './relation-member-happening.repository';
@@ -15,7 +15,7 @@ describe('Relation member happening', function () {
     let relationMemberHappeningService: RelationMemberHappeningService;
 
     beforeEach(function () {
-        DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
+        DIContainer = DIContainerProvider([...MEMBER_INITIAL_LIST_MOCK]);
         relationMemberHappeningService = DIContainer.get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
         relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
         happening = relationMemberHappeningService.editHappening(relationId, { name: HAPPENING_NAME });

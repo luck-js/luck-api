@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { Container } from 'inversify';
-import { initialDependencies } from '../test/test.spec';
+import { DIContainerProvider } from '../di-container';
 import IDENTIFIER from '../identifiers';
 import { Happening } from './happening';
 import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
@@ -14,7 +14,7 @@ describe('Happening', function () {
     let happening: Happening;
 
     beforeEach(function () {
-        DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
+        DIContainer = DIContainerProvider([...MEMBER_INITIAL_LIST_MOCK]);
         happeningFactory = DIContainer.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
         happening = happeningFactory.create();
     });
