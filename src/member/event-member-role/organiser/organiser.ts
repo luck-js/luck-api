@@ -1,12 +1,12 @@
 import { EventMemberRole } from '../event-member-role';
 import { RoleType } from '../event-member-role.model';
 
-export class Organiser implements EventMemberRole {
-    type = RoleType.ORGANISER;
+export class Organiser extends EventMemberRole {
+    public type = RoleType.ORGANISER;
 
-    constructor(public abilityToRandom: boolean = false,
-                public matchedMemberId: string = null) {
-
+    constructor(abilityToRandom: boolean = false,
+                matchedMemberId: string = null) {
+        super(abilityToRandom, matchedMemberId);
     }
 
     public get MatchedMemberId(): string {

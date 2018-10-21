@@ -1,9 +1,11 @@
 import { RoleType } from './event-member-role.model';
 
-export class EventMemberRole {
-    type: RoleType;
-    matchedMemberId: string;
-    abilityToRandom: boolean;
+export abstract class EventMemberRole {
+    public type: RoleType;
+
+    protected constructor(protected abilityToRandom: boolean,
+                          protected matchedMemberId: string) {
+    }
 
     public get MatchedMemberId(): string {
         return this.matchedMemberId;
