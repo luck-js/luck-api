@@ -9,11 +9,13 @@ export const HAPPENING_INITIAL_LIST_MOCK: IHappening[] = [
         name: 'Happening Madden',
         description: '',
         isPublish: null,
+        memberIdList: []
     },
     {
         id: '1',
         name: 'Happening Sloan',
         description: '',
         isPublish: null,
+        memberIdList: []
     }
 ];
