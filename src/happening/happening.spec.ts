@@ -41,13 +41,13 @@ describe('Happening', function () {
     });
 
     describe('Publish happening event', function () {
-        it('members shoudnt has matched when happening wasnt publishing', function () {
+        it('Members shouldn\'t has matched when happening wasn\'t publishing', function () {
             MatchingMemberService.filterMembersWhoAbleToRandom(happening.getMemberList()).forEach((member, index) => {
                 assert.strictEqual(false, typeof member.MatchedMemberId === 'string')
             })
         });
 
-        it('publishing should matched members', function () {
+        it('Publishing should matched members', function () {
             happening.publishEvent();
 
             MatchingMemberService.filterMembersWhoAbleToRandom(happening.getMemberList()).forEach((member, index) => {
