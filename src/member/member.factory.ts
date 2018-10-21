@@ -18,10 +18,9 @@ export class MemberFactory {
 
     public create(relationId: string, type: RoleType, name?: string): Member {
         const id = this.uuidGenerationService.createNewUuid();
-        const uniqueLink = `www.luck.com/${relationId}`;
         const eventMemberRole = this.createEventMemberRole(type);
 
-        return this.DIFactoryMember({ id, relationId, name, uniqueLink, eventMemberRole })
+        return this.DIFactoryMember({ id, relationId, name, eventMemberRole })
     }
 
     public recreate({ eventMemberRole, ...rest }: IMember): Member {
