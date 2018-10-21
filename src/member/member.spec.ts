@@ -22,5 +22,15 @@ describe('Member', function () {
 
             assert.notStrictEqual(billParticipant.relationId, null);
         });
+
+        it('Is able to has modify matchedId of new participant', function () {
+            const billParticipant = memberFactory.create('a0a1522b-76d3-467d-9491-d16102216e10', RoleType.PARTICIPANT);
+            assert.doesNotThrow(() => billParticipant.MatchedMemberId = 'b0a1522b-76d3-467d-9491-d16102216e19');
+        });
+
+        it('Is\'t able to has modify matchedId of new organiser', function () {
+            const billParticipant = memberFactory.create('a0a1522b-76d3-467d-9491-d16102216e10', RoleType.ORGANISER);
+            assert.throws(() => billParticipant.MatchedMemberId = 'b0a1522b-76d3-467d-9491-d16102216e19');
+        });
     });
 });
