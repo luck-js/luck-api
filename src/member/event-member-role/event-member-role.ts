@@ -3,7 +3,7 @@ import { RoleType } from './event-member-role.model';
 export abstract class EventMemberRole {
     public type: RoleType;
 
-    protected constructor(protected abilityToRandom: boolean,
+    protected constructor(public abilityToRandom: boolean,
                           protected matchedMemberId: string) {
     }
 
