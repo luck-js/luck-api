@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import { Container } from 'inversify';
 import IDENTIFIER from '../identifiers';
-import { initialDependencies } from '../test/test.spec';
+import { DIContainerProvider } from '../di-container';
 import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
 import { MatchingMemberService } from './matching-member.service';
 import { MemberRepository } from '../member/member.repository';
@@ -16,7 +16,7 @@ describe('Matching Member Service', function () {
     describe('Testing member list when organiser isn\'t ability to random', function () {
 
         before(function () {
-            DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
+            DIContainer = DIContainerProvider([...MEMBER_INITIAL_LIST_MOCK]);
             memberRepository = DIContainer.get<MemberRepository>(IDENTIFIER.MemberRepository);
 
             const matchingMemberService = DIContainer.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);

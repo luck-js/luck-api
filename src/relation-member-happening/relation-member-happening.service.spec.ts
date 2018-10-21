@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import { Container } from 'inversify';
 import IDENTIFIER from '../identifiers';
-import { initialDependencies } from '../test/test.spec';
+import { DIContainerProvider } from '../di-container';
 import { RelationMemberHappeningService } from './relation-member-happening.service';
 import { RelationMemberHappeningRepository } from './relation-member-happening.repository';
 import { PARTICIPANT_INITIAL_LIST_MOCK } from '../member/member.mock';
@@ -13,7 +13,7 @@ describe('Relation Member Happening Service', function () {
     let relationMemberHappeningRepository: RelationMemberHappeningRepository;
 
     beforeEach(function () {
-        DIContainer = initialDependencies();
+        DIContainer = DIContainerProvider();
         relationMemberHappeningService = DIContainer
             .get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
 
