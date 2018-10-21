@@ -82,7 +82,7 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
 
     DIContainer.bind <(option: IHappening) => Happening>(IDENTIFIER.DIFactoryHappening)
         .toFactory<Happening>((context) => {
-            return ({ id, name, description, isPublish }: IHappening) => {
+            return ({ id, name, description, isPublish, memberIdList }: IHappening) => {
                 const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
                 const relationMemberHappeningRepository = context
                     .container.get<RelationMemberHappeningRepository>(IDENTIFIER.RelationMemberHappeningRepository);
@@ -98,6 +98,7 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
                     name,
                     description,
                     isPublish,
+                    memberIdList,
                     memberRepository,
                     relationMemberHappeningRepository,
                     matchingMemberService,

@@ -3,4 +3,5 @@ export interface IHappening {
     name: string,
     description: string,
     isPublish: boolean,
+    memberIdList: string[],
 }

@@ -1,6 +1,5 @@
 import { IHappening } from './happening.model';
 import { MemberRepository } from '../member/member.repository';
-import { IMember } from '../member/member.model';
 import { MatchingMemberService } from '../services/matching-member.service';
 import { MemberFactory } from '../member/member.factory';
 import { RelationMemberHappeningFactory } from '../relation-member-happening/relation-member-happening.factory';
@@ -15,6 +14,7 @@ export class Happening implements IHappening {
         public name: string = '',
         public description: string = '',
         public isPublish: boolean = false,
+        public memberIdList: string[],
         private memberRepository: MemberRepository,
         private relationMemberHappeningRepository: RelationMemberHappeningRepository,
         private matchingMemberService: MatchingMemberService,
@@ -31,7 +31,7 @@ export class Happening implements IHappening {
         const member = this.memberFactory.create(relationId, type, name);
 
         this.memberRepository.add(member);
-
+        this.memberIdList.push(member.id);
         return member
     }
 
@@ -40,7 +40,7 @@ export class Happening implements IHappening {
     }
 
     public getMemberList(): Member[] {
-        return this.memberRepository.getList();
+        return this.memberIdList.map((id) => this.memberRepository.getByIndex(id));
     }
 
     public publishEvent() {
