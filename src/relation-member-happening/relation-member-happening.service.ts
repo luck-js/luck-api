@@ -78,7 +78,7 @@ export class RelationMemberHappeningService {
 
         return happening.getMemberList()
             .filter((member) => member.eventMemberRole.type !== RoleType.ORGANISER)
-            .map(({ name, uniqueLink }) => ({ name, uniqueLink }));
+            .map((member) => this.mapToIParticipantUniqueLinkData(member));
     }
 
     public getMatchedMember(idRelation: string): IMemberView {
@@ -88,5 +88,14 @@ export class RelationMemberHappeningService {
         const { id, name } = relation.getHappening().getMember(matchedMemberId);
 
         return { id, name };
+    }
+
+    private mapToIParticipantUniqueLinkData({ name, relationId }: Member): IParticipantUniqueLinkData {
+        const uniqueLink = this.mapToUniqueLink(relationId);
+        return { name, uniqueLink }
+    }
+
+    private mapToUniqueLink(id: string): string {
+        return id;
     }
 }

@@ -20,10 +20,10 @@ describe('Member', function () {
     });
 
     describe('Creating new members', function () {
-        it('Added member should be unique link ', function () {
-            const billMember = happening.addMember('Bill', RoleType.PARTICIPANT);
+        it('Added member should be unique relationId ', function () {
+            const billMember = happening.addMember('a0a1522b-76d3-467d-9491-d16102216e10', RoleType.PARTICIPANT);
 
-            assert.notStrictEqual(billMember.uniqueLink, null);
+            assert.notStrictEqual(billMember.relationId, null);
         });
     });
 });

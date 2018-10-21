@@ -3,10 +3,13 @@ import { DIContainerProvider } from '../di-container';
 import IDENTIFIER from '../identifiers';
 import { ParticipationHappeningApi } from './participation-happening.api';
 import { HappeningApi } from './happening.api';
+import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
+import { HAPPENING_INITIAL_LIST_MOCK } from '../happening/happening.mock';
+import { RELATION_INITIAL_LIST_MOCK } from '../relation-member-happening/relation-member-happening.mock';
 
 const router: Router = Router();
 
-const DIContainer = DIContainerProvider();
+const DIContainer = DIContainerProvider([...MEMBER_INITIAL_LIST_MOCK], [...HAPPENING_INITIAL_LIST_MOCK], [...RELATION_INITIAL_LIST_MOCK]);
 const participationHappeningApi = DIContainer.get<ParticipationHappeningApi>(IDENTIFIER.ParticipationHappeningApi);
 const happeningApi = DIContainer.get<HappeningApi>(IDENTIFIER.HappeningApi);
 

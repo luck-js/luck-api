@@ -7,7 +7,6 @@ export class Member implements IMember {
         public id: string,
         public relationId: string,
         public name: string,
-        public uniqueLink: string,
         public eventMemberRole: EventMemberRole
     ) {
 

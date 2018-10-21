@@ -108,13 +108,12 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
 
     DIContainer.bind <(option: IMember) => Member>(IDENTIFIER.DIFactoryMember)
         .toFactory<Member>((context) => {
-            return ({ id, relationId, name, uniqueLink, eventMemberRole }: IMember) => {
+            return ({ id, relationId, name, eventMemberRole }: IMember) => {
 
                 return new Member(
                     id,
                     relationId,
                     name,
-                    uniqueLink,
                     eventMemberRole);
             };
         });
