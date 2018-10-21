@@ -22,6 +22,22 @@ describe('Relation Member Happening Service', function () {
     });
 
     describe('Creating new happening', function () {
+        it('New members should be unique for happening', function () {
+            const firstRelationId = relationMemberHappeningService.createOwnerRelationOfHappening();
+            relationMemberHappeningService.addParticipant(firstRelationId, 'Bill');
+
+            const secondRelationId = relationMemberHappeningService.createOwnerRelationOfHappening();
+            relationMemberHappeningService.addParticipant(secondRelationId, 'Amadeus');
+
+            const firstParticipantListUniqueLinkData = relationMemberHappeningService
+                .getDetailedParticipantListInformation(firstRelationId);
+
+            const secondParticipantListUniqueLinkData = relationMemberHappeningService
+                .getDetailedParticipantListInformation(secondRelationId);
+
+            assert.strictEqual(firstParticipantListUniqueLinkData.length, 1);
+            assert.strictEqual(secondParticipantListUniqueLinkData.length, 1);
+        });
 
         it('Created should returned id relation between member and happening', function () {
             const relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
