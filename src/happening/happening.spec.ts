@@ -1,18 +1,22 @@
 import * as assert from 'assert';
 import { Container } from 'inversify';
-import { createHappening, initialDependencies } from '../test/test.spec';
+import { initialDependencies } from '../test/test.spec';
+import IDENTIFIER from '../identifiers';
 import { Happening } from './happening';
 import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
 import { MatchingMemberService } from '../services/matching-member.service';
+import { HappeningFactory } from './happening.factory';
 
 describe('Happening', function () {
     let DIContainer: Container;
+    let happeningFactory: HappeningFactory;
     let happening: Happening;
 
     beforeEach(function () {
         DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
-        happening = createHappening(DIContainer, { name: 'Initial Happening' });
+        happeningFactory = DIContainer.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
+        happening = happeningFactory.create();
     });
 
     describe('Creating new happening', function () {
@@ -22,7 +26,7 @@ describe('Happening', function () {
         });
 
         it('Created happening should be unique id', function () {
-            const happeningSecond = createHappening(DIContainer, { name: 'Second Happening' });
+            const happeningSecond = happeningFactory.create();
 
             assert.notStrictEqual(happeningSecond.id, happening.id)
         });
@@ -30,7 +34,7 @@ describe('Happening', function () {
 
     describe('Creating new members', function () {
         it('Publishing happening should be closed on adding new members', function () {
-            happening.isPublish = true;
+            happening.publishEvent();
 
             assert.throws(() => happening.addMember('Bill', RoleType.PARTICIPANT))
         });
