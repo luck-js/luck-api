@@ -56,7 +56,7 @@ export class RelationMemberHappeningService {
         const member = happening.addMember(newRelationId, RoleType.PARTICIPANT, name);
 
         const relation = this.relationMemberHappeningFactory.create(newRelationId, happening, member);
-
+        this.happeningRepository.update(happening.id, happening);
         this.relationMemberHappeningRepository.add(relation);
 
         return member;

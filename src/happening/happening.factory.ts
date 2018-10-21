@@ -15,8 +15,9 @@ export class HappeningFactory {
         const name = '';
         const description = '';
         const isPublish = false;
+        const memberIdList = [];
 
-        return this.recreate({ id, name, description, isPublish })
+        return this.recreate({ id, name, description, isPublish, memberIdList })
     }
 
     public recreate(option: IHappening): Happening {
