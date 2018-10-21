@@ -8,9 +8,3 @@ import { RelationMemberHappeningService } from '../relation-member-happening/rel
 export const initialDependencies = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_MOCK?): Container => {
     return DIContainerProvider(MEMBER_INITIAL_LIST_MOCK, HAPPENING_INITIAL_LIST_MOCK);
 };
-
-export function createHappening(DIContainer: Container, { name, description }: any): Happening {
-    const relationMemberHappeningService = DIContainer.get<RelationMemberHappeningService>(IDENTIFIER.RelationMemberHappeningService);
-    const relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
-    return relationMemberHappeningService.editHappening(relationId, { name, description });
-}

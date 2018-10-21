@@ -1,18 +1,22 @@
 import * as assert from 'assert';
 import { Container } from 'inversify';
-import { createHappening, initialDependencies } from '../test/test.spec';
+import { initialDependencies } from '../test/test.spec';
 import { Happening } from '../happening/happening';
 import { MEMBER_INITIAL_LIST_MOCK } from './member.mock';
 import { RoleType } from './event-member-role/event-member-role.model';
+import { HappeningFactory } from '../happening/happening.factory';
+import IDENTIFIER from '../identifiers';
 
 
 describe('Member', function () {
     let DIContainer: Container;
+    let happeningFactory: HappeningFactory;
     let happening: Happening;
 
     beforeEach(function () {
         DIContainer = initialDependencies([...MEMBER_INITIAL_LIST_MOCK]);
-        happening = createHappening(DIContainer, { name: 'Initial Happening' });
+        happeningFactory = DIContainer.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
+        happening = happeningFactory.create();
     });
 
     describe('Creating new members', function () {
