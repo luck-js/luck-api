@@ -8,6 +8,8 @@ import { PARTICIPANT_INITIAL_LIST_MOCK } from '../member/member.mock';
 import { MemberRepository } from '../member/member.repository';
 import { MatchingMemberService } from '../services/matching-member.service';
 import { Happening } from '../happening/happening';
+import { IParticipantUniqueLinkData } from './participant-unique-link-data';
+import { IParticipationHappeningView } from './participation-happening-view.model';
 
 describe('Relation Member Happening Service', function () {
     let DIContainer: Container;
@@ -171,20 +173,42 @@ describe('Relation Member Happening Service', function () {
     });
 
     describe('Generate detailed participant list information', function () {
-        it('Should generated list with the same names', function () {
-            const relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
-            const MOCK_BODY = {
-                'name': 'TEST_NAME',
-                'description': 'TEST_DESCRIPTION',
-                'participantList': [{ 'name': 'Bill' }, { 'name': 'Johny' }, { 'name': 'Matt' }, { 'name': 'Kathy' }]
-            };
+        const MOCK_BODY = {
+            'name': 'TEST_NAME',
+            'description': 'TEST_DESCRIPTION',
+            'participantList': [{ 'name': 'Bill' }, { 'name': 'Johny' }, { 'name': 'Matt' }, { 'name': 'Kathy' }]
+        };
 
-            const participantUniqueLinkData = relationMemberHappeningService
+        let participantUniqueLinkData: IParticipantUniqueLinkData[];
+        let participationHappening: IParticipationHappeningView;
+
+        beforeEach(function () {
+            const relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
+            participantUniqueLinkData = relationMemberHappeningService
                 .generateDetailedParticipantListInformation(relationId, MOCK_BODY);
 
+            participationHappening = relationMemberHappeningService.getDataView(participantUniqueLinkData[0].uniqueLink);
+
+        });
+
+        it('Should generated list with the same names', function () {
             participantUniqueLinkData
                 .map(({ name }) => assert.strictEqual(true, MOCK_BODY.participantList.some((el) => el.name === name)))
-        })
+        });
+
+        it('getDataView should return correct name', function () {
+            assert.strictEqual(participationHappening.happening.name, MOCK_BODY.name);
+        });
+
+        it('generate data should set publish of happening flag to true', function () {
+            assert.strictEqual(participationHappening.happening.isPublish, true);
+        });
+
+        it('getMatchedMember should return object by uniqueLink', function () {
+            const memberView = relationMemberHappeningService.getMatchedMember(participantUniqueLinkData[0].uniqueLink);
+
+            assert.notStrictEqual(null, memberView);
+        });
     });
 })
 ;
