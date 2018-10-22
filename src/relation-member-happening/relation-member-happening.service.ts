@@ -9,6 +9,7 @@ import { Happening } from '../happening/happening';
 import { Member } from '../member/member';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
 import { IParticipantUniqueLinkData } from './participant-unique-link-data';
+import { INewHappeningView } from './happening-view.model';
 
 @injectable()
 export class RelationMemberHappeningService {
@@ -88,6 +89,28 @@ export class RelationMemberHappeningService {
         const { id, name } = relation.getHappening().getMember(matchedMemberId);
 
         return { id, name };
+    }
+
+    public generateDetailedParticipantListInformation(
+        relationId: string,
+        newHappeningView: INewHappeningView): IParticipantUniqueLinkData[] {
+        const { participantList, name, description } = newHappeningView;
+        const relation = this.relationMemberHappeningRepository.get(relationId);
+        const happening = relation.getHappening();
+
+        participantList.map(({ name }) => {
+            const newRelationId = this.relationMemberHappeningFactory.generateUuid();
+            const member = happening.addMember(newRelationId, RoleType.PARTICIPANT, name);
+            const relation = this.relationMemberHappeningFactory.create(newRelationId, happening, member);
+            this.relationMemberHappeningRepository.add(relation);
+        });
+        happening.publishEvent();
+
+        const editedHappening = Object.assign({}, happening, { name, description });
+
+        this.happeningRepository.update(editedHappening.id, editedHappening);
+
+        return this.getDetailedParticipantListInformation(relationId);
     }
 
     private mapToIParticipantUniqueLinkData({ name, relationId }: Member): IParticipantUniqueLinkData {
