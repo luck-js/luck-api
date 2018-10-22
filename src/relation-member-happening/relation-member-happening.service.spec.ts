@@ -113,4 +113,21 @@ describe('Relation Member Happening Service', function () {
             assert.strictEqual(participant.eventMemberRole.MatchedMemberId, matchedMember.id);
         });
     });
-});
+    describe('Generate detailed participant list information', function () {
+        it('Should generated list with the same names', function () {
+            const relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
+            const MOCK_BODY = {
+                'name': 'TEST_NAME',
+                'description': 'TEST_DESCRIPTION',
+                'participantList': [{ 'name': 'Bill' }, { 'name': 'Johny' }, { 'name': 'Matt' }, { 'name': 'Kathy' }]
+            };
+
+            const participantUniqueLinkData = relationMemberHappeningService
+                .generateDetailedParticipantListInformation(relationId, MOCK_BODY);
+
+            participantUniqueLinkData
+                .map(({ name }) => assert.strictEqual(true, MOCK_BODY.participantList.some((el) => el.name === name)))
+        })
+    });
+})
+;
