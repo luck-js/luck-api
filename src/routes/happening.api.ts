@@ -9,7 +9,7 @@ export class HappeningApi {
         try {
             const relationId = this.relationMemberHappeningService.createOwnerRelationOfHappening();
 
-            res.send(relationId);
+            res.json(relationId);
         } catch (err) {
             res.send(err);
         }
@@ -21,7 +21,7 @@ export class HappeningApi {
             const option = req.body;
             const happening = this.relationMemberHappeningService.editHappening(id, option);
 
-            res.send(happening);
+            res.json(happening);
         } catch (err) {
             res.send(err);
         }
@@ -31,7 +31,8 @@ export class HappeningApi {
         try {
             const { id } = req.params;
             const happening = this.relationMemberHappeningService.publish(id);
-            res.send(happening);
+
+            res.json(happening);
         } catch (err) {
             res.send(err);
         }
@@ -43,7 +44,7 @@ export class HappeningApi {
             const { name } = req.body;
             const participant = this.relationMemberHappeningService.addParticipant(id, name);
 
-            res.send(participant);
+            res.json(participant);
         } catch (err) {
             res.send(err);
         }
@@ -55,7 +56,7 @@ export class HappeningApi {
             const { id } = req.params;
             const memberUniqueLinkDataList = this.relationMemberHappeningService.getDetailedParticipantListInformation(id);
 
-            res.send(memberUniqueLinkDataList);
+            res.json(memberUniqueLinkDataList);
         } catch (err) {
             res.send(err);
         }
