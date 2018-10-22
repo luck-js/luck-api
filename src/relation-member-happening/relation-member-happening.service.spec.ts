@@ -6,6 +6,7 @@ import { RelationMemberHappeningService } from './relation-member-happening.serv
 import { RelationMemberHappeningRepository } from './relation-member-happening.repository';
 import { PARTICIPANT_INITIAL_LIST_MOCK } from '../member/member.mock';
 import { MemberRepository } from '../member/member.repository';
+import { MatchingMemberService } from '../services/matching-member.service';
 
 describe('Relation Member Happening Service', function () {
     let DIContainer: Container;
@@ -112,7 +113,39 @@ describe('Relation Member Happening Service', function () {
 
             assert.strictEqual(participant.eventMemberRole.MatchedMemberId, matchedMember.id);
         });
+
+        it('Matched member should be from list of happening', function () {
+            const FIRST_PARTICIPANT_INITIAL_LIST_MOCK = [
+                PARTICIPANT_INITIAL_LIST_MOCK[0],
+                PARTICIPANT_INITIAL_LIST_MOCK[1]
+            ];
+
+            const SECOND_PARTICIPANT_INITIAL_LIST_MOCK = [
+                PARTICIPANT_INITIAL_LIST_MOCK[2],
+                PARTICIPANT_INITIAL_LIST_MOCK[3],
+                PARTICIPANT_INITIAL_LIST_MOCK[4]];
+
+            const firstRelationId = relationMemberHappeningService.createOwnerRelationOfHappening();
+            const firstMemberInstanceList = FIRST_PARTICIPANT_INITIAL_LIST_MOCK
+                .map(({ name }) => relationMemberHappeningService.addParticipant(firstRelationId, name));
+
+            const secondRelationId = relationMemberHappeningService.createOwnerRelationOfHappening();
+            const secondMemberInstanceList = SECOND_PARTICIPANT_INITIAL_LIST_MOCK
+                .map(({ name }) => relationMemberHappeningService.addParticipant(secondRelationId, name));
+
+            relationMemberHappeningService.publish(firstRelationId);
+
+            const firstRelation = relationMemberHappeningRepository.get(firstRelationId);
+            const happening = firstRelation.getHappening();
+
+            const firstMembersListAbleToRandom = MatchingMemberService.filterMembersWhoAbleToRandom(happening.getMemberList());
+
+            assert.strictEqual(true, firstMembersListAbleToRandom
+                .some((member) => firstMembersListAbleToRandom
+                    .some((el) => el.id === member.MatchedMemberId)));
+        });
     });
+
     describe('Generate detailed participant list information', function () {
         it('Should generated list with the same names', function () {
             const relationId = relationMemberHappeningService.createOwnerRelationOfHappening();
