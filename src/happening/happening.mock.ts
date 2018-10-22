@@ -9,7 +9,7 @@ export const HAPPENING_INITIAL_LIST_MOCK: IHappening[] = [
         name: 'Happening Madden',
         description: '',
         isPublish: null,
-        memberIdList: []
+        memberIdList: ['0', '1', '2', '3', '4', '5']
     },
     {
         id: '1',
