@@ -19,6 +19,11 @@ export class RelationMemberHappeningRepository {
 
     public get(id: string): RelationMemberHappening {
         const relationMemberHappening = this.list.find((el) => el.id === id);
-        return this.relationMemberHappeningFactory.recreate(relationMemberHappening);
+
+        if (!relationMemberHappening) {
+            throw Error('id isn\' correct')
+        } else {
+            return this.relationMemberHappeningFactory.recreate(relationMemberHappening);
+        }
     }
 }
