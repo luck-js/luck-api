@@ -18,7 +18,12 @@ export class MemberRepository {
 
     public getByIndex(id: string): Member {
         const member = this.list.find((el) => el.id === id);
-        return this.memberFactory.recreate(member);
+
+        if (!member) {
+            throw Error('id isn\' correct')
+        } else {
+            return this.memberFactory.recreate(member);
+        }
     }
 
     public getList(): Member[] {
@@ -26,10 +31,11 @@ export class MemberRepository {
     }
 
     public updateList(memberList: IMember[]) {
-        this.list = memberList;
-    }
+        this.list = this.list.reduce((previousValue, currentValue) => {
+            const member = memberList.find((el) => el.id === currentValue.id);
+            member ? previousValue.push(member) : previousValue.push(currentValue);
 
-    public updateMatchedMemberId(id: string, idMatched: string ) {
-
+            return previousValue;
+        }, []);
     }
 }
