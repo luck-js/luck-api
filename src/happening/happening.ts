@@ -49,7 +49,7 @@ export class Happening implements IHappening {
     }
 
     private matchMember() {
-        const memberList = this.memberRepository.getList();
+        const memberList = this.getMemberList();
         const newMemberList = this.matchingMemberService.matchMemberList(memberList);
         this.memberRepository.updateList(newMemberList)
 
