@@ -9,7 +9,7 @@ import { Happening } from '../happening/happening';
 import { Member } from '../member/member';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
 import { IParticipantUniqueLinkData } from './participant-unique-link-data';
-import { INewHappeningView } from './happening-view.model';
+import { IHappeningView, INewHappeningView } from './happening-view.model';
 
 @injectable()
 export class RelationMemberHappeningService {
@@ -65,8 +65,8 @@ export class RelationMemberHappeningService {
 
     public getDataView(id: string): IParticipationHappeningView {
         const relation = this.relationMemberHappeningRepository.get(id);
-        const member = relation.getMember();
-        const happening = relation.getHappening();
+        const member = this.mapToMemberView(relation.getMember());
+        const happening = this.mapToHappeningView(relation.getHappening());
 
         return {
             member, happening
@@ -120,5 +120,13 @@ export class RelationMemberHappeningService {
 
     private mapToUniqueLink(id: string): string {
         return id;
+    }
+
+    private mapToMemberView({ id, name }: Member): IMemberView {
+        return { id, name }
+    }
+
+    private mapToHappeningView({ id, name, description, isPublish }: Happening): IHappeningView {
+        return { id, name, description, isPublish }
     }
 }
