@@ -17,7 +17,7 @@ export class MemberRepository {
     }
 
     public getByIndex(id: string): Member {
-        const member = this.list.find((el) => el.id === id)
+        const member = this.list.find((el) => el.id === id);
         return this.memberFactory.recreate(member);
     }
 

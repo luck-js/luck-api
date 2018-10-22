@@ -61,4 +61,16 @@ export class HappeningApi {
             res.send(err);
         }
     }
+
+    public generateDetailedParticipantListInformation(req: Request, res: Response) {
+        try {
+            const { happening } = req.body;
+            const { id } = req.params;
+            const memberUniqueLinkDataList = this.relationMemberHappeningService.generateDetailedParticipantListInformation(id, happening);
+
+            res.json(memberUniqueLinkDataList);
+        } catch (err) {
+            res.send(err);
+        }
+    }
 }

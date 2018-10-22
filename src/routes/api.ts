@@ -31,7 +31,10 @@ router.route('/happening/add-participant/:id')
 router.route('/happening/publish/:id')
     .post((req: Request, res: Response) => happeningApi.publish(req, res));
 
-router.route('/happening/get-detailed-member-list-information/:id')
+router.route('/happening/get-detailed-participant-list-information/:id')
     .get((req: Request, res: Response) => happeningApi.getDetailedParticipantListInformation(req, res));
+
+router.route('/happening/generate-detailed-participant-list-information/:id')
+    .post((req: Request, res: Response) => happeningApi.generateDetailedParticipantListInformation(req, res));
 
 export default router;
