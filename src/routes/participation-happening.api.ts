@@ -10,7 +10,7 @@ export class ParticipationHappeningApi {
             const { id } = req.params;
             const memberInformationView = this.relationMemberHappeningService.getDataView(id);
 
-            res.send(memberInformationView);
+            res.json(memberInformationView);
         } catch (err) {
             res.send(err);
         }
@@ -21,7 +21,7 @@ export class ParticipationHappeningApi {
             const { id } = req.params;
             const memberView = this.relationMemberHappeningService.getMatchedMember(id);
 
-            res.send(memberView);
+            res.json(memberView);
         } catch (err) {
             res.send(err);
         }
