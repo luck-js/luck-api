@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { RelationMemberHappeningRepository } from './relation-member-happening.repository';
 import { IParticipationHappeningView } from './participation-happening-view.model';
-import { IMemberView } from './member-view.model';
+import { IMatchedParticipationData, IMemberView } from './member-view.model';
 import { HappeningFactory } from '../happening/happening.factory';
 import { RelationMemberHappeningFactory } from './relation-member-happening.factory';
 import { HappeningRepository } from '../happening/happening.repository';
@@ -82,13 +82,15 @@ export class RelationMemberHappeningService {
             .map((member) => this.mapToIParticipantUniqueLinkData(member));
     }
 
-    public getMatchedMember(idRelation: string): IMemberView {
+    public getMatchedMember(idRelation: string): IMatchedParticipationData {
         const relation = this.relationMemberHappeningRepository.get(idRelation);
         const member = relation.getMember();
         const matchedMemberId = member.MatchedMemberId;
-        const { id, name } = relation.getHappening().getMember(matchedMemberId);
 
-        return { id, name };
+        const me = this.mapToMemberView(member);
+        const matchedMember = this.mapToMemberView(relation.getHappening().getMember(matchedMemberId));
+
+        return { me, matchedMember };
     }
 
     public generateDetailedParticipantListInformation(
