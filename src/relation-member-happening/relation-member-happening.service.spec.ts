@@ -114,7 +114,7 @@ describe('Relation Member Happening Service', function () {
             const matchedMember = relationMemberHappeningService.getMatchedMember(participant.relationId);
             participant = memberRepository.getByIndex(participant.id);
 
-            assert.strictEqual(participant.eventMemberRole.MatchedMemberId, matchedMember.id);
+            assert.strictEqual(participant.eventMemberRole.MatchedMemberId, matchedMember.matchedMember.id);
         });
 
         describe('for two unique list member of happening', function () {
