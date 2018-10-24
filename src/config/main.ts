@@ -1,11 +1,14 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 let main: {
-    port: number,
+    port: string,
     serverHost: string,
     clientURL: string
 };
 
 export default main = {
-    port: 9001,
-    serverHost: 'http://localhost',
-    clientURL: 'http://localhost:9000'
+    port: process.env.PORT,
+    serverHost: process.env.HOST,
+    clientURL: process.env.CLIENT_URL,
 }

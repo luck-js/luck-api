@@ -27,7 +27,7 @@ export class Server {
      */
     public configure() {
         this.app.set('port', config.port);
-        this.app.listen(config.port, _ => console.log(`API running on http://${ config.serverHost }:${ config.port }`));
+        this.app.listen(config.port, _ => console.log(`API running on ${ config.serverHost }:${ config.port }`));
     }
 
     /**
