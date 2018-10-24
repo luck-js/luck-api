@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as mongoose from 'mongoose';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 
@@ -26,6 +27,8 @@ export class Server {
      * @method config
      */
     public configure() {
+        mongoose.connect(config.database, { useNewUrlParser: true });
+
         this.app.set('port', config.port);
         this.app.listen(config.port, _ => console.log(`API running on ${ config.serverHost }:${ config.port }`));
     }
