@@ -1,4 +1,5 @@
 import { injectable } from 'inversify';
+import { Observable } from 'rxjs';
 import { HappeningRepository } from '../happening/happening.repository';
 import { MemberRepository } from '../member/member.repository';
 import { Member } from '../member/member';
@@ -23,7 +24,7 @@ export class RelationMemberHappening implements IRelationMemberHappening {
         return this.memberRepository.getByIndex(this.memberId);
     }
 
-    public getHappening(): Promise<Happening> {
+    public getHappening(): Observable<Happening> {
         return this.happeningRepository.getByIndex(this.happeningId);
     }
 }

@@ -1,4 +1,6 @@
 import { injectable } from 'inversify';
+import { Observable, from } from 'rxjs';
+import { map } from 'rxjs/operators';
 import HappeningModel, { IHappening } from './happening.model';
 import { Happening } from './happening';
 import { HappeningFactory } from './happening.factory';
@@ -10,17 +12,19 @@ export class HappeningRepository {
                 private happeningFactory: HappeningFactory) {
     }
 
-    public add({ id, name, description, isPublish, memberIdList }: IHappening): Promise<IHappening> {
-        return new HappeningModel({ id, name, description, isPublish, memberIdList }).save();
+    public add({ id, name, description, isPublish, memberIdList }: IHappening): Observable<IHappening> {
+        return from(new HappeningModel({ id, name, description, isPublish, memberIdList }).save());
     }
 
-    public getByIndex(id: string): Promise<Happening> {
-        return HappeningModel.findOne({ id: id }, null, { limit: 1 })
-            .then((happening) => this.happeningFactory.recreate(happening));
+    public getByIndex(id: string): Observable<Happening> {
+        return from(HappeningModel.findOne({ id: id }, null, { limit: 1 }).exec()).pipe(
+            map((happening) => this.happeningFactory.recreate(happening))
+        );
     }
 
-    public update(id: string, option: IHappening): Promise<Happening> {
-        return HappeningModel.findOneAndUpdate({ id }, option, { new: true })
-            .then((happening) => this.happeningFactory.recreate(happening));
+    public update(id: string, option: IHappening): Observable<Happening> {
+        return from(HappeningModel.findOneAndUpdate({ id }, option, { new: true }).exec()).pipe(
+            map((happening) => this.happeningFactory.recreate(happening))
+        );
     }
 }

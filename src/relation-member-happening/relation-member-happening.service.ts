@@ -1,4 +1,6 @@
 import { injectable } from 'inversify';
+import { Observable } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { RelationMemberHappeningRepository } from './relation-member-happening.repository';
 import { IParticipationHappeningView } from './participation-happening-view.model';
 import { IMatchedParticipationData, IMemberView } from './member-view.model';
@@ -20,130 +22,115 @@ export class RelationMemberHappeningService {
         private relationMemberHappeningFactory: RelationMemberHappeningFactory) {
     }
 
-    public createOwnerRelationOfHappening(): Promise<string> {
-        return new Promise((resolve, reject) => {
-            const relationId = this.relationMemberHappeningFactory.generateUuid();
+    public createOwnerRelationOfHappening(): Observable<string> {
 
-            const happening = this.happeningFactory.create();
-            const member = happening.addMember(relationId, RoleType.ORGANISER);
+        const relationId = this.relationMemberHappeningFactory.generateUuid();
 
-            const relation = this.relationMemberHappeningFactory.create(relationId, happening, member);
+        const happening = this.happeningFactory.create();
+        const member = happening.addMember(relationId, RoleType.ORGANISER);
 
-            this.relationMemberHappeningRepository.add(relation);
+        const relation = this.relationMemberHappeningFactory.create(relationId, happening, member);
 
-            this.happeningRepository.add(happening)
-                .then(() => {
-                    resolve(relation.Id);
-                });
-        })
+        this.relationMemberHappeningRepository.add(relation);
+
+        return this.happeningRepository.add(happening).pipe(
+            map((_) => relation.Id)
+        )
+
     }
 
-    public editHappening(relationId: string, option): Promise<Happening> {
+    public editHappening(relationId: string, option): Observable<Happening> {
         const { name, description } = option;
         const relation = this.relationMemberHappeningRepository.get(relationId);
 
-        return relation.getHappening()
-            .then((happening) => {
-                const editedHappening = Object.assign({}, happening, { name, description });
-                return this.happeningRepository.update(happening.id, editedHappening);
-            });
+        return relation.getHappening().pipe(
+            map((happening) => Object.assign({}, happening, { name, description })),
+            switchMap((editedHappening) => this.happeningRepository.update(editedHappening.id, editedHappening))
+        )
     }
 
-    public publish(relationId: string): Promise<Happening> {
+    public publish(relationId: string): Observable<Happening> {
         const relation = this.relationMemberHappeningRepository.get(relationId);
 
-        return relation.getHappening()
-            .then((happening) => {
-                happening.publishEvent();
-                return this.happeningRepository.update(happening.id, happening);
-            })
+        return relation.getHappening().pipe(
+            tap((happening) => happening.publishEvent()),
+            switchMap((happening) => this.happeningRepository.update(happening.id, happening))
+        )
     }
 
-    public addParticipant(ownerRelationId: string, name: string): Promise<Member> {
-        return new Promise((resolve, reject) => {
+    public addParticipant(ownerRelationId: string, name: string): Observable<Member> {
+        const ownerRelation = this.relationMemberHappeningRepository.get(ownerRelationId);
 
-            const ownerRelation = this.relationMemberHappeningRepository.get(ownerRelationId);
-            ownerRelation.getHappening().then((happening) => {
+        return ownerRelation.getHappening().pipe(
+            map((happening) => {
                 const newRelationId = this.relationMemberHappeningFactory.generateUuid();
                 const member = happening.addMember(newRelationId, RoleType.PARTICIPANT, name);
 
                 const relation = this.relationMemberHappeningFactory.create(newRelationId, happening, member);
                 this.relationMemberHappeningRepository.add(relation);
+                this.happeningRepository.update(happening.id, happening);
 
-                this.happeningRepository.update(happening.id, happening)
-                    .then(() => {
-                        resolve(member);
-                    });
+                return member;
             })
-        })
+        )
+
     }
 
-    public getDataView(id: string): Promise<IParticipationHappeningView> {
+    public getDataView(id: string): Observable<IParticipationHappeningView> {
         const relation = this.relationMemberHappeningRepository.get(id);
         const member = this.mapToMemberView(relation.getMember());
 
-        return relation.getHappening()
-            .then((res) => {
-                const happening = this.mapToHappeningView(res);
-
-                return {
-                    member, happening
-                }
-            })
+        return relation.getHappening().pipe(
+            map((happening) => this.mapToHappeningView(happening)),
+            map((happening) => ({ member, happening }))
+        )
     }
 
-    public getDetailedParticipantListInformation(relationId: string): Promise<IParticipantUniqueLinkData[]> {
+    public getDetailedParticipantListInformation(relationId: string): Observable<IParticipantUniqueLinkData[]> {
         const relation = this.relationMemberHappeningRepository.get(relationId);
 
-        return relation.getHappening()
-            .then((happening) => {
-                return happening.getMemberList()
-                    .filter((member) => member.eventMemberRole.type !== RoleType.ORGANISER)
-                    .map((member) => this.mapToIParticipantUniqueLinkData(member));
-            })
-
+        return relation.getHappening().pipe(
+            map((happening) => happening.getMemberList()
+                .filter((member) => member.eventMemberRole.type !== RoleType.ORGANISER)
+                .map((member) => this.mapToIParticipantUniqueLinkData(member)))
+        )
     }
 
-    public getMatchedMember(idRelation: string): Promise<IMatchedParticipationData> {
+    public getMatchedMember(idRelation: string): Observable<IMatchedParticipationData> {
         const relation = this.relationMemberHappeningRepository.get(idRelation);
         const member = relation.getMember();
         const matchedMemberId = member.MatchedMemberId;
 
-        return relation.getHappening()
-            .then((happening) => {
-                const me = this.mapToMemberView(member);
-                const matchedMember = this.mapToMemberView(happening.getMember(matchedMemberId));
+        const me = this.mapToMemberView(member);
 
-                return { me, matchedMember };
-            })
+        return relation.getHappening().pipe(
+            map((happening) => this.mapToMemberView(happening.getMember(matchedMemberId))),
+            map((matchedMember) => ({ me, matchedMember }))
+        )
     }
 
     public generateDetailedParticipantListInformation(
         relationId: string,
-        newHappeningView: INewHappeningView): Promise<IParticipantUniqueLinkData[]> {
-        return new Promise((resolve, reject) => {
+        newHappeningView: INewHappeningView): Observable<IParticipantUniqueLinkData[]> {
 
-            const { participantList, name, description } = newHappeningView;
-            const relation = this.relationMemberHappeningRepository.get(relationId);
-            relation.getHappening()
-                .then((happening) => {
-                    participantList.map(({ name }) => {
-                        const newRelationId = this.relationMemberHappeningFactory.generateUuid();
-                        const member = happening.addMember(newRelationId, RoleType.PARTICIPANT, name);
-                        const relation = this.relationMemberHappeningFactory.create(newRelationId, happening, member);
-                        this.relationMemberHappeningRepository.add(relation);
-                    });
-                    happening.publishEvent();
+        const { participantList, name, description } = newHappeningView;
+        const relation = this.relationMemberHappeningRepository.get(relationId);
 
-                    const editedHappening = Object.assign({}, happening, { name, description });
+        return relation.getHappening().pipe(
+            map((happening) => {
+                participantList.map(({ name }) => {
+                    const newRelationId = this.relationMemberHappeningFactory.generateUuid();
+                    const member = happening.addMember(newRelationId, RoleType.PARTICIPANT, name);
+                    const relation = this.relationMemberHappeningFactory.create(newRelationId, happening, member);
+                    this.relationMemberHappeningRepository.add(relation);
+                });
+                happening.publishEvent();
 
-
-                    this.happeningRepository.update(editedHappening.id, editedHappening)
-                        .then(() => {
-                            resolve(this.getDetailedParticipantListInformation(relationId));
-                        });
-                })
-        });
+                return Object.assign({}, happening, { name, description });
+            }),
+            switchMap((editedHappening) => this.happeningRepository.update(editedHappening.id, editedHappening)),
+            switchMap(() => this.getDetailedParticipantListInformation(relationId))
+        )
     }
 
     private mapToIParticipantUniqueLinkData({ name, relationId }: Member): IParticipantUniqueLinkData {
