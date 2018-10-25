@@ -1,5 +1,7 @@
 import { injectable } from 'inversify';
-import { IMember } from './member.model';
+import { Observable, from, merge, of, forkJoin } from 'rxjs';
+import { map, take, tap } from 'rxjs/operators';
+import MemberModel, { IMember } from './member.model';
 import { Member } from './member';
 import { MemberFactory } from './member.factory';
 
@@ -10,32 +12,27 @@ export class MemberRepository {
                 private memberFactory: MemberFactory) {
     }
 
-    public add(member: IMember): IMember {
-        this.list.push(member);
-
-        return member
+    public add({ id, relationId, name, eventMemberRole }: IMember): Observable<IMember> {
+        return from(new MemberModel({ id, relationId, name, eventMemberRole }).save());
     }
 
-    public getByIndex(id: string): Member {
-        const member = this.list.find((el) => el.id === id);
-
-        if (!member) {
-            throw Error('id isn\' correct')
-        } else {
-            return this.memberFactory.recreate(member);
-        }
+    public getByIndex(id: string): Observable<Member> {
+        return from(MemberModel.findOne({ id }, null, { limit: 1 }).exec()).pipe(
+            map((member) => this.memberFactory.recreate(member))
+        );
     }
 
     public getList(): Member[] {
         return this.list.map((member) => this.memberFactory.recreate(member));
     }
 
-    public updateList(memberList: IMember[]) {
-        this.list = this.list.reduce((previousValue, currentValue) => {
-            const member = memberList.find((el) => el.id === currentValue.id);
-            member ? previousValue.push(member) : previousValue.push(currentValue);
+    public updateList(memberList: IMember[]): Observable<Member[]> {
+        return forkJoin(memberList.map((el) => this.updateMember(el)))
+    }
 
-            return previousValue;
-        }, []);
+    private updateMember(member): Observable<Member> {
+        return from(MemberModel.findOneAndUpdate({ id: member.id }, member, { new: true }).exec()).pipe(
+            map((member) => this.memberFactory.recreate(member))
+        );
     }
 }

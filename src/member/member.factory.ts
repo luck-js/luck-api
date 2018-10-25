@@ -23,9 +23,11 @@ export class MemberFactory {
         return this.DIFactoryMember({ id, relationId, name, eventMemberRole })
     }
 
-    public recreate({ eventMemberRole, ...rest }: IMember): Member {
+    public recreate(member: IMember): Member {
+        const eventMemberRole = member.eventMemberRole;
+        const { id, relationId, name } = member;
         const type = this.createEventMemberRole(eventMemberRole.type, eventMemberRole);
-        return this.DIFactoryMember(Object.assign({}, rest, { eventMemberRole: type }));
+        return this.DIFactoryMember(Object.assign({}, { id, relationId, name }, { eventMemberRole: type }));
     }
 
     private createEventMemberRole(type: RoleType, option?): EventMemberRole {
