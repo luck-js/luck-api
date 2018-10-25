@@ -27,7 +27,9 @@ export class Server {
      * @method config
      */
     public configure() {
-        mongoose.connect(config.database, { useNewUrlParser: true });
+        mongoose.connect(config.database, { useNewUrlParser: true })
+            .then((resolve) => console.log('MongoDB is connected'))
+            .catch((reject) => console.log('connection error'));
 
         this.app.set('port', config.port);
         this.app.listen(config.port, _ => console.log(`API running on ${ config.serverHost }:${ config.port }`));
