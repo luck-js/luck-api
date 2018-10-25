@@ -4,7 +4,7 @@ export abstract class EventMemberRole {
     public type: RoleType;
 
     protected constructor(public abilityToRandom: boolean,
-                          protected matchedMemberId: string) {
+                          public matchedMemberId: string) {
     }
 
     public get MatchedMemberId(): string {

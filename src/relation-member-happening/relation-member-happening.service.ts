@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import { Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { RelationMemberHappeningRepository } from './relation-member-happening.repository';
 import { IParticipationHappeningView } from './participation-happening-view.model';
 import { IMatchedParticipationData, IMemberView } from './member-view.model';
@@ -90,10 +90,11 @@ export class RelationMemberHappeningService {
         const relation = this.relationMemberHappeningRepository.get(relationId);
 
         return relation.getHappening().pipe(
-            map((happening) => happening.getMemberList()
+            switchMap((happening) => happening.getMemberList()),
+            map((memberList) => memberList
                 .filter((member) => member.eventMemberRole.type !== RoleType.ORGANISER)
                 .map((member) => this.mapToIParticipantUniqueLinkData(member)))
-        )
+        );
     }
 
     public getMatchedMember(idRelation: string): Observable<IMatchedParticipationData> {
@@ -104,7 +105,8 @@ export class RelationMemberHappeningService {
         const me = this.mapToMemberView(member);
 
         return relation.getHappening().pipe(
-            map((happening) => this.mapToMemberView(happening.getMember(matchedMemberId))),
+            switchMap((happening) => happening.getMember(matchedMemberId)),
+            map((matchedMember) => this.mapToMemberView(matchedMember)),
             map((matchedMember) => ({ me, matchedMember }))
         )
     }

@@ -39,7 +39,7 @@ export class Happening implements IHappening {
         )
     }
 
-    public getMember(id: string): Observable<Member> {
+    public getMember(id: string): Member {
         return this.memberRepository.getByIndex(id);
     }
 
