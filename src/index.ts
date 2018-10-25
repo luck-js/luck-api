@@ -28,7 +28,7 @@ export class Server {
      */
     public configure() {
         mongoose.connect(config.database, { useNewUrlParser: true })
-            .then((resolve) => console.log('MongoDB is connected'))
+            .then((resolve) => console.log(`MongoDB is connected on ${ config.database }`))
             .catch((reject) => console.log('connection error'));
 
         this.app.set('port', config.port);

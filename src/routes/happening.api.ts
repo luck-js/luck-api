@@ -7,9 +7,10 @@ export class HappeningApi {
 
     public create(req: Request, res: Response) {
         try {
-            const relationId = this.relationMemberHappeningService.createOwnerRelationOfHappening();
+            this.relationMemberHappeningService.createOwnerRelationOfHappening().then((relationId) => {
+                res.json(relationId);
+            });
 
-            res.json(relationId);
         } catch (err) {
             res.send(err);
         }
@@ -19,9 +20,10 @@ export class HappeningApi {
         try {
             const { id } = req.params;
             const option = req.body;
-            const happening = this.relationMemberHappeningService.editHappening(id, option);
+            this.relationMemberHappeningService.editHappening(id, option).then((happening) => {
+                res.json(happening);
+            })
 
-            res.json(happening);
         } catch (err) {
             res.send(err);
         }
@@ -30,9 +32,10 @@ export class HappeningApi {
     public publish(req: Request, res: Response) {
         try {
             const { id } = req.params;
-            const happening = this.relationMemberHappeningService.publish(id);
+            this.relationMemberHappeningService.publish(id).then((happening) => {
+                res.json(happening);
+            });
 
-            res.json(happening);
         } catch (err) {
             res.send(err);
         }
@@ -42,9 +45,10 @@ export class HappeningApi {
         try {
             const { id } = req.params;
             const { name } = req.body;
-            const participant = this.relationMemberHappeningService.addParticipant(id, name);
+            this.relationMemberHappeningService.addParticipant(id, name).then((participant) => {
+                res.json(participant);
+            });
 
-            res.json(participant);
         } catch (err) {
             res.send(err);
         }
@@ -66,9 +70,10 @@ export class HappeningApi {
         try {
             const { happening } = req.body;
             const { id } = req.params;
-            const memberUniqueLinkDataList = this.relationMemberHappeningService.generateDetailedParticipantListInformation(id, happening);
-
-            res.json(memberUniqueLinkDataList);
+            this.relationMemberHappeningService.generateDetailedParticipantListInformation(id, happening)
+                .then((memberUniqueLinkDataList) => {
+                    res.json(memberUniqueLinkDataList);
+                })
         } catch (err) {
             res.send(err);
         }
