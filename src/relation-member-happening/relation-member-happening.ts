@@ -6,7 +6,7 @@ import { Happening } from '../happening/happening';
 import { IRelationMemberHappening } from './relation-member-happening.model';
 
 @injectable()
-export class RelationMemberHappening implements IRelationMemberHappening{
+export class RelationMemberHappening implements IRelationMemberHappening {
     constructor(public id: string,
                 public memberId: string,
                 public happeningId: string,
@@ -23,7 +23,7 @@ export class RelationMemberHappening implements IRelationMemberHappening{
         return this.memberRepository.getByIndex(this.memberId);
     }
 
-    public getHappening(): Happening {
+    public getHappening(): Promise<Happening> {
         return this.happeningRepository.getByIndex(this.happeningId);
     }
 }

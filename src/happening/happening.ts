@@ -1,3 +1,5 @@
+import { forkJoin, Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { IHappening } from './happening.model';
 import { MemberRepository } from '../member/member.repository';
 import { MatchingMemberService } from '../services/matching-member.service';
@@ -23,35 +25,37 @@ export class Happening implements IHappening {
 
     }
 
-    public addMember(relationId: string, type: RoleType, name?: string): Member {
+    public addMember(relationId: string, type: RoleType, name?: string): Observable<Member> {
         if (this.isPublish) {
             throw new Error('Happening is publishing')
         }
 
         const member = this.memberFactory.create(relationId, type, name);
 
-        this.memberRepository.add(member);
         this.memberIdList.push(member.id);
-        return member
+
+        return this.memberRepository.add(member).pipe(
+            map(() => member)
+        )
     }
 
-    public getMember(id: string): Member {
+    public getMember(id: string): Observable<Member> {
         return this.memberRepository.getByIndex(id);
     }
 
-    public getMemberList(): Member[] {
-        return this.memberIdList.map((id) => this.memberRepository.getByIndex(id));
+    public getMemberList(): Observable<Member[]> {
+        return forkJoin(this.memberIdList.map((id) => this.memberRepository.getByIndex(id)));
     }
 
-    public publishEvent() {
+    public publishEvent(): Observable<Member[]> {
         this.isPublish = true;
-        this.matchMember();
+        return this.matchMember();
     }
 
-    private matchMember() {
-        const memberList = this.getMemberList();
-        const newMemberList = this.matchingMemberService.matchMemberList(memberList);
-        this.memberRepository.updateList(newMemberList)
-
+    private matchMember(): Observable<Member[]>  {
+        return this.getMemberList().pipe(
+            map((memberList) => this.matchingMemberService.matchMemberList(memberList)),
+            switchMap((newMemberList) => this.memberRepository.updateList(newMemberList))
+        )
     }
 }
