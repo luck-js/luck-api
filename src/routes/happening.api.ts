@@ -80,7 +80,7 @@ export class HappeningApi {
             const { id } = req.params;
             this.relationMemberHappeningService.generateDetailedParticipantListInformation(id, happening).pipe(
                 take(1),
-                map((memberUniqueLinkDataList) => res.json(memberUniqueLinkDataList))
+                map((createdHappening) => res.json(createdHappening))
             ).subscribe();
 
         } catch (err) {
