@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { RelationMemberHappeningService } from '../relation-member-happening/relation-member-happening.service';
+import { map, take } from 'rxjs/operators';
 
 export class ParticipationHappeningApi {
     constructor(private relationMemberHappeningService: RelationMemberHappeningService) {
@@ -8,9 +9,11 @@ export class ParticipationHappeningApi {
     public getDataView(req: Request, res: Response) {
         try {
             const { id } = req.params;
-            const memberInformationView = this.relationMemberHappeningService.getDataView(id);
+            this.relationMemberHappeningService.getDataView(id).pipe(
+                take(1),
+                map((memberInformationView) => res.json(memberInformationView))
+            ).subscribe();
 
-            res.json(memberInformationView);
         } catch (err) {
             res.send(err);
         }
@@ -19,9 +22,11 @@ export class ParticipationHappeningApi {
     public getMatchedMember(req: Request, res: Response) {
         try {
             const { id } = req.params;
-            const memberView = this.relationMemberHappeningService.getMatchedMember(id);
+            this.relationMemberHappeningService.getMatchedMember(id).pipe(
+                take(1),
+                map((memberView) => res.json(memberView))
+            ).subscribe();
 
-            res.json(memberView);
         } catch (err) {
             res.send(err);
         }
