@@ -1,5 +1,7 @@
 import { injectable } from 'inversify';
-import { IRelationMemberHappening } from './relation-member-happening.model';
+import { Observable, from } from 'rxjs';
+import { map } from 'rxjs/operators';
+import RelationMemberHappeningModel, { IRelationMemberHappening } from './relation-member-happening.model';
 import { RelationMemberHappening } from './relation-member-happening';
 import { RelationMemberHappeningFactory } from './relation-member-happening.factory';
 
@@ -11,19 +13,13 @@ export class RelationMemberHappeningRepository {
 
     }
 
-    public add(relationMemberHappening: IRelationMemberHappening): IRelationMemberHappening {
-        this.list.push(relationMemberHappening);
-
-        return relationMemberHappening
+    public add(relationMemberHappening: IRelationMemberHappening): Observable<IRelationMemberHappening> {
+        return from(new RelationMemberHappeningModel(relationMemberHappening).save());
     }
 
-    public get(id: string): RelationMemberHappening {
-        const relationMemberHappening = this.list.find((el) => el.id === id);
-
-        if (!relationMemberHappening) {
-            throw Error('id isn\' correct')
-        } else {
-            return this.relationMemberHappeningFactory.recreate(relationMemberHappening);
-        }
+    public getByIndex(id: string): Observable<RelationMemberHappening> {
+        return from(RelationMemberHappeningModel.findOne({ id }, null, { limit: 1 }).exec()).pipe(
+            map((relationMemberHappening) => this.relationMemberHappeningFactory.recreate(relationMemberHappening))
+        )
     }
 }
