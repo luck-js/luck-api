@@ -19,6 +19,7 @@ import { RelationMemberHappening } from './relation-member-happening/relation-me
 import { IRelationMemberHappening } from './relation-member-happening/relation-member-happening.model';
 import { MatchingMemberService } from './services/matching-member.service';
 import { HappeningApi } from './routes/happening.api';
+import { EventMemberRoleFactory } from './member/event-member-role/event-member-role.factory';
 
 const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_MOCK?, RELATION_INITIAL_LIST_MOCK?): Container => {
     const DIContainer = new Container();
@@ -73,11 +74,19 @@ const DIContainerProvider = (MEMBER_INITIAL_LIST_MOCK?, HAPPENING_INITIAL_LIST_M
         .toDynamicValue((context: interfaces.Context) => {
             const uuidGenerationService = context.container.get<UuidGenerationService>(IDENTIFIER.UuidGenerationService);
             const DIFactoryMember = context.container.get<(option: IMember) => Member>(IDENTIFIER.DIFactoryMember);
+            const eventMemberRoleFactory = context.container.get<EventMemberRoleFactory>(IDENTIFIER.EventMemberRoleFactory);
 
             return new MemberFactory(
                 uuidGenerationService,
+                eventMemberRoleFactory,
                 DIFactoryMember
             )
+        });
+
+
+    DIContainer.bind<EventMemberRoleFactory>(IDENTIFIER.EventMemberRoleFactory)
+        .toDynamicValue((context: interfaces.Context) => {
+            return new EventMemberRoleFactory()
         });
 
     DIContainer.bind <(option: IHappening) => Happening>(IDENTIFIER.DIFactoryHappening)

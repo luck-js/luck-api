@@ -1,11 +1,12 @@
 import { Document, Schema, model } from 'mongoose';
-import { EventMemberRoleSchema, IEventMemberRole } from './event-member-role/event-member-role.model';
+import { EventMemberRoleSchema } from './event-member-role/event-member-role.model';
+import { EventMemberRole } from './event-member-role/event-member-role';
 
 export interface IMember {
     id: string,
     relationId: string,
     name: string,
-    eventMemberRole: IEventMemberRole
+    eventMemberRole: EventMemberRole
 }
 
 export interface IMemberSchema extends IMember, Document {

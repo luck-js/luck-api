@@ -7,9 +7,8 @@ export class Member implements IMember {
         public id: string,
         public relationId: string,
         public name: string,
-        public eventMemberRole: EventMemberRole
+        public eventMemberRole: EventMemberRole,
     ) {
-
     }
 
     public get MatchedMemberId(): string {
