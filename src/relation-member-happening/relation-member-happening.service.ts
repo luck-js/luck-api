@@ -10,8 +10,8 @@ import { HappeningRepository } from '../happening/happening.repository';
 import { Happening } from '../happening/happening';
 import { Member } from '../member/member';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
-import { IParticipantUniqueLinkData } from './participant-unique-link-data';
 import { IHappeningView, INewHappeningView } from './happening-view.model';
+import { ICreatedHappening, IParticipantUniqueLinkData } from './created-happening-view';
 
 @injectable()
 export class RelationMemberHappeningService {
@@ -79,10 +79,7 @@ export class RelationMemberHappeningService {
 
     public getDetailedParticipantListInformation(relationId: string): Observable<IParticipantUniqueLinkData[]> {
         return this.getHappeningObservable(relationId).pipe(
-            switchMap((happening) => happening.getMemberList()),
-            map((memberList) => memberList
-                .filter((member) => member.eventMemberRole.type !== RoleType.ORGANISER)
-                .map((member) => this.mapToIParticipantUniqueLinkData(member)))
+            switchMap((happening) => this.getDetailedParticipantListInformationFromHappening(happening))
         );
     }
 
@@ -103,7 +100,7 @@ export class RelationMemberHappeningService {
 
     public generateDetailedParticipantListInformation(
         relationId: string,
-        newHappeningView: INewHappeningView): Observable<IParticipantUniqueLinkData[]> {
+        newHappeningView: INewHappeningView): Observable<ICreatedHappening> {
 
         const { participantList, name, description } = newHappeningView;
 
@@ -113,8 +110,18 @@ export class RelationMemberHappeningService {
                 map(() => Object.assign({}, happening, { name, description }))
             )),
             switchMap((editedHappening) => this.happeningRepository.update(editedHappening.id, editedHappening)),
-            switchMap(() => this.getDetailedParticipantListInformation(relationId))
+            switchMap((happening) => this.getDetailedParticipantListInformationFromHappening(happening).pipe(
+                map((participantList) => ({ participantList, name: happening.name, description: happening.description }))
+            ))
         )
+    }
+
+    private getDetailedParticipantListInformationFromHappening(happening: Happening): Observable<IParticipantUniqueLinkData[]> {
+        return happening.getMemberList().pipe(
+            map((memberList) => memberList
+                .filter((member) => member.eventMemberRole.type !== RoleType.ORGANISER)
+                .map((member) => this.mapToIParticipantUniqueLinkData(member)))
+        );
     }
 
     private createMember(happening: Happening, role: RoleType, name: string): Observable<Member> {
