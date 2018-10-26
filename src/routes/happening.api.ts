@@ -74,6 +74,19 @@ export class HappeningApi {
         }
     }
 
+    public getGenerateDetailedParticipantListInformation(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            this.relationMemberHappeningService.getGenerateDetailedParticipantListInformation(id).pipe(
+                take(1),
+                map((createdHappening) => res.json(createdHappening))
+            ).subscribe();
+
+        } catch (err) {
+            res.send(err);
+        }
+    }
+
     public generateDetailedParticipantListInformation(req: Request, res: Response) {
         try {
             const { happening } = req.body;

@@ -98,6 +98,14 @@ export class RelationMemberHappeningService {
         )
     }
 
+    public getGenerateDetailedParticipantListInformation(relationId: string): Observable<ICreatedHappening> {
+        return this.getHappeningObservable(relationId).pipe(
+            switchMap((happening) => this.getDetailedParticipantListInformationFromHappening(happening).pipe(
+                map((participantList) => ({ participantList, name: happening.name, description: happening.description })))
+            )
+        )
+    }
+
     public generateDetailedParticipantListInformation(
         relationId: string,
         newHappeningView: INewHappeningView): Observable<ICreatedHappening> {
