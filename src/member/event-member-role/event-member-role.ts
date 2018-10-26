@@ -1,6 +1,6 @@
-import { RoleType } from './event-member-role.model';
+import { IEventMemberRole, RoleType } from './event-member-role.model';
 
-export abstract class EventMemberRole {
+export abstract class EventMemberRole implements IEventMemberRole {
     public type: RoleType;
 
     protected constructor(public abilityToRandom: boolean,

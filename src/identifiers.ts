@@ -1,3 +1,4 @@
+
 const IDENTIFIER = {
     RelationMemberHappeningRepository: Symbol.for('RelationMemberHappeningRepository'),
     MemberRepository: Symbol.for('MemberRepository'),
@@ -10,7 +11,9 @@ const IDENTIFIER = {
     MatchingService: Symbol.for('MatchingService'),
     MatchingMemberService: Symbol.for('MatchingMemberService'),
     UuidGenerationService: Symbol.for('UuidGenerationService'),
+
     RelationMemberHappeningFactory: Symbol.for('RelationMemberHappeningFactory'),
+    EventMemberRoleFactory: Symbol.for('EventMemberRoleFactory'),
     MemberFactory: Symbol.for('MemberFactory'),
     HappeningFactory: Symbol.for('HappeningFactory'),
 
