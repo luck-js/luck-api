@@ -20,7 +20,7 @@ export class RelationMemberHappening implements IRelationMemberHappening {
         return this.id;
     }
 
-    public getMember(): Member {
+    public getMember(): Observable<Member> {
         return this.memberRepository.getByIndex(this.memberId);
     }
 
