@@ -35,6 +35,7 @@ router.route('/happening/get-detailed-participant-list-information/:id')
     .get((req: Request, res: Response) => happeningApi.getDetailedParticipantListInformation(req, res));
 
 router.route('/happening/generate-detailed-participant-list-information/:id')
+    .get((req: Request, res: Response) => happeningApi.getGenerateDetailedParticipantListInformation(req, res))
     .post((req: Request, res: Response) => happeningApi.generateDetailedParticipantListInformation(req, res));
 
 export default router;
