@@ -2,7 +2,6 @@ import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import * as path from 'path';
 
 import api from './routes/api';
 import config from './config/main';
@@ -46,7 +45,7 @@ export class Server {
         this.app.use('/api', api);
 
         this.app.get('*', (req, res) => {
-            res.sendFile(path.join(__dirname));
+            res.json({ 'message': 'Welcome to Luck REST Api' });
         });
     }
 
@@ -57,7 +56,6 @@ export class Server {
      * @method api
      */
     public middleware() {
-        this.app.use(express.static(__dirname + '/dist/luck-ui'));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
         this.app.use(cors({ origin: config.clientURL }));
