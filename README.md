@@ -1,33 +1,28 @@
-# luck
-
-This application is created for learning unit tests. **Luck** will help you with your friends matched in pair on the christmas to give gifts.
-
-<p align="center">
-
-<a href="https://opensource.org/licenses/MIT">
-<img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License">
+# Luck-api
+ <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License">
 </a>
 
-</p>
+#### For more information about this project, see the front-end [Luck app repository](https://github.com/luck-js/luck-ui) 
 
-## Mock of views
+## About **luck-api**
+This repository contains a CRUD back-end, written in TypeScript, for **Luck** application. You can interact with this server, using [luck-ui web app](https://github.com/luck-js/luck-ui), or with curl or postman.
 
-[![img](https://image.ibb.co/nm2wye/received_1196304227190545.jpg)](https://image.ibb.co/nm2wye/received_1196304227190545.jpg)
+## Setup
+This application uses mongo
 
-## Prototype of views
+1. Clone this repository using `git clone`
+2. Install dependencies using `npm install`
+3. Setup mongo database (either local or hosted)
+4. Create `.env` file based on `.env.example`. For local mongodb, you can just copy over example contents to actual `.env`, and everything should work.
+5. If using local mongo, remember to start the db with `mongod` in a separate process
+5. Run `npm run watch`, and start developing!
 
-[![img](https://image.ibb.co/nEpWWz/received_561731747595485.jpg)](https://image.ibb.co/nEpWWz/received_561731747595485.jpg)
+## Production Build
+To create production build, simply run `npm run build`. It will compile the project to javascript, and start the production server.
 
-[![img](https://image.ibb.co/iMZLPK/received_357121261696101.jpg)](https://image.ibb.co/iMZLPK/received_357121261696101.jpg)
+## Endpoints Documentation
+Currently there is no documentation available, but in the future we plan to add one (e.g. swagger).
 
-[![img](https://image.ibb.co/kRZLPK/received_514577912347750.jpg)](https://image.ibb.co/kRZLPK/received_514577912347750.jpg)
-
-[![img](https://image.ibb.co/bXr0PK/received_2073974466246421.jpg)](https://image.ibb.co/bXr0PK/received_2073974466246421.jpg)
-
-[![img](https://image.ibb.co/hR10PK/received_279658222878021.jpg)](https://image.ibb.co/hR10PK/received_279658222878021.jpg)
-
-## Author and license
-
-**Luck** is creating by [Daniel Karski](https://github.com/dkarski). Design views and mocks of application is [Mateusz Karski](https://www.behance.net/user/?username=MateuszKarski).
-
-Luck is available under the  [MIT](LICENSE) license
+## Authors and License
+**Luck** was created by [Daniel Karski](https://github.com/dkarski). Desig nand mocks of the application are by [Mateusz Karski](https://www.behance.net/user/?username=MateuszKarski).
