@@ -7,6 +7,7 @@
     "test": "mocha --colors -r ts-node/register \"./src/**/*.spec.ts\"",
     "lint": "tslint --outputAbsolutePaths -c tslint.json \"./src/**/*.ts\"",
     "lint-fix": "tslint --fix \"./src/**/*.ts\"",
+    "build": "tsc && node bin/index.js",
     "watch": "nodemon --exec ts-node -- ./src/index.ts"
   },
   "repository": {
