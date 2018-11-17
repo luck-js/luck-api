@@ -1,0 +1,23 @@
+version: '3'
+services:
+  ts-luck-api:
+    environment:
+    - .env
+    image: ${TS_IMAGE_NAME}
+    build:
+      context: .
+      dockerfile: prod.Dockerfile
+    command: npm run watch
+    container_name: ${TS_CONTAINER_NAME}
+    ports:
+    - "${TS_PORT}:${TS_PORT_EXPOSE}"
+    volumes:
+    - "./:/var/${TS_VOLUMES}"
+    - "/var/${TS_VOLUMES}/node_modules"
+    depends_on:
+    - "ts-mongo"
+  ts-mongo:
+    image: "mongo"
+    container_name: "ts-mongo"
+    ports:
+    - "${TS_DATABASE_PORT}:${TS_DATABASE_PORT}"
