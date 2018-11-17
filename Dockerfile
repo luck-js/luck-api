@@ -2,12 +2,12 @@ FROM node:9.11.2
 
 MAINTAINER Karski Daniel
 
-COPY . /var/www
+COPY . /var/luck-api
 
-WORKDIR /var/www
+WORKDIR /var/luck-api
 
 RUN npm install
 
-EXPOSE $PORT
+EXPOSE $PROD_PORT_EXPOSE
 
 ENTRYPOINT ["npm", "run", "watch"]
