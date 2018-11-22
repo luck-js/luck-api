@@ -1,0 +1,46 @@
+{
+  "name": "luck",
+  "version": "1.0.0",
+  "description": "server application",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --colors -r ts-node/register \"./src/**/*.spec.ts\"",
+    "lint": "tslint --outputAbsolutePaths -c tslint.json \"./src/**/*.ts\"",
+    "lint-fix": "tslint --fix \"./src/**/*.ts\"",
+    "build": "tsc && node bin/index.js",
+    "watch": "nodemon --exec ts-node -- ./src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dkarski/luck.git"
+  },
+  "author": "Daniel Karski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dkarski/luck/issues"
+  },
+  "homepage": "https://github.com/dkarski/luck#readme",
+  "dependencies": {
+    "@types/body-parser": "^1.17.0",
+    "@types/express": "^4.16.0",
+    "@types/mocha": "^5.2.5",
+    "@types/mongoose": "^5.2.19",
+    "@types/node": "^10.11.3",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.3",
+    "inversify": "^4.14.0",
+    "mocha": "^5.2.0",
+    "mongodb": "^3.1.8",
+    "mongoose": "^5.3.6",
+    "nodemon": "^1.18.4",
+    "reflect-metadata": "^0.1.12",
+    "rxjs": "^6.3.3",
+    "sinon": "^6.3.4",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.1.1"
+  }
+}

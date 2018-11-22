@@ -1,0 +1,17 @@
+FROM node:9.11.2
+
+MAINTAINER Karski Daniel
+
+ENV DATABASE_URL="mongodb://ts-mongo/luck"
+ENV PORT=80
+ENV CLIENT_URL="www.testdevelop.luck.org.pl"
+
+COPY . /var/ts-luck-api
+
+WORKDIR /var/ts-luck-api
+
+RUN npm install
+
+EXPOSE $PORT
+
+ENTRYPOINT ["npm", "run", "watch"]
