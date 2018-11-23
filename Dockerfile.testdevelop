@@ -2,7 +2,7 @@ FROM node:9.11.2
 
 MAINTAINER Karski Daniel
 
-ENV DATABASE_URL="mongodb://ts-mongo/luck"
+ENV DATABASE_URL="mongodb://mongo/ts-luck"
 ENV PORT=80
 ENV CLIENT_URL="www.testdevelop.luck.org.pl"
 
