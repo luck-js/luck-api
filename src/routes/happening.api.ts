@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { map, take } from 'rxjs/operators';
+import { catchError, map, take } from 'rxjs/operators';
 import { RelationMemberHappeningService } from '../relation-member-happening/relation-member-happening.service';
+import { Observable, of } from 'rxjs';
 
 export class HappeningApi {
     constructor(private relationMemberHappeningService: RelationMemberHappeningService) {
@@ -88,16 +89,18 @@ export class HappeningApi {
     }
 
     public generateDetailedParticipantListInformation(req: Request, res: Response) {
-        try {
-            const { happening } = req.body;
-            const { id } = req.params;
-            this.relationMemberHappeningService.generateDetailedParticipantListInformation(id, happening).pipe(
-                take(1),
-                map((createdHappening) => res.json(createdHappening))
-            ).subscribe();
+        const { happening } = req.body;
+        const { id } = req.params;
+        this.relationMemberHappeningService.generateDetailedParticipantListInformation(id, happening).pipe(
+            take(1),
+            map((createdHappening) => res.json(createdHappening)),
+            catchError(val => this.sendError(res, 400, val))
+        ).subscribe();
+    }
 
-        } catch (err) {
-            res.send(err);
-        }
+    private sendError(res: Response, code: number, text: string): Observable<null>{
+        res.status(code);
+        res.send(text);
+        return of()
     }
 }
