@@ -8,84 +8,66 @@ export class HappeningApi {
     }
 
     public create(req: Request, res: Response) {
-        try {
-            this.relationMemberHappeningService.createOwnerRelationOfHappening().pipe(
-                take(1),
-                map((relationId) => res.json(relationId))
-            ).subscribe();
-
-        } catch (err) {
-            res.send(err);
-        }
+        this.relationMemberHappeningService.createOwnerRelationOfHappening().pipe(
+            take(1),
+            map((relationId) => res.json(relationId)),
+            catchError(val => this.sendError(res, 400, val))
+        ).subscribe();
     }
 
     public edit(req: Request, res: Response) {
-        try {
-            const { id } = req.params;
-            const option = req.body;
-            this.relationMemberHappeningService.editHappening(id, option).pipe(
-                take(1),
-                map((happening) => res.json(happening))
-            ).subscribe();
-
-        } catch (err) {
-            res.send(err);
-        }
+        const { id } = req.params;
+        const option = req.body;
+        this.relationMemberHappeningService.editHappening(id, option).pipe(
+            take(1),
+            map((happening) => res.json(happening)),
+            catchError(val => this.sendError(res, 400, val))
+        ).subscribe();
     }
 
     public publish(req: Request, res: Response) {
-        try {
-            const { id } = req.params;
-            this.relationMemberHappeningService.publish(id).pipe(
-                take(1),
-                map((happening) => res.json(happening))
-            ).subscribe();
+        const { id } = req.params;
+        this.relationMemberHappeningService.publish(id).pipe(
+            take(1),
+            map((happening) => res.json(happening)),
+            catchError(val => this.sendError(res, 400, val))
+        ).subscribe();
 
-        } catch (err) {
-            res.send(err);
-        }
     }
 
     public addParticipant(req: Request, res: Response) {
-        try {
-            const { id } = req.params;
-            const { name } = req.body;
-            this.relationMemberHappeningService.addParticipant(id, name).pipe(
-                take(1),
-                map((participant) => res.json(participant))
-            ).subscribe();
 
-        } catch (err) {
-            res.send(err);
-        }
+        const { id } = req.params;
+        const { name } = req.body;
+        this.relationMemberHappeningService.addParticipant(id, name).pipe(
+            take(1),
+            map((participant) => res.json(participant)),
+            catchError(val => this.sendError(res, 400, val))
+        ).subscribe();
+
 
     }
 
     public getDetailedParticipantListInformation(req: Request, res: Response) {
-        try {
-            const { id } = req.params;
+        const { id } = req.params;
 
-            this.relationMemberHappeningService.getDetailedParticipantListInformation(id).pipe(
-                take(1),
-                map((memberUniqueLinkDataList) => res.json(memberUniqueLinkDataList))
-            ).subscribe();
+        this.relationMemberHappeningService.getDetailedParticipantListInformation(id).pipe(
+            take(1),
+            map((memberUniqueLinkDataList) => res.json(memberUniqueLinkDataList)),
+            catchError(val => this.sendError(res, 400, val))
+        ).subscribe();
 
-        } catch (err) {
-            res.send(err);
-        }
     }
 
     public getGenerateDetailedParticipantListInformation(req: Request, res: Response) {
-        try {
-            const { id } = req.params;
-            this.relationMemberHappeningService.getGenerateDetailedParticipantListInformation(id).pipe(
-                take(1),
-                map((createdHappening) => res.json(createdHappening))
-            ).subscribe();
 
-        } catch (err) {
-            res.send(err);
-        }
+        const { id } = req.params;
+        this.relationMemberHappeningService.getGenerateDetailedParticipantListInformation(id).pipe(
+            take(1),
+            map((createdHappening) => res.json(createdHappening)),
+            catchError(val => this.sendError(res, 400, val))
+        ).subscribe();
+
     }
 
     public generateDetailedParticipantListInformation(req: Request, res: Response) {
@@ -98,7 +80,7 @@ export class HappeningApi {
         ).subscribe();
     }
 
-    private sendError(res: Response, code: number, text: string): Observable<null>{
+    private sendError(res: Response, code: number, text: string): Observable<null> {
         res.status(code);
         res.send(text);
         return of()
