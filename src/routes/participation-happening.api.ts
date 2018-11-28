@@ -1,34 +1,33 @@
 import { Request, Response } from 'express';
 import { RelationMemberHappeningService } from '../relation-member-happening/relation-member-happening.service';
-import { map, take } from 'rxjs/operators';
+import { catchError, map, take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 export class ParticipationHappeningApi {
     constructor(private relationMemberHappeningService: RelationMemberHappeningService) {
     }
 
     public getDataView(req: Request, res: Response) {
-        try {
-            const { id } = req.params;
-            this.relationMemberHappeningService.getDataView(id).pipe(
-                take(1),
-                map((memberInformationView) => res.json(memberInformationView))
-            ).subscribe();
-
-        } catch (err) {
-            res.send(err);
-        }
+        const { id } = req.params;
+        this.relationMemberHappeningService.getDataView(id).pipe(
+            take(1),
+            map((memberInformationView) => res.json(memberInformationView)),
+            catchError(val => this.sendError(res, 400, val))
+        ).subscribe();
     }
 
     public getMatchedMember(req: Request, res: Response) {
-        try {
-            const { id } = req.params;
-            this.relationMemberHappeningService.getMatchedMember(id).pipe(
-                take(1),
-                map((memberView) => res.json(memberView))
-            ).subscribe();
+        const { id } = req.params;
+        this.relationMemberHappeningService.getMatchedMember(id).pipe(
+            take(1),
+            map((memberView) => res.json(memberView)),
+            catchError(val => this.sendError(res, 400, val))
+        ).subscribe();
+    }
 
-        } catch (err) {
-            res.send(err);
-        }
+    private sendError(res: Response, code: number, text: string): Observable<null> {
+        res.status(code);
+        res.send(text);
+        return of()
     }
 }
