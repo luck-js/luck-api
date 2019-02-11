@@ -6,24 +6,23 @@ import { Participant } from './participant/participant';
 
 @injectable()
 export class EventMemberRoleFactory {
-    constructor() {
+  constructor() {}
+
+  public create(type: RoleType): EventMemberRole {
+    return this.switchInstanceHelper(type);
+  }
+
+  public recreate({ type, abilityToRandom, matchedMemberId }: IEventMemberRole): EventMemberRole {
+    return this.switchInstanceHelper(type, abilityToRandom, matchedMemberId);
+  }
+
+  private switchInstanceHelper(type, abilityToRandom?, matchedMemberId?) {
+    if (type === RoleType.ORGANISER) {
+      return new Organiser(abilityToRandom, matchedMemberId);
     }
 
-    public create(type: RoleType): EventMemberRole {
-        return this.switchInstanceHelper(type);
+    if (type === RoleType.PARTICIPANT) {
+      return new Participant(abilityToRandom, matchedMemberId);
     }
-
-    public recreate({ type, abilityToRandom, matchedMemberId }: IEventMemberRole): EventMemberRole {
-        return this.switchInstanceHelper(type, abilityToRandom, matchedMemberId);
-    }
-
-    private switchInstanceHelper(type, abilityToRandom?, matchedMemberId?) {
-        if (type === RoleType.ORGANISER) {
-            return new Organiser(abilityToRandom, matchedMemberId);
-        }
-
-        if (type === RoleType.PARTICIPANT) {
-            return new Participant(abilityToRandom, matchedMemberId);
-        }
-    }
+  }
 }
