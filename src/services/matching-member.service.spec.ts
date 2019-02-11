@@ -7,41 +7,46 @@ import { MatchingMemberService } from './matching-member.service';
 import { MemberRepository } from '../member/member.repository';
 import { Member } from '../member/member';
 
+describe('Matching Member Service', function() {
+  let DIContainer: Container;
+  let memberRepository: MemberRepository;
+  let newMemberList: Member[];
 
-describe('Matching Member Service', function () {
-    let DIContainer: Container;
-    let memberRepository: MemberRepository;
-    let newMemberList: Member[];
+  describe("Testing member list when organiser isn't ability to random", function() {
+    before(function() {
+      DIContainer = DIContainerProvider([...MEMBER_INITIAL_LIST_MOCK]);
+      memberRepository = DIContainer.get<MemberRepository>(IDENTIFIER.MemberRepository);
 
-    describe('Testing member list when organiser isn\'t ability to random', function () {
+      const matchingMemberService = DIContainer.get<MatchingMemberService>(
+        IDENTIFIER.MatchingMemberService,
+      );
+      newMemberList = matchingMemberService.matchMemberList(memberRepository.getList());
+    });
 
-        before(function () {
-            DIContainer = DIContainerProvider([...MEMBER_INITIAL_LIST_MOCK]);
-            memberRepository = DIContainer.get<MemberRepository>(IDENTIFIER.MemberRepository);
+    it('Every member has random matched member', function() {
+      MatchingMemberService.filterMembersWhoAbleToRandom(newMemberList).forEach((member, index) => {
+        assert.strictEqual(true, typeof member.MatchedMemberId === 'string');
+      });
+    });
 
-            const matchingMemberService = DIContainer.get<MatchingMemberService>(IDENTIFIER.MatchingMemberService);
-            newMemberList = matchingMemberService.matchMemberList(memberRepository.getList());
-        });
+    it('Matched member has another id', function() {
+      MatchingMemberService.filterMembersWhoAbleToRandom(newMemberList).forEach((member, index) => {
+        assert.strictEqual(true, member.id !== member.MatchedMemberId);
+      });
+    });
 
-        it('Every member has random matched member', function () {
-            MatchingMemberService.filterMembersWhoAbleToRandom(newMemberList).forEach((member, index) => {
-                assert.strictEqual(true, typeof member.MatchedMemberId === 'string')
-            })
-        });
-
-        it('Matched member has another id', function () {
-            MatchingMemberService.filterMembersWhoAbleToRandom(newMemberList).forEach((member, index) => {
-                assert.strictEqual(true, member.id !== member.MatchedMemberId)
-            })
-        });
-
-        it('Every matched is unique', function () {
-            MatchingMemberService.filterMembersWhoAbleToRandom(newMemberList).reduce((previousState, member) => {
-                const isUnique = !previousState.some((matchedMemberId) => matchedMemberId === member.MatchedMemberId);
-                assert.strictEqual(true, isUnique);
-                previousState.push(member.MatchedMemberId);
-                return previousState;
-            }, [])
-        });
-    })
+    it('Every matched is unique', function() {
+      MatchingMemberService.filterMembersWhoAbleToRandom(newMemberList).reduce(
+        (previousState, member) => {
+          const isUnique = !previousState.some(
+            matchedMemberId => matchedMemberId === member.MatchedMemberId,
+          );
+          assert.strictEqual(true, isUnique);
+          previousState.push(member.MatchedMemberId);
+          return previousState;
+        },
+        [],
+      );
+    });
+  });
 });

@@ -8,21 +8,23 @@ import { UuidGenerationService } from '../member/uuid-generation.service';
 
 @injectable()
 export class RelationMemberHappeningFactory {
-    constructor(
-        private uuidGenerationService: UuidGenerationService,
-        @inject(IDENTIFIER.DIFactoryRelationMemberHappening)
-        private DIFactoryRelationMemberHappening: (option: IRelationMemberHappening) => RelationMemberHappening) {
-    }
+  constructor(
+    private uuidGenerationService: UuidGenerationService,
+    @inject(IDENTIFIER.DIFactoryRelationMemberHappening)
+    private DIFactoryRelationMemberHappening: (
+      option: IRelationMemberHappening,
+    ) => RelationMemberHappening,
+  ) {}
 
-    public generateUuid(): string {
-        return this.uuidGenerationService.createNewUuid();
-    }
+  public generateUuid(): string {
+    return this.uuidGenerationService.createNewUuid();
+  }
 
-    public create(id: string, happening: Happening, member: Member): RelationMemberHappening {
-        return this.recreate({ id, happeningId: happening.id, memberId: member.id })
-    }
+  public create(id: string, happening: Happening, member: Member): RelationMemberHappening {
+    return this.recreate({ id, happeningId: happening.id, memberId: member.id });
+  }
 
-    public recreate(option: IRelationMemberHappening): RelationMemberHappening {
-        return this.DIFactoryRelationMemberHappening(option)
-    }
+  public recreate(option: IRelationMemberHappening): RelationMemberHappening {
+    return this.DIFactoryRelationMemberHappening(option);
+  }
 }
