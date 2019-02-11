@@ -8,24 +8,23 @@ import { EventMemberRoleFactory } from './event-member-role/event-member-role.fa
 
 @injectable()
 export class MemberFactory {
+  constructor(
+    private uuidGenerationService: UuidGenerationService,
+    private eventMemberRoleFactory: EventMemberRoleFactory,
+    @inject(IDENTIFIER.DIFactoryMember) private DIFactoryMember: (option: IMember) => Member,
+  ) {}
 
-    constructor(
-        private uuidGenerationService: UuidGenerationService,
-        private eventMemberRoleFactory: EventMemberRoleFactory,
-        @inject(IDENTIFIER.DIFactoryMember) private DIFactoryMember: (option: IMember) => Member) {
-    }
+  public create(relationId: string, type: RoleType, name?: string): Member {
+    const id = this.uuidGenerationService.createNewUuid();
+    const eventMemberRole = this.eventMemberRoleFactory.create(type);
 
-    public create(relationId: string, type: RoleType, name?: string): Member {
-        const id = this.uuidGenerationService.createNewUuid();
-        const eventMemberRole = this.eventMemberRoleFactory.create(type);
+    return this.DIFactoryMember({ id, relationId, name, eventMemberRole });
+  }
 
-        return this.DIFactoryMember({ id, relationId, name, eventMemberRole })
-    }
+  public recreate(member: IMember): Member {
+    const { id, relationId, name } = member;
+    const eventMemberRole = this.eventMemberRoleFactory.recreate(member.eventMemberRole);
 
-    public recreate(member: IMember): Member {
-        const { id, relationId, name } = member;
-        const eventMemberRole = this.eventMemberRoleFactory.recreate(member.eventMemberRole);
-
-        return this.DIFactoryMember(Object.assign({}, { id, relationId, name }, { eventMemberRole }));
-    }
+    return this.DIFactoryMember(Object.assign({}, { id, relationId, name }, { eventMemberRole }));
+  }
 }
