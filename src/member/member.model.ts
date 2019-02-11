@@ -4,7 +4,6 @@ import { EventMemberRole } from './event-member-role/event-member-role';
 
 export interface IMember {
   id: string;
-  relationId: string;
   name: string;
   eventMemberRole: EventMemberRole;
 }
@@ -16,10 +15,6 @@ export interface IMemberSchema extends IMember, Document {
 const MemberSchema: Schema = new Schema(
   {
     id: {
-      type: String,
-      required: true,
-    },
-    relationId: {
       type: String,
       required: true,
     },
