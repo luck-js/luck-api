@@ -10,6 +10,22 @@
     "build": "tsc && node bin/index.js",
     "watch": "nodemon --exec ts-node -- ./src/index.ts"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "*.{ts,scss,md,html}": [
+        "prettier --write",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "src/graphql/**"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dkarski/luck.git"
