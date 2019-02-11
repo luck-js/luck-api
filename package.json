@@ -42,5 +42,8 @@
     "tslint": "^5.12.1",
     "tslint-eslint-rules": "^5.4.0",
     "typescript": "^3.3.3"
+  },
+  "devDependencies": {
+    "prettier": "^1.16.4"
   }
 }
