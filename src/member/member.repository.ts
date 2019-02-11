@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
-import { Observable, from, merge, of, forkJoin } from 'rxjs';
-import { map, take, tap } from 'rxjs/operators';
+import { Observable, from, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import MemberModel, { IMember } from './member.model';
 import { Member } from './member';
 import { MemberFactory } from './member.factory';
@@ -9,8 +9,8 @@ import { MemberFactory } from './member.factory';
 export class MemberRepository {
   constructor(private list: IMember[] = [], private memberFactory: MemberFactory) {}
 
-  public add({ id, relationId, name, eventMemberRole }: IMember): Observable<IMember> {
-    return from(new MemberModel({ id, relationId, name, eventMemberRole }).save());
+  public add({ id, name, eventMemberRole }: IMember): Observable<IMember> {
+    return from(new MemberModel({ id, name, eventMemberRole }).save());
   }
 
   public getByIndex(id: string): Observable<Member> {

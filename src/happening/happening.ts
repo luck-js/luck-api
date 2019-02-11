@@ -23,12 +23,12 @@ export class Happening implements IHappening {
     private memberFactory: MemberFactory,
   ) {}
 
-  public addMember(relationId: string, type: RoleType, name?: string): Observable<Member> {
+  public addMember(type: RoleType, name?: string): Observable<Member> {
     if (this.isPublish) {
       throw new Error('Happening is publishing');
     }
 
-    const member = this.memberFactory.create(relationId, type, name);
+    const member = this.memberFactory.create(type, name);
 
     this.memberIdList.push(member.id);
 
@@ -43,15 +43,17 @@ export class Happening implements IHappening {
     return forkJoin(this.memberIdList.map(id => this.memberRepository.getByIndex(id)));
   }
 
-  public publishEvent(): Observable<Member[]> {
+  public publishEvent(): void {
     this.isPublish = true;
-    return this.matchMember();
+    this.matchMember();
   }
 
-  private matchMember(): Observable<Member[]> {
-    return this.getMemberList().pipe(
-      map(memberList => this.matchingMemberService.matchMemberList(memberList)),
-      switchMap(newMemberList => this.memberRepository.updateList(newMemberList)),
-    );
+  private matchMember(): void {
+    this.getMemberList()
+      .pipe(
+        map(memberList => this.matchingMemberService.matchMemberList(memberList)),
+        switchMap(newMemberList => this.memberRepository.updateList(newMemberList)),
+      )
+      .subscribe();
   }
 }

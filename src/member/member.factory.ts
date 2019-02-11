@@ -14,17 +14,17 @@ export class MemberFactory {
     @inject(IDENTIFIER.DIFactoryMember) private DIFactoryMember: (option: IMember) => Member,
   ) {}
 
-  public create(relationId: string, type: RoleType, name?: string): Member {
+  public create(type: RoleType, name?: string): Member {
     const id = this.uuidGenerationService.createNewUuid();
     const eventMemberRole = this.eventMemberRoleFactory.create(type);
 
-    return this.DIFactoryMember({ id, relationId, name, eventMemberRole });
+    return this.DIFactoryMember({ id, name, eventMemberRole });
   }
 
   public recreate(member: IMember): Member {
-    const { id, relationId, name } = member;
+    const { id, name } = member;
     const eventMemberRole = this.eventMemberRoleFactory.recreate(member.eventMemberRole);
 
-    return this.DIFactoryMember(Object.assign({}, { id, relationId, name }, { eventMemberRole }));
+    return this.DIFactoryMember(Object.assign({}, { id, name }, { eventMemberRole }));
   }
 }
