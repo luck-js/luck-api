@@ -7,24 +7,27 @@ import { HappeningFactory } from './happening.factory';
 
 @injectable()
 export class HappeningRepository {
+  constructor(private list: IHappening[] = [], private happeningFactory: HappeningFactory) {}
 
-    constructor(private list: IHappening[] = [],
-                private happeningFactory: HappeningFactory) {
-    }
+  public add({
+    id,
+    name,
+    description,
+    isPublish,
+    memberIdList,
+  }: IHappening): Observable<IHappening> {
+    return from(new HappeningModel({ id, name, description, isPublish, memberIdList }).save());
+  }
 
-    public add({ id, name, description, isPublish, memberIdList }: IHappening): Observable<IHappening> {
-        return from(new HappeningModel({ id, name, description, isPublish, memberIdList }).save());
-    }
+  public getByIndex(id: string): Observable<Happening> {
+    return from(HappeningModel.findOne({ id: id }, null, { limit: 1 }).exec()).pipe(
+      map(happening => this.happeningFactory.recreate(happening)),
+    );
+  }
 
-    public getByIndex(id: string): Observable<Happening> {
-        return from(HappeningModel.findOne({ id: id }, null, { limit: 1 }).exec()).pipe(
-            map((happening) => this.happeningFactory.recreate(happening))
-        );
-    }
-
-    public update(id: string, option: IHappening): Observable<Happening> {
-        return from(HappeningModel.findOneAndUpdate({ id }, option, { new: true }).exec()).pipe(
-            map((happening) => this.happeningFactory.recreate(happening))
-        );
-    }
+  public update(id: string, option: IHappening): Observable<Happening> {
+    return from(HappeningModel.findOneAndUpdate({ id }, option, { new: true }).exec()).pipe(
+      map(happening => this.happeningFactory.recreate(happening)),
+    );
+  }
 }

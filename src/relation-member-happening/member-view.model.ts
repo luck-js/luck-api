@@ -1,13 +1,13 @@
 export interface INewParticipantView {
-    name: string;
+  name: string;
 }
 
 export interface IMemberView {
-    id: string,
-    name: string,
+  id: string;
+  name: string;
 }
 
 export interface IMatchedParticipationData {
-    me: IMemberView;
-    matchedMember: IMemberView;
+  me: IMemberView;
+  matchedMember: IMemberView;
 }
