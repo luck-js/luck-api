@@ -43,9 +43,7 @@ const DIContainerProvider = (
 
   DIContainer.bind<MemberRepository>(IDENTIFIER.MemberRepository)
     .toDynamicValue((context: interfaces.Context) => {
-      const memberFactory = context.container.get<MemberFactory>(IDENTIFIER.MemberFactory);
-
-      return new MemberRepository(MEMBER_INITIAL_LIST_MOCK, memberFactory);
+      return new MemberRepository();
     })
     .inSingletonScope();
 
@@ -136,8 +134,8 @@ const DIContainerProvider = (
 
   DIContainer.bind<(option: IMember) => Member>(IDENTIFIER.DIFactoryMember).toFactory<Member>(
     context => {
-      return ({ id, relationId, name, eventMemberRole }: IMember) => {
-        return new Member(id, relationId, name, eventMemberRole);
+      return ({ id, name, eventMemberRole }: IMember) => {
+        return new Member(id, name, eventMemberRole);
       };
     },
   );

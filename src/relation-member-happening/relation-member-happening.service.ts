@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import { forkJoin, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { RelationMemberHappeningRepository } from './relation-member-happening.repository';
 import { IParticipationHappeningView } from './participation-happening-view.model';
 import { IMatchedParticipationData, IMemberView } from './member-view.model';
@@ -28,7 +28,7 @@ export class RelationMemberHappeningService {
     const happening = this.happeningFactory.create();
 
     return this.happeningRepository.add(happening).pipe(
-      switchMap(() => happening.addMember(relationId, RoleType.ORGANISER)),
+      switchMap(() => happening.addMember(RoleType.ORGANISER)),
       switchMap(member => {
         const relation = this.relationMemberHappeningFactory.create(relationId, happening, member);
         return this.relationMemberHappeningRepository.add(relation);
@@ -50,7 +50,7 @@ export class RelationMemberHappeningService {
 
   public publish(relationId: string): Observable<Happening> {
     return this.getHappeningObservable(relationId).pipe(
-      switchMap(happening => happening.publishEvent().pipe(map(() => happening))),
+      tap(happening => happening.publishEvent()),
       switchMap(happening => this.happeningRepository.update(happening.id, happening)),
     );
   }
@@ -83,7 +83,9 @@ export class RelationMemberHappeningService {
     relationId: string,
   ): Observable<IParticipantUniqueLinkData[]> {
     return this.getHappeningObservable(relationId).pipe(
-      switchMap(happening => this.getDetailedParticipantListInformationFromHappening(happening)),
+      switchMap(happening =>
+        this.getDetailedParticipantListInformationFromHappening(happening, relationId),
+      ),
     );
   }
 
@@ -108,7 +110,7 @@ export class RelationMemberHappeningService {
   ): Observable<ICreatedHappening> {
     return this.getHappeningObservable(relationId).pipe(
       switchMap(happening =>
-        this.getDetailedParticipantListInformationFromHappening(happening).pipe(
+        this.getDetailedParticipantListInformationFromHappening(happening, relationId).pipe(
           map(participantList => ({
             participantList,
             name: happening.name,
@@ -132,7 +134,7 @@ export class RelationMemberHappeningService {
             this.createMember(happening, RoleType.PARTICIPANT, name),
           ),
         ).pipe(
-          switchMap(() => happening.publishEvent()),
+          tap(() => happening.publishEvent()),
           map(() => Object.assign({}, happening, { name, description })),
         ),
       ),
@@ -140,7 +142,7 @@ export class RelationMemberHappeningService {
         this.happeningRepository.update(editedHappening.id, editedHappening),
       ),
       switchMap(happening =>
-        this.getDetailedParticipantListInformationFromHappening(happening).pipe(
+        this.getDetailedParticipantListInformationFromHappening(happening, relationId).pipe(
           map(participantList => ({
             participantList,
             name: happening.name,
@@ -153,6 +155,7 @@ export class RelationMemberHappeningService {
 
   private getDetailedParticipantListInformationFromHappening(
     happening: Happening,
+    relationId: string,
   ): Observable<IParticipantUniqueLinkData[]> {
     return happening
       .getMemberList()
@@ -160,7 +163,7 @@ export class RelationMemberHappeningService {
         map(memberList =>
           memberList
             .filter(member => member.eventMemberRole.type !== RoleType.ORGANISER)
-            .map(member => this.mapToIParticipantUniqueLinkData(member)),
+            .map(member => this.mapToIParticipantUniqueLinkData(member, relationId)),
         ),
       );
   }
@@ -168,7 +171,7 @@ export class RelationMemberHappeningService {
   private createMember(happening: Happening, role: RoleType, name: string): Observable<Member> {
     const newRelationId = this.relationMemberHappeningFactory.generateUuid();
 
-    return happening.addMember(newRelationId, role, name).pipe(
+    return happening.addMember(role, name).pipe(
       switchMap(member => {
         const relation = this.relationMemberHappeningFactory.create(
           newRelationId,
@@ -192,10 +195,10 @@ export class RelationMemberHappeningService {
       .pipe(switchMap(relation => relation.getMember()));
   }
 
-  private mapToIParticipantUniqueLinkData({
-    name,
-    relationId,
-  }: Member): IParticipantUniqueLinkData {
+  private mapToIParticipantUniqueLinkData(
+    { name }: Member,
+    relationId: string,
+  ): IParticipantUniqueLinkData {
     const uniqueLink = this.mapToUniqueLink(relationId);
     return { name, uniqueLink };
   }
