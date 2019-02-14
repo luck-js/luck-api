@@ -104,15 +104,8 @@ const DIContainerProvider = (
   >(context => {
     return ({ id, name, description, isPublish, memberIdList }: IHappening) => {
       const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
-      const relationMemberHappeningRepository = context.container.get<
-        RelationMemberHappeningRepository
-      >(IDENTIFIER.RelationMemberHappeningRepository);
-
       const matchingMemberService = context.container.get<MatchingMemberService>(
         IDENTIFIER.MatchingMemberService,
-      );
-      const relationMemberHappeningFactory = context.container.get<RelationMemberHappeningFactory>(
-        IDENTIFIER.RelationMemberHappeningFactory,
       );
 
       const memberFactory = context.container.get<MemberFactory>(IDENTIFIER.MemberFactory);
@@ -124,9 +117,7 @@ const DIContainerProvider = (
         isPublish,
         memberIdList,
         memberRepository,
-        relationMemberHappeningRepository,
         matchingMemberService,
-        relationMemberHappeningFactory,
         memberFactory,
       );
     };
