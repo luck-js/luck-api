@@ -1,5 +1,5 @@
 import { forkJoin, Observable } from 'rxjs';
-import { map, mapTo, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { IHappening } from './happening.model';
 import { MemberRepository } from '../member/member.repository';
 import { MatchingMemberService } from '../services/matching-member.service';
@@ -28,20 +28,26 @@ export class Happening implements IHappening {
       throw new Error('Happening is publishing');
     }
 
-    const member = this.memberFactory.create(type, name);
-
-    return this.memberRepository.add(member).pipe(
-      tap(() => this.memberIdList.push(member.id)),
-      mapTo(member),
+    return this.memberRepository.add(this.memberFactory.create(type, name)).pipe(
+      tap(member => this.memberIdList.push(member.id)),
+      map(member => this.memberFactory.recreate(member)),
     );
   }
 
   public getMember(id: string): Observable<Member> {
-    return this.memberRepository.getByIndex(id);
+    return this.memberRepository
+      .getByIndex(id)
+      .pipe(map(member => this.memberFactory.recreate(member)));
   }
 
   public getMemberList(): Observable<Member[]> {
-    return forkJoin(this.memberIdList.map(id => this.memberRepository.getByIndex(id)));
+    return forkJoin(
+      this.memberIdList.map(id =>
+        this.memberRepository
+          .getByIndex(id)
+          .pipe(map(member => this.memberFactory.recreate(member))),
+      ),
+    );
   }
 
   public publishEvent(): void {
