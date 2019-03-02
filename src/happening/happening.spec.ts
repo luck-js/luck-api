@@ -30,9 +30,9 @@ describe('Happening', function() {
   });
 
   describe('Creating new members', function() {
-    it('Publishing happening should be closed on adding new members', function() {
+    it('Publishing happening should be closed on creating new members', function() {
       happening.publishEvent();
-      assert.throws(() => happening.addMember(RoleType.PARTICIPANT));
+      assert.throws(() => happening.createMember(RoleType.PARTICIPANT));
     });
   });
 
