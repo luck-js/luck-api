@@ -167,7 +167,7 @@ const DIContainerProvider = (
     .toDynamicValue((context: interfaces.Context) => {
       const happeningFactory = context.container.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
 
-      return new HappeningRepository(HAPPENING_INITIAL_LIST_MOCK, happeningFactory);
+      return new HappeningRepository(happeningFactory);
     })
     .inSingletonScope();
 
