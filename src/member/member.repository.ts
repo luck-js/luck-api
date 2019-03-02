@@ -12,8 +12,8 @@ export class MemberRepository {
     return from(MemberModel.findOne({ id }, null, { limit: 1 }).exec());
   }
 
-  public updateList(memberList: IMember[]): Observable<IMember[]> {
-    return forkJoin(memberList.map(el => this.updateMember(el)));
+  public updateMembers(members: IMember[]): Observable<IMember[]> {
+    return forkJoin(members.map(el => this.updateMember(el)));
   }
 
   private updateMember(member): Observable<IMember> {

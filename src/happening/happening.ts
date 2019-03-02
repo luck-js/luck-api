@@ -36,7 +36,7 @@ export class Happening implements IHappening {
       .pipe(map(member => this.memberFactory.recreate(member)));
   }
 
-  public getMemberList(): Observable<Member[]> {
+  public getMembers(): Observable<Member[]> {
     return forkJoin(
       this.memberIdList.map(id =>
         this.memberRepository
@@ -52,10 +52,10 @@ export class Happening implements IHappening {
   }
 
   private matchMember(): void {
-    this.getMemberList()
+    this.getMembers()
       .pipe(
-        map(memberList => this.matchingMemberService.matchMemberList(memberList)),
-        switchMap(newMemberList => this.memberRepository.updateList(newMemberList)),
+        map(members => this.matchingMemberService.matchMembers(members)),
+        switchMap(members => this.memberRepository.updateMembers(members)),
       )
       .subscribe();
   }
