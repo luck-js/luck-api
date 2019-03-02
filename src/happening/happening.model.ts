@@ -5,7 +5,7 @@ export interface IHappening {
   name: string;
   description: string;
   isPublish: boolean;
-  memberIdList: string[];
+  memberIds: string[];
 }
 
 export interface IHappeningSchema extends IHappening, Document {

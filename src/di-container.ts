@@ -102,7 +102,7 @@ const DIContainerProvider = (
   DIContainer.bind<(option: IHappening) => Happening>(IDENTIFIER.DIFactoryHappening).toFactory<
     Happening
   >(context => {
-    return ({ id, name, description, isPublish, memberIdList }: IHappening) => {
+    return ({ id, name, description, isPublish, memberIds }: IHappening) => {
       const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
       const matchingMemberService = context.container.get<MatchingMemberService>(
         IDENTIFIER.MatchingMemberService,
@@ -115,7 +115,7 @@ const DIContainerProvider = (
         name,
         description,
         isPublish,
-        memberIdList,
+        memberIds,
         memberRepository,
         matchingMemberService,
         memberFactory,

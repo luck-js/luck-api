@@ -13,7 +13,7 @@ export class Happening implements IHappening {
     public name: string = '',
     public description: string = '',
     public isPublish: boolean = false,
-    public memberIdList: string[] = [],
+    public memberIds: string[] = [],
     private memberRepository: MemberRepository,
     private matchingMemberService: MatchingMemberService,
     private memberFactory: MemberFactory,
@@ -25,7 +25,7 @@ export class Happening implements IHappening {
     }
 
     return this.memberRepository.add(this.memberFactory.create(type, name)).pipe(
-      tap(member => this.memberIdList.push(member.id)),
+      tap(member => this.memberIds.push(member.id)),
       map(member => this.memberFactory.recreate(member)),
     );
   }
@@ -38,7 +38,7 @@ export class Happening implements IHappening {
 
   public getMembers(): Observable<Member[]> {
     return forkJoin(
-      this.memberIdList.map(id =>
+      this.memberIds.map(id =>
         this.memberRepository
           .getByIndex(id)
           .pipe(map(member => this.memberFactory.recreate(member))),
