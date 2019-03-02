@@ -55,7 +55,7 @@ export class Happening implements IHappening {
     this.getMembers()
       .pipe(
         map(members => this.matchingMemberService.matchMembers(members)),
-        switchMap(members => this.memberRepository.updateMembers(members)),
+        switchMap(members => this.memberRepository.updateList(members)),
       )
       .subscribe();
   }
