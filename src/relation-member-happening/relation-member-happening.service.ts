@@ -28,7 +28,7 @@ export class RelationMemberHappeningService {
     const happening = this.happeningFactory.create();
 
     return this.happeningRepository.add(happening).pipe(
-      switchMap(() => happening.addMember(RoleType.ORGANISER)),
+      switchMap(() => happening.createMember(RoleType.ORGANISER)),
       switchMap(member => {
         const relation = this.relationMemberHappeningFactory.create(relationId, happening, member);
         return this.relationMemberHappeningRepository.add(relation);
@@ -171,7 +171,7 @@ export class RelationMemberHappeningService {
   private createMember(happening: Happening, role: RoleType, name: string): Observable<Member> {
     const newRelationId = this.relationMemberHappeningFactory.generateUuid();
 
-    return happening.addMember(role, name).pipe(
+    return happening.createMember(role, name).pipe(
       switchMap(member => {
         const relation = this.relationMemberHappeningFactory.create(
           newRelationId,

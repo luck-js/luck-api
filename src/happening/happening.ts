@@ -1,5 +1,5 @@
 import { forkJoin, Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, mapTo, switchMap, tap } from 'rxjs/operators';
 import { IHappening } from './happening.model';
 import { MemberRepository } from '../member/member.repository';
 import { MatchingMemberService } from '../services/matching-member.service';
@@ -19,14 +19,15 @@ export class Happening implements IHappening {
     private memberFactory: MemberFactory,
   ) {}
 
-  public addMember(type: RoleType, name?: string): Observable<Member> {
+  public createMember(type: RoleType, name: string = ''): Observable<Member> {
     if (this.isPublish) {
       throw new Error('Happening is publishing');
     }
 
-    return this.memberRepository.add(this.memberFactory.create(type, name)).pipe(
+    const createdMember = this.memberFactory.create(type, name);
+    return this.memberRepository.add(createdMember).pipe(
       tap(member => this.memberIds.push(member.id)),
-      map(member => this.memberFactory.recreate(member)),
+      mapTo(createdMember),
     );
   }
 
