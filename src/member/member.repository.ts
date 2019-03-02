@@ -12,11 +12,11 @@ export class MemberRepository {
     return from(MemberModel.findOne({ id }, null, { limit: 1 }).exec());
   }
 
-  public updateMembers(members: IMember[]): Observable<IMember[]> {
-    return forkJoin(members.map(el => this.updateMember(el)));
+  public updateList(members: IMember[]): Observable<IMember[]> {
+    return forkJoin(members.map(el => this.update(el)));
   }
 
-  private updateMember(member): Observable<IMember> {
+  private update(member): Observable<IMember> {
     return from(MemberModel.findOneAndUpdate({ id: member.id }, member, { new: true }).exec());
   }
 }
