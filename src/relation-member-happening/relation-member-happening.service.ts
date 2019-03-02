@@ -158,7 +158,7 @@ export class RelationMemberHappeningService {
     relationId: string,
   ): Observable<IParticipantUniqueLinkData[]> {
     return happening
-      .getMemberList()
+      .getMembers()
       .pipe(
         map(memberList =>
           memberList
