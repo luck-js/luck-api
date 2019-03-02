@@ -7,7 +7,7 @@ import { HappeningFactory } from './happening.factory';
 
 @injectable()
 export class HappeningRepository {
-  constructor(private list: IHappening[] = [], private happeningFactory: HappeningFactory) {}
+  constructor(private happeningFactory: HappeningFactory) {}
 
   public add({ id, name, description, isPublish, memberIds }: IHappening): Observable<IHappening> {
     return from(new HappeningModel({ id, name, description, isPublish, memberIds }).save());
