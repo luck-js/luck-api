@@ -14,7 +14,7 @@ export class MemberFactory {
     @inject(IDENTIFIER.DIFactoryMember) private DIFactoryMember: (option: IMember) => Member,
   ) {}
 
-  public create(type: RoleType, name?: string): Member {
+  public create(type: RoleType, name: string = ''): Member {
     const id = this.uuidGenerationService.createNewUuid();
     const eventMemberRole = this.eventMemberRoleFactory.create(type);
 
