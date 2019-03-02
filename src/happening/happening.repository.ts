@@ -10,9 +10,7 @@ export class HappeningRepository {
   constructor(private list: IHappening[] = [], private happeningFactory: HappeningFactory) {}
 
   public add({ id, name, description, isPublish, memberIds }: IHappening): Observable<IHappening> {
-    return from(
-      new HappeningModel({ id, name, description, isPublish, memberIds: memberIdList }).save(),
-    );
+    return from(new HappeningModel({ id, name, description, isPublish, memberIds }).save());
   }
 
   public getByIndex(id: string): Observable<Happening> {
