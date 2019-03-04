@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
 import { catchError, map, take } from 'rxjs/operators';
-import { RelationMemberHappeningService } from '../relation-member-happening/relation-member-happening.service';
+import { MemberParticipationService } from '../member-participation/member-participation.service';
 import { Observable, of } from 'rxjs';
 
 export class HappeningApi {
-  constructor(private relationMemberHappeningService: RelationMemberHappeningService) {}
+  constructor(private relationMemberHappeningService: MemberParticipationService) {}
 
   public create(req: Request, res: Response) {
     this.relationMemberHappeningService
-      .createOwnerRelationOfHappening()
+      .createMemberParticipation()
       .pipe(
         take(1),
         map(relationId => res.json(relationId)),

@@ -5,14 +5,14 @@ import { ParticipationHappeningApi } from './participation-happening.api';
 import { HappeningApi } from './happening.api';
 import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
 import { HAPPENING_INITIAL_LIST_MOCK } from '../happening/happening.mock';
-import { RELATION_INITIAL_LIST_MOCK } from '../relation-member-happening/relation-member-happening.mock';
+import { MEMBER_PARTICIPATIONS_INITIAL_MOCK } from '../member-participation/member-participation.mock';
 
 const router: Router = Router();
 
 const DIContainer = DIContainerProvider(
   [...MEMBER_INITIAL_LIST_MOCK],
   [...HAPPENING_INITIAL_LIST_MOCK],
-  [...RELATION_INITIAL_LIST_MOCK],
+  [...MEMBER_PARTICIPATIONS_INITIAL_MOCK],
 );
 const participationHappeningApi = DIContainer.get<ParticipationHappeningApi>(
   IDENTIFIER.ParticipationHappeningApi,

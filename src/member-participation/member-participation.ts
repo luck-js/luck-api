@@ -4,14 +4,14 @@ import { HappeningRepository } from '../happening/happening.repository';
 import { MemberRepository } from '../member/member.repository';
 import { Member } from '../member/member';
 import { Happening } from '../happening/happening';
-import { IRelationMemberHappening } from './relation-member-happening.model';
+import { IMemberParticipation } from './member-participation.model';
 import { map, mapTo, switchMap, tap } from 'rxjs/operators';
 import { HappeningFactory } from '../happening/happening.factory';
 import { IHappening } from '../happening/happening.model';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
 
 @injectable()
-export class RelationMemberHappening implements IRelationMemberHappening {
+export class MemberParticipation implements IMemberParticipation {
   constructor(
     public id: string,
     public memberId: string,

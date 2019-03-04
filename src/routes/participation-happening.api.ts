@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { RelationMemberHappeningService } from '../relation-member-happening/relation-member-happening.service';
+import { MemberParticipationService } from '../member-participation/member-participation.service';
 import { catchError, map, take } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
 export class ParticipationHappeningApi {
-  constructor(private relationMemberHappeningService: RelationMemberHappeningService) {}
+  constructor(private relationMemberHappeningService: MemberParticipationService) {}
 
   public getDataView(req: Request, res: Response) {
     const { id } = req.params;
