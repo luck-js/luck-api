@@ -1,7 +1,6 @@
 import { injectable } from 'inversify';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HappeningRepository } from '../happening/happening.repository';
-import { MemberRepository } from '../member/member.repository';
 import { Member } from '../member/member';
 import { Happening } from '../happening/happening';
 import { IMemberParticipation } from './member-participation.model';
@@ -16,7 +15,6 @@ export class MemberParticipation implements IMemberParticipation {
     public id: string,
     public memberId: string,
     public happeningId: string,
-    private memberRepository: MemberRepository,
     private happeningRepository: HappeningRepository,
     private happeningFactory: HappeningFactory,
   ) {}
@@ -26,7 +24,17 @@ export class MemberParticipation implements IMemberParticipation {
   }
 
   public getMember(): Observable<Member> {
-    return of(null);
+    return this.getHappening().pipe(switchMap(happening => happening.getMember(this.memberId)));
+  }
+
+  public getMatchedMember(): Observable<Member> {
+    return this.getHappening().pipe(
+      switchMap(happening =>
+        happening
+          .getMember(this.memberId)
+          .pipe(switchMap(member => happening.getMember(member.MatchedMemberId))),
+      ),
+    );
   }
 
   public getMembers(): Observable<Member[]> {
