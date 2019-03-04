@@ -1,9 +1,9 @@
 /*
  *   generate by https://www.json-generator.com/#
  */
-import { IRelationMemberHappening } from './relation-member-happening.model';
+import { IMemberParticipation } from './member-participation.model';
 
-export const RELATION_INITIAL_LIST_MOCK: IRelationMemberHappening[] = [
+export const MEMBER_PARTICIPATIONS_INITIAL_MOCK: IMemberParticipation[] = [
   {
     id: '53ae0bde-1c3c-4db7-90f7-14366243cdb9',
     memberId: '0',
