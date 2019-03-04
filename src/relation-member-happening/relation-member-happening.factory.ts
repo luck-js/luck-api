@@ -2,8 +2,6 @@ import { inject, injectable } from 'inversify';
 import IDENTIFIER from '../identifiers';
 import { IRelationMemberHappening } from './relation-member-happening.model';
 import { RelationMemberHappening } from './relation-member-happening';
-import { Happening } from '../happening/happening';
-import { Member } from '../member/member';
 import { UuidGenerationService } from '../member/uuid-generation.service';
 
 @injectable()
@@ -16,12 +14,9 @@ export class RelationMemberHappeningFactory {
     ) => RelationMemberHappening,
   ) {}
 
-  public generateUuid(): string {
-    return this.uuidGenerationService.createNewUuid();
-  }
-
-  public create(id: string, happening: Happening, member: Member): RelationMemberHappening {
-    return this.recreate({ id, happeningId: happening.id, memberId: member.id });
+  public create(memberId: string, happeningId: string): RelationMemberHappening {
+    const id = this.uuidGenerationService.createNewUuid();
+    return this.DIFactoryRelationMemberHappening({ id, memberId, happeningId });
   }
 
   public recreate(option: IRelationMemberHappening): RelationMemberHappening {
