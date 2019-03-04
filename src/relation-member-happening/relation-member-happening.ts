@@ -5,6 +5,10 @@ import { MemberRepository } from '../member/member.repository';
 import { Member } from '../member/member';
 import { Happening } from '../happening/happening';
 import { IRelationMemberHappening } from './relation-member-happening.model';
+import { map, mapTo, switchMap, tap } from 'rxjs/operators';
+import { HappeningFactory } from '../happening/happening.factory';
+import { IHappening } from '../happening/happening.model';
+import { RoleType } from '../member/event-member-role/event-member-role.model';
 
 @injectable()
 export class RelationMemberHappening implements IRelationMemberHappening {
@@ -14,6 +18,7 @@ export class RelationMemberHappening implements IRelationMemberHappening {
     public happeningId: string,
     private memberRepository: MemberRepository,
     private happeningRepository: HappeningRepository,
+    private happeningFactory: HappeningFactory,
   ) {}
 
   public get Id() {
@@ -24,7 +29,36 @@ export class RelationMemberHappening implements IRelationMemberHappening {
     return of(null);
   }
 
+  public getMembers(): Observable<Member[]> {
+    return this.getHappening().pipe(switchMap(happening => happening.getMembers()));
+  }
+
+  public createMember(roleType: RoleType, name: string): Observable<Member> {
+    return this.getHappening().pipe(
+      switchMap(happening =>
+        happening
+          .createMember(roleType, name)
+          .pipe(switchMap(member => this.updateHappening(happening).pipe(mapTo(member)))),
+      ),
+    );
+  }
+
   public getHappening(): Observable<Happening> {
-    return this.happeningRepository.getByIndex(this.happeningId);
+    return this.happeningRepository
+      .getByIndex(this.happeningId)
+      .pipe(map(happening => this.happeningFactory.recreate(happening)));
+  }
+
+  public updateHappening(happening: IHappening): Observable<Happening> {
+    return this.happeningRepository
+      .update(happening.id, happening)
+      .pipe(map(happening => this.happeningFactory.recreate(happening)));
+  }
+
+  public publishHappening(): Observable<Happening> {
+    return this.getHappening().pipe(
+      tap(happening => happening.publishEvent()),
+      switchMap(happening => this.updateHappening(happening)),
+    );
   }
 }
