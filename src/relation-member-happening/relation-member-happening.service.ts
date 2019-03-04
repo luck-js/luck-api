@@ -4,46 +4,45 @@ import { map, switchMap } from 'rxjs/operators';
 import { RelationMemberHappeningRepository } from './relation-member-happening.repository';
 import { IParticipationHappeningView } from './participation-happening-view.model';
 import { IMatchedParticipationData, IMemberView } from './member-view.model';
-import { HappeningFactory } from '../happening/happening.factory';
 import { RelationMemberHappeningFactory } from './relation-member-happening.factory';
 import { Happening } from '../happening/happening';
 import { Member } from '../member/member';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
 import { IHappeningView, INewHappeningView } from './happening-view.model';
 import { ICreatedHappening, IParticipantUniqueLinkData } from './created-happening-view';
-import { HappeningRepository } from '../happening/happening.repository';
 
 @injectable()
 export class RelationMemberHappeningService {
   constructor(
-    private happeningRepository: HappeningRepository,
-    private happeningFactory: HappeningFactory,
     private relationMemberHappeningRepository: RelationMemberHappeningRepository,
     private relationMemberHappeningFactory: RelationMemberHappeningFactory,
   ) {}
 
   public createOwnerRelationOfHappening(): Observable<string> {
-    const happening = this.happeningFactory.create();
-
-    return happening.createMember(RoleType.ORGANISER).pipe(
-      switchMap(() => this.happeningRepository.add(happening)),
-      map(member => this.relationMemberHappeningFactory.create(member.id, happening.id)),
-      switchMap(relation => this.relationMemberHappeningRepository.add(relation)),
-      map(relation => relation.id),
+    return this.relationMemberHappeningFactory.create().pipe(
+      switchMap(relationMemberHappening =>
+        this.relationMemberHappeningRepository.add(relationMemberHappening),
+      ),
+      map(relationMemberHappening => relationMemberHappening.id),
     );
   }
 
   public editHappening(relationId: string, option): Observable<Happening> {
     const { name, description } = option;
 
-    return this.getHappeningObservable(relationId).pipe(
-      map(happening => Object.assign({}, happening, { name, description })),
-      switchMap(editedHappening =>
-        this.happeningRepository
-          .update(editedHappening.id, editedHappening)
-          .pipe(map(happening => this.happeningFactory.recreate(happening))),
-      ),
-    );
+    return this.relationMemberHappeningRepository
+      .getByIndex(relationId)
+      .pipe(
+        switchMap(relationMemberHappening =>
+          relationMemberHappening
+            .getHappening()
+            .pipe(
+              switchMap(happening =>
+                relationMemberHappening.updateHappening({ ...happening, ...{ name, description } }),
+              ),
+            ),
+        ),
+      );
   }
 
   public publish(relationId: string): Observable<any> {
@@ -176,13 +175,13 @@ export class RelationMemberHappeningService {
   private getHappeningObservable(relationId): Observable<Happening> {
     return this.relationMemberHappeningRepository
       .getByIndex(relationId)
-      .pipe(switchMap(relation => relation.getHappening()));
+      .pipe(switchMap(relationMemberHappening => relationMemberHappening.getHappening()));
   }
 
   private getMemberObservable(relationId): Observable<Member> {
     return this.relationMemberHappeningRepository
       .getByIndex(relationId)
-      .pipe(switchMap(relation => relation.getMember()));
+      .pipe(switchMap(relationMemberHappening => relationMemberHappening.getMember()));
   }
 
   private mapToIParticipantUniqueLinkData(
