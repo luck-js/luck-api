@@ -141,7 +141,6 @@ const DIContainerProvider = (
     IDENTIFIER.DIFactoryMemberParticipation,
   ).toFactory<MemberParticipation>(context => {
     return ({ id, memberId, happeningId }: IMemberParticipation) => {
-      const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
       const happeningRepository = context.container.get<HappeningRepository>(
         IDENTIFIER.HappeningRepository,
       );
@@ -151,7 +150,6 @@ const DIContainerProvider = (
         id,
         memberId,
         happeningId,
-        memberRepository,
         happeningRepository,
         happeningFactory,
       );

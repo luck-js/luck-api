@@ -8,7 +8,7 @@ import { MemberParticipationFactory } from './member-participation.factory';
 import { Happening } from '../happening/happening';
 import { Member } from '../member/member';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
-import { IHappeningView, INewHappeningView } from './happening-view.model';
+import { INewHappeningView } from './happening-view.model';
 import { ICreatedHappening, IParticipantUniqueLinkData } from './created-happening-view';
 
 @injectable()
@@ -60,12 +60,15 @@ export class MemberParticipationService {
   }
 
   public getDataView(id: string): Observable<IMemberParticipationView> {
-    return this.getHappeningObservable(id).pipe(
-      map(happening => this.mapToHappeningView(happening)),
-      switchMap(happening =>
-        this.getMemberObservable(id).pipe(
-          map(member => this.mapToMemberView(member)),
-          map(member => ({ happening, member })),
+    return this.memberParticipationRepository.getByIndex(id).pipe(
+      switchMap(memberParticipation =>
+        memberParticipation.getHappening().pipe(
+          switchMap(happening =>
+            memberParticipation.getMember().pipe(
+              map(member => this.mapToMemberView(member)),
+              map(member => ({ happening, member })),
+            ),
+          ),
         ),
       ),
     );
@@ -90,16 +93,19 @@ export class MemberParticipationService {
   }
 
   public getMatchedMember(id: string): Observable<IMatchedParticipationData> {
-    return this.getMemberObservable(id).pipe(
-      switchMap(me =>
-        this.getHappeningObservable(id).pipe(
-          switchMap(happening => happening.getMember(me.MatchedMemberId)),
-          map(matchedMember => {
-            return {
-              me: this.mapToMemberView(me),
-              matchedMember: this.mapToMemberView(matchedMember),
-            };
-          }),
+    return this.memberParticipationRepository.getByIndex(id).pipe(
+      switchMap(memberParticipation =>
+        memberParticipation.getMember().pipe(
+          switchMap(member =>
+            memberParticipation.getMatchedMember().pipe(
+              map(matchedMember => {
+                return {
+                  me: this.mapToMemberView(member),
+                  matchedMember: this.mapToMemberView(matchedMember),
+                };
+              }),
+            ),
+          ),
         ),
       ),
     );
@@ -168,18 +174,6 @@ export class MemberParticipationService {
       .map(member => this.mapToIParticipantUniqueLinkData(member, id));
   }
 
-  private getHappeningObservable(id: string): Observable<Happening> {
-    return this.memberParticipationRepository
-      .getByIndex(id)
-      .pipe(switchMap(memberParticipation => memberParticipation.getHappening()));
-  }
-
-  private getMemberObservable(id: string): Observable<Member> {
-    return this.memberParticipationRepository
-      .getByIndex(id)
-      .pipe(switchMap(memberParticipation => memberParticipation.getMember()));
-  }
-
   private mapToIParticipantUniqueLinkData(
     { name }: Member,
     id: string,
@@ -194,9 +188,5 @@ export class MemberParticipationService {
 
   private mapToMemberView({ id, name }: Member): IMemberView {
     return { id, name };
-  }
-
-  private mapToHappeningView({ id, name, description, isPublish }: Happening): IHappeningView {
-    return { id, name, description, isPublish };
   }
 }
