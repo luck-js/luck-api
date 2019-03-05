@@ -19,10 +19,6 @@ export class MemberParticipation implements IMemberParticipation {
     private happeningFactory: HappeningFactory,
   ) {}
 
-  public get Id() {
-    return this.id;
-  }
-
   public getMember(): Observable<Member> {
     return this.getHappening().pipe(switchMap(happening => happening.getMember(this.memberId)));
   }
