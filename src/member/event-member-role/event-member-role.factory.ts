@@ -16,7 +16,11 @@ export class EventMemberRoleFactory {
     return this.switchInstanceHelper(type, abilityToRandom, matchedMemberId);
   }
 
-  private switchInstanceHelper(type, abilityToRandom?, matchedMemberId?) {
+  private switchInstanceHelper(
+    type: RoleType,
+    abilityToRandom?: boolean,
+    matchedMemberId?: string,
+  ) {
     if (type === RoleType.ORGANISER) {
       return new Organiser(abilityToRandom, matchedMemberId);
     }
