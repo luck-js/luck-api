@@ -30,14 +30,7 @@ const DIContainerProvider = (
 
   DIContainer.bind<MemberParticipationRepository>(IDENTIFIER.MemberParticipationRepository)
     .toDynamicValue((context: interfaces.Context) => {
-      const memberParticipationFactory = context.container.get<MemberParticipationFactory>(
-        IDENTIFIER.MemberParticipationFactory,
-      );
-
-      return new MemberParticipationRepository(
-        MEMBER_PARTICIPATIONS_INITIAL_MOCK,
-        memberParticipationFactory,
-      );
+      return new MemberParticipationRepository();
     })
     .inSingletonScope();
 
