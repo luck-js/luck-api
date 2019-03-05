@@ -4,14 +4,14 @@ import { MemberParticipationService } from '../domain/member-participation/membe
 import { Observable, of } from 'rxjs';
 
 export class HappeningApi {
-  constructor(private relationMemberHappeningService: MemberParticipationService) {}
+  constructor(private memberParticipationService: MemberParticipationService) {}
 
   public create(req: Request, res: Response) {
-    this.relationMemberHappeningService
+    this.memberParticipationService
       .createMemberParticipation()
       .pipe(
         take(1),
-        map(relationId => res.json(relationId)),
+        map(id => res.json(id)),
         catchError(val => this.sendError(res, 400, val)),
       )
       .subscribe();
@@ -20,7 +20,7 @@ export class HappeningApi {
   public edit(req: Request, res: Response) {
     const { id } = req.params;
     const option = req.body;
-    this.relationMemberHappeningService
+    this.memberParticipationService
       .editHappening(id, option)
       .pipe(
         take(1),
@@ -32,7 +32,7 @@ export class HappeningApi {
 
   public publish(req: Request, res: Response) {
     const { id } = req.params;
-    this.relationMemberHappeningService
+    this.memberParticipationService
       .publishHappening(id)
       .pipe(
         take(1),
@@ -45,7 +45,7 @@ export class HappeningApi {
   public addParticipant(req: Request, res: Response) {
     const { id } = req.params;
     const { name } = req.body;
-    this.relationMemberHappeningService
+    this.memberParticipationService
       .addParticipantMember(id, name)
       .pipe(
         take(1),
@@ -58,7 +58,7 @@ export class HappeningApi {
   public getDetailedParticipantListInformation(req: Request, res: Response) {
     const { id } = req.params;
 
-    this.relationMemberHappeningService
+    this.memberParticipationService
       .getParticipantsView(id)
       .pipe(
         take(1),
@@ -70,7 +70,7 @@ export class HappeningApi {
 
   public getGenerateDetailedParticipantListInformation(req: Request, res: Response) {
     const { id } = req.params;
-    this.relationMemberHappeningService
+    this.memberParticipationService
       .getGeneratedParticipantUniqueLinks(id)
       .pipe(
         take(1),
@@ -83,7 +83,7 @@ export class HappeningApi {
   public generateDetailedParticipantListInformation(req: Request, res: Response) {
     const { happening } = req.body;
     const { id } = req.params;
-    this.relationMemberHappeningService
+    this.memberParticipationService
       .generateParticipantUniqueLinks(id, happening)
       .pipe(
         take(1),
