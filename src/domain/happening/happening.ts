@@ -47,17 +47,15 @@ export class Happening implements IHappening {
     );
   }
 
-  public publishEvent(): void {
+  public publishEvent(): Observable<Member[]> {
     this.isPublish = true;
-    this.matchMember();
+    return this.matchMember();
   }
 
-  private matchMember(): void {
-    this.getMembers()
-      .pipe(
-        map(members => this.matchingMemberService.matchMembers(members)),
-        switchMap(members => this.memberRepository.updateList(members)),
-      )
-      .subscribe();
+  private matchMember(): Observable<Member[]> {
+    return this.getMembers().pipe(
+      map(members => this.matchingMemberService.matchMembers(members)),
+      switchMap(members => this.memberRepository.updateList(members).pipe(mapTo(members))),
+    );
   }
 }
