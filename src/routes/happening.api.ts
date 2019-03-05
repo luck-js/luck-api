@@ -33,7 +33,7 @@ export class HappeningApi {
   public publish(req: Request, res: Response) {
     const { id } = req.params;
     this.relationMemberHappeningService
-      .publish(id)
+      .publishHappening(id)
       .pipe(
         take(1),
         map(happening => res.json(happening)),
@@ -46,7 +46,7 @@ export class HappeningApi {
     const { id } = req.params;
     const { name } = req.body;
     this.relationMemberHappeningService
-      .addParticipant(id, name)
+      .addParticipantMember(id, name)
       .pipe(
         take(1),
         map(participant => res.json(participant)),
@@ -59,7 +59,7 @@ export class HappeningApi {
     const { id } = req.params;
 
     this.relationMemberHappeningService
-      .getDetailedParticipantListInformation(id)
+      .getParticipantsView(id)
       .pipe(
         take(1),
         map(memberUniqueLinkDataList => res.json(memberUniqueLinkDataList)),
@@ -71,7 +71,7 @@ export class HappeningApi {
   public getGenerateDetailedParticipantListInformation(req: Request, res: Response) {
     const { id } = req.params;
     this.relationMemberHappeningService
-      .getGenerateDetailedParticipantListInformation(id)
+      .getGeneratedParticipantUniqueLinks(id)
       .pipe(
         take(1),
         map(createdHappening => res.json(createdHappening)),
@@ -84,7 +84,7 @@ export class HappeningApi {
     const { happening } = req.body;
     const { id } = req.params;
     this.relationMemberHappeningService
-      .generateDetailedParticipantListInformation(id, happening)
+      .generateParticipantUniqueLinks(id, happening)
       .pipe(
         take(1),
         map(createdHappening => res.json(createdHappening)),
