@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { catchError, map, take } from 'rxjs/operators';
-import { MemberParticipationService } from '../member-participation/member-participation.service';
+import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
 import { Observable, of } from 'rxjs';
 
 export class HappeningApi {

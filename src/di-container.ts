@@ -1,25 +1,25 @@
 import 'reflect-metadata';
 import { Container, interfaces } from 'inversify';
 import IDENTIFIER from './identifiers';
-import { MemberParticipationRepository } from './member-participation/member-participation.repository';
-import { MemberRepository } from './member/member.repository';
-import { HappeningRepository } from './happening/happening.repository';
-import { HappeningFactory } from './happening/happening.factory';
+import { MemberParticipationRepository } from './domain/member-participation/member-participation.repository';
+import { MemberRepository } from './domain/member/member.repository';
+import { HappeningRepository } from './domain/happening/happening.repository';
+import { HappeningFactory } from './domain/happening/happening.factory';
 import { MatchingService } from './services/matching.service';
-import { UuidGenerationService } from './member/uuid-generation.service';
-import { MemberParticipationFactory } from './member-participation/member-participation.factory';
-import { MemberFactory } from './member/member.factory';
-import { Happening } from './happening/happening';
-import { Member } from './member/member';
-import { MemberParticipationService } from './member-participation/member-participation.service';
+import { UuidGenerationService } from './domain/member/uuid-generation.service';
+import { MemberParticipationFactory } from './domain/member-participation/member-participation.factory';
+import { MemberFactory } from './domain/member/member.factory';
+import { Happening } from './domain/happening/happening';
+import { Member } from './domain/member/member';
+import { MemberParticipationService } from './domain/member-participation/member-participation.service';
 import { ParticipationHappeningApi } from './routes/participation-happening.api';
-import { IMember } from './member/member.model';
-import { IHappening } from './happening/happening.model';
-import { MemberParticipation } from './member-participation/member-participation';
-import { IMemberParticipation } from './member-participation/member-participation.model';
+import { IMember } from './domain/member/member.model';
+import { IHappening } from './domain/happening/happening.model';
+import { MemberParticipation } from './domain/member-participation/member-participation';
+import { IMemberParticipation } from './domain/member-participation/member-participation.model';
 import { MatchingMemberService } from './services/matching-member.service';
 import { HappeningApi } from './routes/happening.api';
-import { EventMemberRoleFactory } from './member/event-member-role/event-member-role.factory';
+import { EventMemberRoleFactory } from './domain/member/event-member-role/event-member-role.factory';
 
 const DIContainerProvider = (
   MEMBER_INITIAL_LIST_MOCK?,
