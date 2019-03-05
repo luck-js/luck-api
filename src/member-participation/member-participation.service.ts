@@ -11,6 +11,7 @@ import { RoleType } from '../member/event-member-role/event-member-role.model';
 import { INewHappeningView } from './happening-view.model';
 import { ICreatedHappeningView, IParticipantsView } from './created-happening-view.model';
 import { MemberParticipation } from './member-participation';
+import { IHappening } from '../happening/happening.model';
 
 @injectable()
 export class MemberParticipationService {
@@ -27,10 +28,7 @@ export class MemberParticipationService {
     );
   }
 
-  public editHappening(
-    id: string,
-    option: { name: string; description: string },
-  ): Observable<Happening> {
+  public editHappening(id: string, option: IHappening): Observable<Happening> {
     const { name, description } = option;
 
     return this.getMemberParticipation(id).pipe(

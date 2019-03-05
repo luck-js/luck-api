@@ -16,7 +16,7 @@ export class MemberRepository {
     return forkJoin(members.map(el => this.update(el)));
   }
 
-  private update(member): Observable<IMember> {
+  private update(member: IMember): Observable<IMember> {
     return from(MemberModel.findOneAndUpdate({ id: member.id }, member, { new: true }).exec());
   }
 }
