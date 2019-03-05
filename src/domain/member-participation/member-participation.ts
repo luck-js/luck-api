@@ -61,8 +61,9 @@ export class MemberParticipation implements IMemberParticipation {
 
   public publishHappening(): Observable<Happening> {
     return this.getHappening().pipe(
-      tap(happening => happening.publishEvent()),
-      switchMap(happening => this.updateHappening(happening)),
+      switchMap(happening =>
+        happening.publishEvent().pipe(switchMap(() => this.updateHappening(happening))),
+      ),
     );
   }
 }
