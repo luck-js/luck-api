@@ -3,9 +3,9 @@ import { DIContainerProvider } from '../di-container';
 import IDENTIFIER from '../identifiers';
 import { ParticipationHappeningApi } from './participation-happening.api';
 import { HappeningApi } from './happening.api';
-import { MEMBER_INITIAL_LIST_MOCK } from '../member/member.mock';
-import { HAPPENING_INITIAL_LIST_MOCK } from '../happening/happening.mock';
-import { MEMBER_PARTICIPATIONS_INITIAL_MOCK } from '../member-participation/member-participation.mock';
+import { MEMBER_INITIAL_LIST_MOCK } from '../domain/member/member.mock';
+import { HAPPENING_INITIAL_LIST_MOCK } from '../domain/happening/happening.mock';
+import { MEMBER_PARTICIPATIONS_INITIAL_MOCK } from '../domain/member-participation/member-participation.mock';
 
 const router: Router = Router();
 

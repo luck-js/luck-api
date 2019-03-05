@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import { MatchedElement, MatchingService } from './matching.service';
-import { Member } from '../member/member';
+import { Member } from '../domain/member/member';
 
 @injectable()
 export class MatchingMemberService {

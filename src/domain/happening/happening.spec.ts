@@ -4,8 +4,8 @@ import { Container } from 'inversify';
 import { HappeningFactory } from './happening.factory';
 import { Happening } from './happening';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
-import { DIContainerProvider } from '../di-container';
-import IDENTIFIER from '../identifiers';
+import { DIContainerProvider } from '../../di-container';
+import IDENTIFIER from '../../identifiers';
 
 describe('Happening', function() {
   let DIContainer: Container;

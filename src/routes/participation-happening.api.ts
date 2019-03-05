@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { MemberParticipationService } from '../member-participation/member-participation.service';
+import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
 import { catchError, map, take } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 

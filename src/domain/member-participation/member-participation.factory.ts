@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import IDENTIFIER from '../identifiers';
+import IDENTIFIER from '../../identifiers';
 import { IMemberParticipation } from './member-participation.model';
 import { MemberParticipation } from './member-participation';
 import { UuidGenerationService } from '../member/uuid-generation.service';

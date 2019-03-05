@@ -2,7 +2,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { map, mapTo, switchMap, tap } from 'rxjs/operators';
 import { IHappening } from './happening.model';
 import { MemberRepository } from '../member/member.repository';
-import { MatchingMemberService } from '../services/matching-member.service';
+import { MatchingMemberService } from '../../services/matching-member.service';
 import { MemberFactory } from '../member/member.factory';
 import { Member } from '../member/member';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
