@@ -9,7 +9,7 @@ export class ParticipationHappeningApi {
   public getDataView(req: Request, res: Response) {
     const { id } = req.params;
     this.relationMemberHappeningService
-      .getDataView(id)
+      .getMemberParticipationView(id)
       .pipe(
         take(1),
         map(memberInformationView => res.json(memberInformationView)),

@@ -3,7 +3,7 @@ import { INewParticipantView } from './member-view.model';
 export interface INewHappeningView {
   name: string;
   description: string;
-  participantList: INewParticipantView[];
+  participants: INewParticipantView[];
 }
 
 export interface IHappeningView {

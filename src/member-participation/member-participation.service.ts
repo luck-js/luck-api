@@ -3,13 +3,13 @@ import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { MemberParticipationRepository } from './member-participation.repository';
 import { IMemberParticipationView } from './member-participation-view.model';
-import { IMatchedParticipationData, IMemberView } from './member-view.model';
+import { IMatchedMemberView, IMemberView } from './member-view.model';
 import { MemberParticipationFactory } from './member-participation.factory';
 import { Happening } from '../happening/happening';
 import { Member } from '../member/member';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
 import { INewHappeningView } from './happening-view.model';
-import { ICreatedHappening, IParticipantUniqueLinkData } from './created-happening-view';
+import { ICreatedHappeningView, IParticipantsView } from './created-happening-view.model';
 
 @injectable()
 export class MemberParticipationService {
@@ -21,11 +21,15 @@ export class MemberParticipationService {
   public createMemberParticipation(): Observable<string> {
     return this.memberParticipationFactory.create().pipe(
       switchMap(memberParticipation => this.memberParticipationRepository.add(memberParticipation)),
+      // TODO: refactor to return memberParticipation
       map(memberParticipation => memberParticipation.id),
     );
   }
 
-  public editHappening(id: string, option): Observable<Happening> {
+  public editHappening(
+    id: string,
+    option: { name: string; description: string },
+  ): Observable<Happening> {
     const { name, description } = option;
 
     return this.memberParticipationRepository
@@ -43,13 +47,13 @@ export class MemberParticipationService {
       );
   }
 
-  public publish(id: string): Observable<any> {
+  public publishHappening(id: string): Observable<any> {
     return this.memberParticipationRepository
       .getByIndex(id)
       .pipe(map(memberParticipation => memberParticipation.publishHappening()));
   }
 
-  public addParticipant(id: string, name: string): Observable<Member> {
+  public addParticipantMember(id: string, name: string): Observable<Member> {
     return this.memberParticipationRepository
       .getByIndex(id)
       .pipe(
@@ -59,7 +63,7 @@ export class MemberParticipationService {
       );
   }
 
-  public getDataView(id: string): Observable<IMemberParticipationView> {
+  public getMemberParticipationView(id: string): Observable<IMemberParticipationView> {
     return this.memberParticipationRepository.getByIndex(id).pipe(
       switchMap(memberParticipation =>
         memberParticipation.getHappening().pipe(
@@ -74,9 +78,7 @@ export class MemberParticipationService {
     );
   }
 
-  public getDetailedParticipantListInformation(
-    id: string,
-  ): Observable<IParticipantUniqueLinkData[]> {
+  public getParticipantsView(id: string): Observable<IParticipantsView[]> {
     return this.memberParticipationRepository
       .getByIndex(id)
       .pipe(
@@ -84,15 +86,13 @@ export class MemberParticipationService {
           memberParticipation
             .getMembers()
             .pipe(
-              map(members =>
-                this.mapMembersToParticipantUniqueLinkDataList(members, memberParticipation.id),
-              ),
+              map(members => this.mapMembersToParticipantsView(members, memberParticipation.id)),
             ),
         ),
       );
   }
 
-  public getMatchedMember(id: string): Observable<IMatchedParticipationData> {
+  public getMatchedMember(id: string): Observable<IMatchedMemberView> {
     return this.memberParticipationRepository.getByIndex(id).pipe(
       switchMap(memberParticipation =>
         memberParticipation.getMember().pipe(
@@ -111,18 +111,16 @@ export class MemberParticipationService {
     );
   }
 
-  public getGenerateDetailedParticipantListInformation(id: string): Observable<ICreatedHappening> {
+  public getGeneratedParticipantUniqueLinks(id: string): Observable<ICreatedHappeningView> {
     return this.memberParticipationRepository.getByIndex(id).pipe(
       switchMap(memberParticipation =>
         memberParticipation.getHappening().pipe(
           switchMap(happening =>
             memberParticipation.getMembers().pipe(
-              map(members =>
-                this.mapMembersToParticipantUniqueLinkDataList(members, memberParticipation.id),
-              ),
-              map(participantList => {
+              map(members => this.mapMembersToParticipantsView(members, memberParticipation.id)),
+              map(participants => {
                 return {
-                  participantList,
+                  participants,
                   name: happening.name,
                   description: happening.description,
                 };
@@ -134,15 +132,15 @@ export class MemberParticipationService {
     );
   }
 
-  public generateDetailedParticipantListInformation(
+  public generateParticipantUniqueLinks(
     id: string,
     newHappeningView: INewHappeningView,
-  ): Observable<ICreatedHappening> {
-    const { participantList, name, description } = newHappeningView;
+  ): Observable<ICreatedHappeningView> {
+    const { participants, name, description } = newHappeningView;
     return this.memberParticipationRepository.getByIndex(id).pipe(
       switchMap(memberParticipation =>
         forkJoin(
-          participantList.map(({ name }) =>
+          participants.map(({ name }) =>
             memberParticipation.createMember(RoleType.PARTICIPANT, name),
           ),
         ).pipe(
@@ -152,11 +150,9 @@ export class MemberParticipationService {
             memberParticipation.updateHappening({ ...happening, ...{ name, description } }),
           ),
           switchMap(() => memberParticipation.getMembers()),
-          map(members =>
-            this.mapMembersToParticipantUniqueLinkDataList(members, memberParticipation.id),
-          ),
-          map(participantList => ({
-            participantList,
+          map(members => this.mapMembersToParticipantsView(members, memberParticipation.id)),
+          map(participants => ({
+            participants,
             name: name,
             description: description,
           })),
@@ -165,21 +161,13 @@ export class MemberParticipationService {
     );
   }
 
-  private mapMembersToParticipantUniqueLinkDataList(
-    members: Member[],
-    id: string,
-  ): IParticipantUniqueLinkData[] {
+  private mapMembersToParticipantsView(members: Member[], id: string): IParticipantsView[] {
     return members
       .filter(member => member.eventMemberRole.type !== RoleType.ORGANISER)
-      .map(member => this.mapToIParticipantUniqueLinkData(member, id));
-  }
-
-  private mapToIParticipantUniqueLinkData(
-    { name }: Member,
-    id: string,
-  ): IParticipantUniqueLinkData {
-    const uniqueLink = this.mapToUniqueLink(id);
-    return { name, uniqueLink };
+      .map(member => ({
+        name: member.name,
+        uniqueLink: this.mapToUniqueLink(id),
+      }));
   }
 
   private mapToUniqueLink(id: string): string {

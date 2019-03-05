@@ -7,7 +7,7 @@ export interface IMemberView {
   name: string;
 }
 
-export interface IMatchedParticipationData {
+export interface IMatchedMemberView {
   me: IMemberView;
   matchedMember: IMemberView;
 }
