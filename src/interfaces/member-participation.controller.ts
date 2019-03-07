@@ -1,18 +1,22 @@
 import { Request, Response } from 'express';
-import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
 import { catchError, map, take } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+import { GetMemberParticipation } from '../application/get-member-participation';
+import { GetMatchedMember } from '../application/matched-member';
 
-export class ParticipationHappeningApi {
-  constructor(private relationMemberHappeningService: MemberParticipationService) {}
+export class MemberParticipationController {
+  constructor(
+    private getMemberParticipationApplication: GetMemberParticipation,
+    private getMatchedMemberApplication: GetMatchedMember,
+  ) {}
 
-  public getDataView(req: Request, res: Response) {
+  public getMemberParticipation(req: Request, res: Response) {
     const { id } = req.params;
-    this.relationMemberHappeningService
-      .getMemberParticipationView(id)
+    this.getMemberParticipationApplication
+      .execute(id)
       .pipe(
         take(1),
-        map(memberInformationView => res.json(memberInformationView)),
+        map(memberParticipation => res.json(memberParticipation)),
         catchError(val => this.sendError(res, 400, val)),
       )
       .subscribe();
@@ -20,11 +24,11 @@ export class ParticipationHappeningApi {
 
   public getMatchedMember(req: Request, res: Response) {
     const { id } = req.params;
-    this.relationMemberHappeningService
-      .getMatchedMember(id)
+    this.getMatchedMemberApplication
+      .execute(id)
       .pipe(
         take(1),
-        map(memberView => res.json(memberView)),
+        map(matchedMember => res.json(matchedMember)),
         catchError(val => this.sendError(res, 400, val)),
       )
       .subscribe();

@@ -19,7 +19,11 @@ const IDENTIFIER = {
   HappeningFactory: Symbol.for('HappeningFactory'),
 
   MemberParticipationService: Symbol.for('MemberParticipationService'),
-  ParticipationHappeningApi: Symbol.for('ParticipationHappeningApi'),
+  GetMemberParticipation: Symbol.for('GetMemberParticipation'),
+  GetMatchedMember: Symbol.for('GetMatchedMember'),
+
+  MemberParticipationController: Symbol.for('MemberParticipationController'),
+
   HappeningApi: Symbol.for('HappeningApi'),
 };
 
