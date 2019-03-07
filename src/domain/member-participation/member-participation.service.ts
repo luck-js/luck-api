@@ -11,7 +11,7 @@ import { HappeningService } from '../happening/happening.service';
 import { IMemberParticipation } from './member-participation.model';
 import { MemberFactory } from '../member/member.factory';
 import { HappeningFactory } from '../happening/happening.factory';
-import { MatchingMemberService } from '../../services/matching-member.service';
+import { MatchingMemberService } from '../matching-member.service';
 
 @injectable()
 export class MemberParticipationService {

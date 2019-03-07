@@ -1,23 +1,25 @@
 import 'reflect-metadata';
 import { Container, interfaces } from 'inversify';
 import IDENTIFIER from './identifiers';
-import { MemberParticipationRepository } from './domain/member-participation/member-participation.repository';
-import { MemberRepository } from './domain/member/member.repository';
-import { HappeningRepository } from './domain/happening/happening.repository';
-import { HappeningFactory } from './domain/happening/happening.factory';
-import { MatchingService } from './services/matching.service';
-import { UuidGenerationService } from './domain/member/uuid-generation.service';
-import { MemberParticipationFactory } from './domain/member-participation/member-participation.factory';
-import { MemberFactory } from './domain/member/member.factory';
-import { Member } from './domain/member/member';
-import { MemberParticipationService } from './domain/member-participation/member-participation.service';
-import { ParticipationHappeningApi } from './routes/participation-happening.api';
-import { IMember } from './domain/member/member.model';
-import { MatchingMemberService } from './services/matching-member.service';
+import { MemberParticipationRepository } from '../domain/member-participation/member-participation.repository';
+import { MemberRepository } from '../domain/member/member.repository';
+import { HappeningRepository } from '../domain/happening/happening.repository';
+import { HappeningFactory } from '../domain/happening/happening.factory';
+import { MatchingService } from '../domain/matching.service';
+import { UuidGenerationService } from '../domain/member/uuid-generation.service';
+import { MemberParticipationFactory } from '../domain/member-participation/member-participation.factory';
+import { MemberFactory } from '../domain/member/member.factory';
+import { Member } from '../domain/member/member';
+import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
+import { IMember } from '../domain/member/member.model';
+import { MatchingMemberService } from '../domain/matching-member.service';
 import { HappeningApi } from './routes/happening.api';
-import { EventMemberRoleFactory } from './domain/member/event-member-role/event-member-role.factory';
-import { HappeningService } from './domain/happening/happening.service';
-import { MemberService } from './domain/member/member.service';
+import { EventMemberRoleFactory } from '../domain/member/event-member-role/event-member-role.factory';
+import { HappeningService } from '../domain/happening/happening.service';
+import { MemberService } from '../domain/member/member.service';
+import { GetMemberParticipation } from '../application/get-member-participation';
+import { GetMatchedMember } from '../application/matched-member';
+import { MemberParticipationController } from '../interfaces/member-participation.controller';
 
 const DIContainerProvider = (
   MEMBER_INITIAL_LIST_MOCK?,
@@ -156,13 +158,23 @@ const DIContainerProvider = (
     );
   });
 
-  DIContainer.bind<ParticipationHappeningApi>(IDENTIFIER.ParticipationHappeningApi).toDynamicValue(
+  DIContainer.bind<GetMemberParticipation>(IDENTIFIER.GetMemberParticipation).toDynamicValue(
     (context: interfaces.Context) => {
       const memberParticipationService = context.container.get<MemberParticipationService>(
         IDENTIFIER.MemberParticipationService,
       );
 
-      return new ParticipationHappeningApi(memberParticipationService);
+      return new GetMemberParticipation(memberParticipationService);
+    },
+  );
+
+  DIContainer.bind<GetMatchedMember>(IDENTIFIER.GetMatchedMember).toDynamicValue(
+    (context: interfaces.Context) => {
+      const memberParticipationService = context.container.get<MemberParticipationService>(
+        IDENTIFIER.MemberParticipationService,
+      );
+
+      return new GetMatchedMember(memberParticipationService);
     },
   );
 
@@ -175,6 +187,19 @@ const DIContainerProvider = (
       return new HappeningApi(memberParticipationService);
     },
   );
+
+  DIContainer.bind<MemberParticipationController>(
+    IDENTIFIER.MemberParticipationController,
+  ).toDynamicValue((context: interfaces.Context) => {
+    const getMemberParticipation = context.container.get<GetMemberParticipation>(
+      IDENTIFIER.GetMemberParticipation,
+    );
+    const memberParticipationService = context.container.get<GetMatchedMember>(
+      IDENTIFIER.GetMatchedMember,
+    );
+
+    return new MemberParticipationController(getMemberParticipation, memberParticipationService);
+  });
 
   return DIContainer;
 };

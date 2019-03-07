@@ -11,6 +11,10 @@ export class MemberParticipation {
     return this.member;
   }
 
+  public getMatchedMember(): Member {
+    return this.getMembers().find(member => this.member.MatchedMemberId === member.id);
+  }
+
   public updateMembers(members: Member[]): Member[] {
     return this.happening.updateMembers(members);
   }

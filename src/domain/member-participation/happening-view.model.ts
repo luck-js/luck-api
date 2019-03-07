@@ -5,10 +5,3 @@ export interface INewHappeningView {
   description: string;
   participants: INewParticipantView[];
 }
-
-export interface IHappeningView {
-  id: string;
-  name: string;
-  description: string;
-  isPublish: boolean;
-}
