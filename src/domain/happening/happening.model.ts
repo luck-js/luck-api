@@ -1,6 +1,11 @@
 import { Document, Schema, model } from 'mongoose';
 
-export interface IHappening {
+export interface IHappeningMetadata {
+  name: string;
+  description: string;
+}
+
+export interface IHappening extends IHappeningMetadata {
   id: string;
   name: string;
   description: string;

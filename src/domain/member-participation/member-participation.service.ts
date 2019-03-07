@@ -1,179 +1,116 @@
 import { injectable } from 'inversify';
-import { forkJoin, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map, mapTo, switchMap } from 'rxjs/operators';
 import { MemberParticipationRepository } from './member-participation.repository';
-import { IMemberParticipationView } from './member-participation-view.model';
-import { IMatchedMemberView, IMemberView } from './member-view.model';
 import { MemberParticipationFactory } from './member-participation.factory';
-import { Happening } from '../happening/happening';
 import { Member } from '../member/member';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
-import { INewHappeningView } from './happening-view.model';
-import { ICreatedHappeningView, IParticipantsView } from './created-happening-view.model';
 import { MemberParticipation } from './member-participation';
-import { IHappening } from '../happening/happening.model';
+import { IHappeningMetadata } from '../happening/happening.model';
+import { HappeningService } from '../happening/happening.service';
+import { IMemberParticipation } from './member-participation.model';
+import { MemberFactory } from '../member/member.factory';
+import { HappeningFactory } from '../happening/happening.factory';
+import { MatchingMemberService } from '../../services/matching-member.service';
 
 @injectable()
 export class MemberParticipationService {
   constructor(
+    private happeningService: HappeningService,
+    private matchingMemberService: MatchingMemberService,
+    private memberFactory: MemberFactory,
+    private happeningFactory: HappeningFactory,
     private memberParticipationRepository: MemberParticipationRepository,
     private memberParticipationFactory: MemberParticipationFactory,
   ) {}
 
-  public createMemberParticipation(): Observable<string> {
-    return this.memberParticipationFactory.create().pipe(
-      switchMap(memberParticipation => this.memberParticipationRepository.add(memberParticipation)),
-      // TODO: refactor to return memberParticipation
-      map(memberParticipation => memberParticipation.id),
+  public create(): Observable<MemberParticipation> {
+    const happening = this.happeningFactory.create();
+    const member = happening.addMember(this.memberFactory.create(RoleType.ORGANISER));
+    const memberParticipation = this.memberParticipationFactory.create(member, happening);
+
+    return this.add(memberParticipation);
+  }
+
+  public add(memberParticipation: MemberParticipation): Observable<MemberParticipation> {
+    return this.happeningService.add(memberParticipation.happening).pipe(
+      switchMap(() => this.memberParticipationRepository.add(mapToEntity(memberParticipation))),
+      mapTo(memberParticipation),
+      // map(memberParticipation => this.memberParticipationFactory.recreate(memberParticipation)),
     );
   }
 
-  public editHappening(id: string, option: IHappening): Observable<Happening> {
-    const { name, description } = option;
+  public update(memberParticipation: MemberParticipation): Observable<MemberParticipation> {
+    return this.happeningService.update(memberParticipation.happening).pipe(
+      // switchMap(() => this.memberParticipationRepository.update(mapToEntity(memberParticipation))),
+      mapTo(memberParticipation),
+      // map(memberParticipation => this.memberParticipationFactory.recreate(memberParticipation)),
+    );
+  }
 
-    return this.getMemberParticipation(id).pipe(
-      switchMap(memberParticipation =>
-        memberParticipation
-          .getHappening()
-          .pipe(
-            switchMap(happening =>
-              memberParticipation.updateHappening({ ...happening, ...{ name, description } }),
-            ),
-          ),
+  public get(id: string): Observable<MemberParticipation> {
+    const memberParticipation$ = this.memberParticipationRepository.getByIndex(id);
+    const happening$ = memberParticipation$.pipe(
+      switchMap(memberParticipation => this.happeningService.get(memberParticipation.happeningId)),
+    );
+
+    const recreateMemberParticipation = (memberParticipation, happening) => {
+      const id = memberParticipation.id;
+      const member = happening.getMember(memberParticipation.memberId);
+      return this.memberParticipationFactory.recreate(id, member, happening);
+    };
+
+    return combineLatest([memberParticipation$, happening$]).pipe(
+      map(([memberParticipation, happening]) =>
+        recreateMemberParticipation(memberParticipation, happening),
       ),
     );
   }
 
-  public publishHappening(id: string): Observable<any> {
-    return this.getMemberParticipation(id).pipe(
-      map(memberParticipation => memberParticipation.publishHappening()),
+  public updateHappeningMetadata(
+    id: string,
+    happeningMetadata: IHappeningMetadata,
+  ): Observable<MemberParticipation> {
+    return this.get(id).pipe(
+      switchMap(memberParticipation => {
+        memberParticipation.updateHappeningMetadata(happeningMetadata);
+        return this.update(memberParticipation);
+      }),
+    );
+  }
+
+  public publishHappening(id: string): Observable<void> {
+    const matchMember = (members: Member[]) => {
+      return this.matchingMemberService.matchMembers(members);
+    };
+
+    return this.get(id).pipe(
+      filter(memberParticipation => !memberParticipation.happening.isPublish),
+      switchMap(memberParticipation => {
+        memberParticipation.publishHappening();
+        memberParticipation.updateMembers(matchMember(memberParticipation.happening.getMembers()));
+        return this.update(memberParticipation);
+      }),
+      mapTo(null),
     );
   }
 
   public addParticipantMember(id: string, name: string): Observable<Member> {
-    return this.getMemberParticipation(id).pipe(
-      switchMap(memberParticipation =>
-        memberParticipation.createMember(RoleType.PARTICIPANT, name),
-      ),
+    return this.get(id).pipe(
+      switchMap(memberParticipation => {
+        const participantMember = memberParticipation.happening.addMember(
+          this.memberFactory.create(RoleType.PARTICIPANT, name),
+        );
+        return this.update(memberParticipation).pipe(mapTo(participantMember));
+      }),
     );
   }
+}
 
-  public getMemberParticipationView(id: string): Observable<IMemberParticipationView> {
-    return this.getMemberParticipation(id).pipe(
-      switchMap(memberParticipation =>
-        memberParticipation.getHappening().pipe(
-          switchMap(happening =>
-            memberParticipation.getMember().pipe(
-              map(member => this.mapToMemberView(member)),
-              map(member => ({ happening, member })),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  public getParticipantsView(id: string): Observable<IParticipantsView[]> {
-    return this.getMemberParticipation(id).pipe(
-      switchMap(memberParticipation =>
-        memberParticipation
-          .getMembers()
-          .pipe(map(members => this.mapMembersToParticipantsView(members, memberParticipation.id))),
-      ),
-    );
-  }
-
-  public getMatchedMember(id: string): Observable<IMatchedMemberView> {
-    return this.getMemberParticipation(id).pipe(
-      switchMap(memberParticipation =>
-        memberParticipation.getMember().pipe(
-          switchMap(member =>
-            memberParticipation.getMatchedMember().pipe(
-              map(matchedMember => {
-                return {
-                  me: this.mapToMemberView(member),
-                  matchedMember: this.mapToMemberView(matchedMember),
-                };
-              }),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  public getGeneratedParticipantUniqueLinks(id: string): Observable<ICreatedHappeningView> {
-    return this.getMemberParticipation(id).pipe(
-      switchMap(memberParticipation =>
-        memberParticipation.getHappening().pipe(
-          switchMap(happening =>
-            memberParticipation.getMembers().pipe(
-              map(members => this.mapMembersToParticipantsView(members, memberParticipation.id)),
-              map(participants => {
-                return {
-                  participants,
-                  name: happening.name,
-                  description: happening.description,
-                };
-              }),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  public generateParticipantUniqueLinks(
-    id: string,
-    newHappeningView: INewHappeningView,
-  ): Observable<ICreatedHappeningView> {
-    const { participants, name, description } = newHappeningView;
-    return this.getMemberParticipation(id).pipe(
-      switchMap(memberParticipation =>
-        forkJoin(
-          participants.map(({ name }) =>
-            memberParticipation.createMember(RoleType.PARTICIPANT, name),
-          ),
-        ).pipe(
-          // TODO: create transaction for above operations
-          switchMap(() => memberParticipation.publishHappening()),
-          switchMap(happening =>
-            memberParticipation.updateHappening({ ...happening, ...{ name, description } }),
-          ),
-          switchMap(() => memberParticipation.getMembers()),
-          map(members => this.mapMembersToParticipantsView(members, memberParticipation.id)),
-          map(participants => ({
-            participants,
-            name: name,
-            description: description,
-          })),
-        ),
-      ),
-    );
-  }
-
-  private mapMembersToParticipantsView(members: Member[], id: string): IParticipantsView[] {
-    return members
-      .filter(member => member.eventMemberRole.type !== RoleType.ORGANISER)
-      .map(member => ({
-        name: member.name,
-        uniqueLink: this.mapToUniqueLink(id),
-      }));
-  }
-
-  private mapToUniqueLink(id: string): string {
-    return id;
-  }
-
-  private mapToMemberView({ id, name }: Member): IMemberView {
-    return { id, name };
-  }
-
-  private getMemberParticipation(id: string): Observable<MemberParticipation> {
-    return this.memberParticipationRepository
-      .getByIndex(id)
-      .pipe(
-        map(memberParticipation => this.memberParticipationFactory.recreate(memberParticipation)),
-      );
-  }
+function mapToEntity({ id, member, happening }: MemberParticipation): IMemberParticipation {
+  return {
+    id,
+    memberId: member.id,
+    happeningId: happening.id,
+  };
 }
