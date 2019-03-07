@@ -7,6 +7,8 @@ const IDENTIFIER = {
   DIFactoryMember: Symbol.for('DIFactoryMember'),
   DIFactoryMemberParticipation: Symbol.for('DIFactoryMemberParticipation'),
 
+  MemberService: Symbol.for('MemberService'),
+  HappeningService: Symbol.for('HappeningService'),
   MatchingService: Symbol.for('MatchingService'),
   MatchingMemberService: Symbol.for('MatchingMemberService'),
   UuidGenerationService: Symbol.for('UuidGenerationService'),

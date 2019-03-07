@@ -1,61 +1,44 @@
-import { forkJoin, Observable } from 'rxjs';
-import { map, mapTo, switchMap, tap } from 'rxjs/operators';
-import { IHappening } from './happening.model';
-import { MemberRepository } from '../member/member.repository';
-import { MatchingMemberService } from '../../services/matching-member.service';
-import { MemberFactory } from '../member/member.factory';
 import { Member } from '../member/member';
-import { RoleType } from '../member/event-member-role/event-member-role.model';
+import { IHappeningMetadata } from './happening.model';
 
-export class Happening implements IHappening {
+export class Happening {
   constructor(
     public id: string = '',
     public name: string = '',
     public description: string = '',
     public isPublish: boolean = false,
-    public memberIds: string[] = [],
-    private memberRepository: MemberRepository,
-    private matchingMemberService: MatchingMemberService,
-    private memberFactory: MemberFactory,
+    public members: Member[] = [],
   ) {}
 
-  public createMember(type: RoleType, name: string = ''): Observable<Member> {
+  public addMember(member: Member): Member {
     if (this.isPublish) {
       throw new Error('Happening is publishing');
     }
 
-    const createdMember = this.memberFactory.create(type, name);
-    return this.memberRepository.add(createdMember).pipe(
-      tap(member => this.memberIds.push(member.id)),
-      mapTo(createdMember),
-    );
+    this.members.push(member);
+    return member;
   }
 
-  public getMember(id: string): Observable<Member> {
-    return this.memberRepository
-      .getByIndex(id)
-      .pipe(map(member => this.memberFactory.recreate(member)));
+  public getMember(id: string): Member {
+    return this.members.find(member => member.id === id);
   }
 
-  public getMembers(): Observable<Member[]> {
-    return forkJoin(
-      this.memberIds.map(id =>
-        this.memberRepository
-          .getByIndex(id)
-          .pipe(map(member => this.memberFactory.recreate(member))),
-      ),
-    );
+  public getMembers(): Member[] {
+    return this.members;
   }
 
-  public publishEvent(): Observable<Member[]> {
+  public updateMembers(members: Member[]): Member[] {
+    this.members = members;
+    return this.members;
+  }
+
+  public publishEvent(): void {
     this.isPublish = true;
-    return this.matchMember();
   }
 
-  private matchMember(): Observable<Member[]> {
-    return this.getMembers().pipe(
-      map(members => this.matchingMemberService.matchMembers(members)),
-      switchMap(members => this.memberRepository.updateList(members).pipe(mapTo(members))),
-    );
+  public updateMetadata(happeningMetadata: IHappeningMetadata): void {
+    const { name, description } = happeningMetadata;
+    this.name = name;
+    this.description = description;
   }
 }

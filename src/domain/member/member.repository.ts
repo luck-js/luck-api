@@ -8,6 +8,10 @@ export class MemberRepository {
     return from(new MemberModel({ id, name, eventMemberRole }).save());
   }
 
+  public addList(members: IMember[]): Observable<IMember[]> {
+    return forkJoin(members.map(el => this.add(el)));
+  }
+
   public getByIndex(id: string): Observable<IMember> {
     return from(MemberModel.findOne({ id }, null, { limit: 1 }).exec());
   }

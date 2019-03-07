@@ -8,7 +8,7 @@ export class HappeningApi {
 
   public create(req: Request, res: Response) {
     this.memberParticipationService
-      .createMemberParticipation()
+      .create()
       .pipe(
         take(1),
         map(id => res.json(id)),
@@ -21,7 +21,7 @@ export class HappeningApi {
     const { id } = req.params;
     const option = req.body;
     this.memberParticipationService
-      .editHappening(id, option)
+      .updateHappeningMetadata(id, option)
       .pipe(
         take(1),
         map(happening => res.json(happening)),
@@ -58,39 +58,39 @@ export class HappeningApi {
   public getDetailedParticipantListInformation(req: Request, res: Response) {
     const { id } = req.params;
 
-    this.memberParticipationService
+    /*this.memberParticipationService
       .getParticipantsView(id)
       .pipe(
         take(1),
         map(memberUniqueLinkDataList => res.json(memberUniqueLinkDataList)),
         catchError(val => this.sendError(res, 400, val)),
       )
-      .subscribe();
+      .subscribe();*/
   }
 
   public getGenerateDetailedParticipantListInformation(req: Request, res: Response) {
     const { id } = req.params;
-    this.memberParticipationService
+    /*this.memberParticipationService
       .getGeneratedParticipantUniqueLinks(id)
       .pipe(
         take(1),
         map(createdHappening => res.json(createdHappening)),
         catchError(val => this.sendError(res, 400, val)),
       )
-      .subscribe();
+      .subscribe();*/
   }
 
   public generateDetailedParticipantListInformation(req: Request, res: Response) {
     const { happening } = req.body;
     const { id } = req.params;
-    this.memberParticipationService
+    /*this.memberParticipationService
       .generateParticipantUniqueLinks(id, happening)
       .pipe(
         take(1),
         map(createdHappening => res.json(createdHappening)),
         catchError(val => this.sendError(res, 400, val)),
       )
-      .subscribe();
+      .subscribe();*/
   }
 
   private sendError(res: Response, code: number, text: string): Observable<null> {

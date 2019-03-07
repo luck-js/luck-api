@@ -1,26 +1,24 @@
 import { injectable } from 'inversify';
 import { Happening } from './happening';
 import { UuidGenerationService } from '../member/uuid-generation.service';
-import { IHappening } from './happening.model';
+import { Member } from '../member/member';
 
 @injectable()
 export class HappeningFactory {
-  constructor(
-    private uuidGenerationService: UuidGenerationService,
-    private DIFactoryHappening: (option: IHappening) => Happening,
-  ) {}
+  constructor(private uuidGenerationService: UuidGenerationService) {}
 
   public create(): Happening {
     const id = this.uuidGenerationService.createNewUuid();
-    const name = '';
-    const description = '';
-    const isPublish = false;
-    const memberIds = [];
-
-    return this.recreate({ id, name, description, isPublish, memberIds });
+    return new Happening(id);
   }
 
-  public recreate(option: IHappening): Happening {
-    return this.DIFactoryHappening(option);
+  public recreate(
+    id: string,
+    name: string,
+    description: string,
+    isPublish: boolean,
+    members: Member[],
+  ): Happening {
+    return new Happening(id, name, description, isPublish, members);
   }
 }
