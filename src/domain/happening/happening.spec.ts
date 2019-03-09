@@ -3,9 +3,9 @@ import * as sinon from 'sinon';
 import { Container } from 'inversify';
 import { HappeningFactory } from './happening.factory';
 import { Happening } from './happening';
-import { RoleType } from '../member/event-member-role/event-member-role.model';
 import { DIContainerProvider } from '../../infrastructure/di-container';
 import IDENTIFIER from '../../infrastructure/identifiers';
+import { Member } from '../member/member';
 
 describe('Happening', function() {
   let DIContainer: Container;
@@ -32,20 +32,21 @@ describe('Happening', function() {
   describe('Creating new members', function() {
     it('Publishing happening should be closed on creating new members', function() {
       happening.publishEvent();
-      assert.throws(() => happening.createMember(RoleType.PARTICIPANT));
+      const member: Member = sinon.mock(Member);
+      assert.throws(() => happening.addMember(member));
     });
   });
 
   describe('Publish happening event', function() {
-    it("Members shouldn't has matched when happening wasn't publishing", function() {
-      let matchMemberStub = sinon.stub(happening, 'matchMember');
-      sinon.assert.notCalled(matchMemberStub);
+    it("Members could updated when happening isn't publishing", function() {
+      const members: Member[] = sinon.mock([Member]);
+      assert.doesNotThrow(() => happening.updateMembers(members));
     });
 
-    it('Publishing should matched members', function() {
-      let matchMemberStub = sinon.stub(happening, 'matchMember');
+    it("Members couldn't updated when happening is publishing", function() {
       happening.publishEvent();
-      sinon.assert.calledOnce(matchMemberStub);
+      const members: Member[] = sinon.mock([Member]);
+      assert.throws(() => happening.updateMembers(members));
     });
   });
 });

@@ -33,6 +33,10 @@ export class Happening {
   }
 
   public updateMembers(members: Member[]): Member[] {
+    if (this.isPublish) {
+      throw new Error('Happening is publishing');
+    }
+
     this.members = members;
     return this.members;
   }
