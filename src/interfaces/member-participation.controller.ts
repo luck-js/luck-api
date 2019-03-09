@@ -114,7 +114,19 @@ export class MemberParticipationController {
       .execute(id)
       .pipe(
         take(1),
-        map(createdHappening => res.json(createdHappening)),
+        map(publishedHappening => res.json(publishedHappening)),
+        catchError(val => this.sendError(res, 400, val)),
+      )
+      .subscribe();
+  }
+
+  public getFromPublishedHappeningParticipants(req: Request, res: Response) {
+    const { id } = req.params;
+    this.getPublishedHappeningApplication
+      .execute(id)
+      .pipe(
+        take(1),
+        map(({ participants }) => res.json(participants)),
         catchError(val => this.sendError(res, 400, val)),
       )
       .subscribe();

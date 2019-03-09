@@ -57,7 +57,7 @@ router
 router
   .route('/happening/get-detailed-participant-list-information/:id')
   .get((req: Request, res: Response) =>
-    happeningApi.getDetailedParticipantListInformation(req, res),
+    memberParticipationController.getFromPublishedHappeningParticipants(req, res),
   );
 
 router
