@@ -1,4 +1,4 @@
-export interface ICreatedHappeningView {
+export interface IPublishedHappeningView {
   name: string;
   description: string;
   participants: IParticipantsView[];

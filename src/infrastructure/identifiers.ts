@@ -25,6 +25,7 @@ const IDENTIFIER = {
   UpdateHappeningMetadata: Symbol.for('UpdateHappeningMetadata'),
   AddParticipantMember: Symbol.for('AddParticipantMember'),
   PublishHappening: Symbol.for('PublishHappening'),
+  CreatePublishedHappening: Symbol.for('CreatePublishedHappening'),
 
   MemberParticipationController: Symbol.for('MemberParticipationController'),
 
