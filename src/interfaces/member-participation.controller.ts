@@ -6,6 +6,7 @@ import { GetMatchedMember } from '../application/matched-member';
 import { CreateMemberParticipation } from '../application/create-member-participation';
 import { UpdateHappeningMetadata } from '../application/update-happening-metadata';
 import { AddParticipantMember } from '../application/add-participant-member';
+import { PublishHappening } from '../application/publish-happening';
 
 export class MemberParticipationController {
   constructor(
@@ -14,6 +15,7 @@ export class MemberParticipationController {
     private getMatchedMemberApplication: GetMatchedMember,
     private updateHappeningMetadataApplication: UpdateHappeningMetadata,
     private addParticipantMemberApplication: AddParticipantMember,
+    private publishHappeningApplication: PublishHappening,
   ) {}
 
   public createMemberParticipation(req: Request, res: Response) {
@@ -64,12 +66,6 @@ export class MemberParticipationController {
       .subscribe();
   }
 
-  private sendError(res: Response, code: number, text: string): Observable<null> {
-    res.status(code);
-    res.send(text);
-    return of();
-  }
-
   public addParticipantMember(req: Request, res: Response) {
     const { id } = req.params;
     const { name } = req.body;
@@ -81,5 +77,23 @@ export class MemberParticipationController {
         catchError(val => this.sendError(res, 400, val)),
       )
       .subscribe();
+  }
+
+  public publishHappening(req: Request, res: Response) {
+    const { id } = req.params;
+    this.publishHappeningApplication
+      .execute(id)
+      .pipe(
+        take(1),
+        map(() => res.sendStatus(200)),
+        catchError(val => this.sendError(res, 400, val)),
+      )
+      .subscribe();
+  }
+
+  private sendError(res: Response, code: number, text: string): Observable<null> {
+    res.status(code);
+    res.send(text);
+    return of();
   }
 }

@@ -52,7 +52,7 @@ router
 
 router
   .route('/happening/publish/:id')
-  .post((req: Request, res: Response) => happeningApi.publish(req, res));
+  .post((req: Request, res: Response) => memberParticipationController.publishHappening(req, res));
 
 router
   .route('/happening/get-detailed-participant-list-information/:id')

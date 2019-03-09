@@ -6,18 +6,6 @@ import { MemberParticipationService } from '../../domain/member-participation/me
 export class HappeningApi {
   constructor(private memberParticipationService: MemberParticipationService) {}
 
-  public publish(req: Request, res: Response) {
-    const { id } = req.params;
-    this.memberParticipationService
-      .publishHappening(id)
-      .pipe(
-        take(1),
-        map(happening => res.json(happening)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();
-  }
-
   public getDetailedParticipantListInformation(req: Request, res: Response) {
     const { id } = req.params;
 
