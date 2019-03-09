@@ -1,12 +1,9 @@
 import { Router, Request, Response } from 'express';
 import { DIContainerProvider } from '../di-container';
 import IDENTIFIER from '../identifiers';
-import { HappeningApi } from './happening.api';
 import { MEMBER_INITIAL_LIST_MOCK } from '../../domain/member/member.mock';
 import { HAPPENING_INITIAL_LIST_MOCK } from '../../domain/happening/happening.mock';
 import { MEMBER_PARTICIPATIONS_INITIAL_MOCK } from '../../domain/member-participation/member-participation.mock';
-import { GetMemberParticipation } from '../../application/get-member-participation';
-import { GetMatchedMember } from '../../application/matched-member';
 import { MemberParticipationController } from '../../interfaces/member-participation.controller';
 
 const router: Router = Router();
@@ -20,7 +17,6 @@ const DIContainer = DIContainerProvider(
 const memberParticipationController = DIContainer.get<MemberParticipationController>(
   IDENTIFIER.MemberParticipationController,
 );
-const happeningApi = DIContainer.get<HappeningApi>(IDENTIFIER.HappeningApi);
 
 router
   .route('/participation-happening/:id')

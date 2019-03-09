@@ -13,7 +13,6 @@ import { Member } from '../domain/member/member';
 import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
 import { IMember } from '../domain/member/member.model';
 import { MatchingMemberService } from '../domain/matching-member.service';
-import { HappeningApi } from './routes/happening.api';
 import { EventMemberRoleFactory } from '../domain/member/event-member-role/event-member-role.factory';
 import { HappeningService } from '../domain/happening/happening.service';
 import { MemberService } from '../domain/member/member.service';
@@ -241,16 +240,6 @@ const DIContainerProvider = (
       );
 
       return new GetPublishedHappening(memberParticipationService);
-    },
-  );
-
-  DIContainer.bind<HappeningApi>(IDENTIFIER.HappeningApi).toDynamicValue(
-    (context: interfaces.Context) => {
-      const memberParticipationService = context.container.get<MemberParticipationService>(
-        IDENTIFIER.MemberParticipationService,
-      );
-
-      return new HappeningApi(memberParticipationService);
     },
   );
 
