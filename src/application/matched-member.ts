@@ -1,5 +1,5 @@
 import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
-import { map, take } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { IMatchedMemberView } from './model/matched-member-view.model';
 import { Member } from '../domain/member/member';
@@ -10,7 +10,6 @@ export class GetMatchedMember {
 
   public execute(id: string): Observable<IMatchedMemberView> {
     return this.relationMemberHappeningService.get(id).pipe(
-      take(1),
       map(memberParticipation => ({
         me: mapToMemberView(memberParticipation.getMember()),
         matchedMember: mapToMemberView(memberParticipation.getMatchedMember()),

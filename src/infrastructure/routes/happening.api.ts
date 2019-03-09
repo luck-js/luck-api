@@ -18,19 +18,6 @@ export class HappeningApi {
       .subscribe();
   }
 
-  public addParticipant(req: Request, res: Response) {
-    const { id } = req.params;
-    const { name } = req.body;
-    this.memberParticipationService
-      .addParticipantMember(id, name)
-      .pipe(
-        take(1),
-        map(participant => res.json(participant)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();
-  }
-
   public getDetailedParticipantListInformation(req: Request, res: Response) {
     const { id } = req.params;
 

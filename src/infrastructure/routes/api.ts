@@ -46,7 +46,9 @@ router
 
 router
   .route('/happening/add-participant/:id')
-  .post((req: Request, res: Response) => happeningApi.addParticipant(req, res));
+  .post((req: Request, res: Response) =>
+    memberParticipationController.addParticipantMember(req, res),
+  );
 
 router
   .route('/happening/publish/:id')
