@@ -29,8 +29,6 @@ const IDENTIFIER = {
   GetPublishedHappening: Symbol.for('GetPublishedHappening'),
 
   MemberParticipationController: Symbol.for('MemberParticipationController'),
-
-  HappeningApi: Symbol.for('HappeningApi'),
 };
 
 export default IDENTIFIER;
