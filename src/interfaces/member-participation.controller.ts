@@ -5,6 +5,7 @@ import { GetMemberParticipation } from '../application/get-member-participation'
 import { GetMatchedMember } from '../application/matched-member';
 import { CreateMemberParticipation } from '../application/create-member-participation';
 import { UpdateHappeningMetadata } from '../application/update-happening-metadata';
+import { AddParticipantMember } from '../application/add-participant-member';
 
 export class MemberParticipationController {
   constructor(
@@ -12,12 +13,14 @@ export class MemberParticipationController {
     private getMemberParticipationApplication: GetMemberParticipation,
     private getMatchedMemberApplication: GetMatchedMember,
     private updateHappeningMetadataApplication: UpdateHappeningMetadata,
+    private addParticipantMemberApplication: AddParticipantMember,
   ) {}
 
   public createMemberParticipation(req: Request, res: Response) {
     this.createMemberParticipationApplication
       .execute()
       .pipe(
+        take(1),
         map(memberParticipation => res.json(memberParticipation)),
         catchError(val => this.sendError(res, 400, val)),
       )
@@ -29,6 +32,7 @@ export class MemberParticipationController {
     this.getMemberParticipationApplication
       .execute(id)
       .pipe(
+        take(1),
         map(memberParticipation => res.json(memberParticipation)),
         catchError(val => this.sendError(res, 400, val)),
       )
@@ -40,6 +44,7 @@ export class MemberParticipationController {
     this.getMatchedMemberApplication
       .execute(id)
       .pipe(
+        take(1),
         map(matchedMember => res.json(matchedMember)),
         catchError(val => this.sendError(res, 400, val)),
       )
@@ -63,5 +68,18 @@ export class MemberParticipationController {
     res.status(code);
     res.send(text);
     return of();
+  }
+
+  public addParticipantMember(req: Request, res: Response) {
+    const { id } = req.params;
+    const { name } = req.body;
+    this.addParticipantMemberApplication
+      .execute(id, name)
+      .pipe(
+        take(1),
+        map(participant => res.json(participant)),
+        catchError(val => this.sendError(res, 400, val)),
+      )
+      .subscribe();
   }
 }

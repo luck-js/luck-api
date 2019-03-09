@@ -23,6 +23,7 @@ const IDENTIFIER = {
   GetMemberParticipation: Symbol.for('GetMemberParticipation'),
   GetMatchedMember: Symbol.for('GetMatchedMember'),
   UpdateHappeningMetadata: Symbol.for('UpdateHappeningMetadata'),
+  AddParticipantMember: Symbol.for('AddParticipantMember'),
 
   MemberParticipationController: Symbol.for('MemberParticipationController'),
 

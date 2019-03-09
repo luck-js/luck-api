@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
-import { map, take } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Happening } from '../domain/happening/happening';
 import { IHappeningView } from './model/happening-view.model';
 import { Member } from '../domain/member/member';
@@ -12,7 +12,6 @@ export class CreateMemberParticipation {
 
   public execute(): Observable<IMemberParticipationView> {
     return this.relationMemberHappeningService.create().pipe(
-      take(1),
       map(memberParticipation => ({
         happening: mapToHappeningView(memberParticipation.happening),
         member: mapToMemberView(memberParticipation.member),
