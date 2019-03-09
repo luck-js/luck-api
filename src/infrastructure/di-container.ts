@@ -26,118 +26,110 @@ import { PublishHappening } from '../application/publish-happening';
 import { CreatePublishedHappening } from '../application/create-published-happening';
 import { GetPublishedHappening } from '../application/get-published-happening';
 
-const DIContainerProvider = (
-  MEMBER_INITIAL_LIST_MOCK?,
-  HAPPENING_INITIAL_LIST_MOCK?,
-  MEMBER_PARTICIPATIONS_INITIAL_MOCK?,
-): Container => {
-  const DIContainer = new Container();
+const DIContainer = new Container();
 
-  DIContainer.bind<MemberParticipationRepository>(IDENTIFIER.MemberParticipationRepository)
-    .toDynamicValue((context: interfaces.Context) => {
-      return new MemberParticipationRepository();
-    })
-    .inSingletonScope();
+DIContainer.bind<MemberParticipationRepository>(IDENTIFIER.MemberParticipationRepository)
+  .toDynamicValue((context: interfaces.Context) => {
+    return new MemberParticipationRepository();
+  })
+  .inSingletonScope();
 
-  DIContainer.bind<MemberRepository>(IDENTIFIER.MemberRepository)
-    .toDynamicValue((context: interfaces.Context) => {
-      return new MemberRepository();
-    })
-    .inSingletonScope();
+DIContainer.bind<MemberRepository>(IDENTIFIER.MemberRepository)
+  .toDynamicValue((context: interfaces.Context) => {
+    return new MemberRepository();
+  })
+  .inSingletonScope();
 
-  DIContainer.bind<MatchingService>(IDENTIFIER.MatchingService).to(MatchingService);
+DIContainer.bind<MatchingService>(IDENTIFIER.MatchingService).to(MatchingService);
 
-  DIContainer.bind<MemberService>(IDENTIFIER.MemberService).toDynamicValue(
-    (context: interfaces.Context) => {
-      const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
-      const memberFactory = context.container.get<MemberFactory>(IDENTIFIER.MemberFactory);
+DIContainer.bind<MemberService>(IDENTIFIER.MemberService).toDynamicValue(
+  (context: interfaces.Context) => {
+    const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
+    const memberFactory = context.container.get<MemberFactory>(IDENTIFIER.MemberFactory);
 
-      return new MemberService(memberRepository, memberFactory);
-    },
-  );
+    return new MemberService(memberRepository, memberFactory);
+  },
+);
 
-  DIContainer.bind<HappeningService>(IDENTIFIER.HappeningService).toDynamicValue(
-    (context: interfaces.Context) => {
-      const memberService = context.container.get<MemberService>(IDENTIFIER.MemberService);
-      const happeningRepository = context.container.get<HappeningRepository>(
-        IDENTIFIER.HappeningRepository,
-      );
-      const happeningFactory = context.container.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
+DIContainer.bind<HappeningService>(IDENTIFIER.HappeningService).toDynamicValue(
+  (context: interfaces.Context) => {
+    const memberService = context.container.get<MemberService>(IDENTIFIER.MemberService);
+    const happeningRepository = context.container.get<HappeningRepository>(
+      IDENTIFIER.HappeningRepository,
+    );
+    const happeningFactory = context.container.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
 
-      return new HappeningService(memberService, happeningRepository, happeningFactory);
-    },
-  );
+    return new HappeningService(memberService, happeningRepository, happeningFactory);
+  },
+);
 
-  DIContainer.bind<MatchingMemberService>(IDENTIFIER.MatchingMemberService).toDynamicValue(
-    (context: interfaces.Context) => {
-      const matchingService = context.container.get<MatchingService>(IDENTIFIER.MatchingService);
+DIContainer.bind<MatchingMemberService>(IDENTIFIER.MatchingMemberService).toDynamicValue(
+  (context: interfaces.Context) => {
+    const matchingService = context.container.get<MatchingService>(IDENTIFIER.MatchingService);
 
-      return new MatchingMemberService(matchingService);
-    },
-  );
+    return new MatchingMemberService(matchingService);
+  },
+);
 
-  DIContainer.bind<UuidGenerationService>(IDENTIFIER.UuidGenerationService).to(
-    UuidGenerationService,
-  );
+DIContainer.bind<UuidGenerationService>(IDENTIFIER.UuidGenerationService).to(UuidGenerationService);
 
-  DIContainer.bind<MemberParticipationFactory>(
-    IDENTIFIER.MemberParticipationFactory,
-  ).toDynamicValue((context: interfaces.Context) => {
+DIContainer.bind<MemberParticipationFactory>(IDENTIFIER.MemberParticipationFactory).toDynamicValue(
+  (context: interfaces.Context) => {
     const uuidGenerationService = context.container.get<UuidGenerationService>(
       IDENTIFIER.UuidGenerationService,
     );
     return new MemberParticipationFactory(uuidGenerationService);
-  });
+  },
+);
 
-  DIContainer.bind<MemberFactory>(IDENTIFIER.MemberFactory).toDynamicValue(
-    (context: interfaces.Context) => {
-      const uuidGenerationService = context.container.get<UuidGenerationService>(
-        IDENTIFIER.UuidGenerationService,
-      );
-      const DIFactoryMember = context.container.get<(option: IMember) => Member>(
-        IDENTIFIER.DIFactoryMember,
-      );
-      const eventMemberRoleFactory = context.container.get<EventMemberRoleFactory>(
-        IDENTIFIER.EventMemberRoleFactory,
-      );
+DIContainer.bind<MemberFactory>(IDENTIFIER.MemberFactory).toDynamicValue(
+  (context: interfaces.Context) => {
+    const uuidGenerationService = context.container.get<UuidGenerationService>(
+      IDENTIFIER.UuidGenerationService,
+    );
+    const DIFactoryMember = context.container.get<(option: IMember) => Member>(
+      IDENTIFIER.DIFactoryMember,
+    );
+    const eventMemberRoleFactory = context.container.get<EventMemberRoleFactory>(
+      IDENTIFIER.EventMemberRoleFactory,
+    );
 
-      return new MemberFactory(uuidGenerationService, eventMemberRoleFactory, DIFactoryMember);
-    },
-  );
+    return new MemberFactory(uuidGenerationService, eventMemberRoleFactory, DIFactoryMember);
+  },
+);
 
-  DIContainer.bind<EventMemberRoleFactory>(IDENTIFIER.EventMemberRoleFactory).toDynamicValue(
-    (context: interfaces.Context) => {
-      return new EventMemberRoleFactory();
-    },
-  );
+DIContainer.bind<EventMemberRoleFactory>(IDENTIFIER.EventMemberRoleFactory).toDynamicValue(
+  (context: interfaces.Context) => {
+    return new EventMemberRoleFactory();
+  },
+);
 
-  DIContainer.bind<(option: IMember) => Member>(IDENTIFIER.DIFactoryMember).toFactory<Member>(
-    context => {
-      return ({ id, name, eventMemberRole }: IMember) => {
-        return new Member(id, name, eventMemberRole);
-      };
-    },
-  );
+DIContainer.bind<(option: IMember) => Member>(IDENTIFIER.DIFactoryMember).toFactory<Member>(
+  context => {
+    return ({ id, name, eventMemberRole }: IMember) => {
+      return new Member(id, name, eventMemberRole);
+    };
+  },
+);
 
-  DIContainer.bind<HappeningFactory>(IDENTIFIER.HappeningFactory).toDynamicValue(
-    (context: interfaces.Context) => {
-      const uuidGenerationService = context.container.get<UuidGenerationService>(
-        IDENTIFIER.UuidGenerationService,
-      );
+DIContainer.bind<HappeningFactory>(IDENTIFIER.HappeningFactory).toDynamicValue(
+  (context: interfaces.Context) => {
+    const uuidGenerationService = context.container.get<UuidGenerationService>(
+      IDENTIFIER.UuidGenerationService,
+    );
 
-      return new HappeningFactory(uuidGenerationService);
-    },
-  );
+    return new HappeningFactory(uuidGenerationService);
+  },
+);
 
-  DIContainer.bind<HappeningRepository>(IDENTIFIER.HappeningRepository)
-    .toDynamicValue((context: interfaces.Context) => {
-      return new HappeningRepository();
-    })
-    .inSingletonScope();
+DIContainer.bind<HappeningRepository>(IDENTIFIER.HappeningRepository)
+  .toDynamicValue((context: interfaces.Context) => {
+    return new HappeningRepository();
+  })
+  .inSingletonScope();
 
-  DIContainer.bind<MemberParticipationService>(
-    IDENTIFIER.MemberParticipationService,
-  ).toDynamicValue((context: interfaces.Context) => {
+DIContainer.bind<MemberParticipationService>(IDENTIFIER.MemberParticipationService).toDynamicValue(
+  (context: interfaces.Context) => {
     const happeningService = context.container.get<HappeningService>(IDENTIFIER.HappeningService);
     const matchingMemberService = context.container.get<MatchingMemberService>(
       IDENTIFIER.MatchingMemberService,
@@ -161,130 +153,128 @@ const DIContainerProvider = (
       memberParticipationRepository,
       memberParticipationFactory,
     );
-  });
+  },
+);
 
-  DIContainer.bind<GetMemberParticipation>(IDENTIFIER.GetMemberParticipation).toDynamicValue(
-    (context: interfaces.Context) => {
-      const memberParticipationService = context.container.get<MemberParticipationService>(
-        IDENTIFIER.MemberParticipationService,
-      );
-
-      return new GetMemberParticipation(memberParticipationService);
-    },
-  );
-
-  DIContainer.bind<CreateMemberParticipation>(IDENTIFIER.CreateMemberParticipation).toDynamicValue(
-    (context: interfaces.Context) => {
-      const memberParticipationService = context.container.get<MemberParticipationService>(
-        IDENTIFIER.MemberParticipationService,
-      );
-
-      return new CreateMemberParticipation(memberParticipationService);
-    },
-  );
-
-  DIContainer.bind<GetMatchedMember>(IDENTIFIER.GetMatchedMember).toDynamicValue(
-    (context: interfaces.Context) => {
-      const memberParticipationService = context.container.get<MemberParticipationService>(
-        IDENTIFIER.MemberParticipationService,
-      );
-
-      return new GetMatchedMember(memberParticipationService);
-    },
-  );
-
-  DIContainer.bind<UpdateHappeningMetadata>(IDENTIFIER.UpdateHappeningMetadata).toDynamicValue(
-    (context: interfaces.Context) => {
-      const memberParticipationService = context.container.get<MemberParticipationService>(
-        IDENTIFIER.MemberParticipationService,
-      );
-
-      return new UpdateHappeningMetadata(memberParticipationService);
-    },
-  );
-
-  DIContainer.bind<AddParticipantMember>(IDENTIFIER.AddParticipantMember).toDynamicValue(
-    (context: interfaces.Context) => {
-      const memberParticipationService = context.container.get<MemberParticipationService>(
-        IDENTIFIER.MemberParticipationService,
-      );
-
-      return new AddParticipantMember(memberParticipationService);
-    },
-  );
-
-  DIContainer.bind<PublishHappening>(IDENTIFIER.PublishHappening).toDynamicValue(
-    (context: interfaces.Context) => {
-      const memberParticipationService = context.container.get<MemberParticipationService>(
-        IDENTIFIER.MemberParticipationService,
-      );
-
-      return new PublishHappening(memberParticipationService);
-    },
-  );
-
-  DIContainer.bind<CreatePublishedHappening>(IDENTIFIER.CreatePublishedHappening).toDynamicValue(
-    (context: interfaces.Context) => {
-      const memberParticipationService = context.container.get<MemberParticipationService>(
-        IDENTIFIER.MemberParticipationService,
-      );
-
-      return new CreatePublishedHappening(memberParticipationService);
-    },
-  );
-
-  DIContainer.bind<GetPublishedHappening>(IDENTIFIER.GetPublishedHappening).toDynamicValue(
-    (context: interfaces.Context) => {
-      const memberParticipationService = context.container.get<MemberParticipationService>(
-        IDENTIFIER.MemberParticipationService,
-      );
-
-      return new GetPublishedHappening(memberParticipationService);
-    },
-  );
-
-  DIContainer.bind<MemberParticipationController>(
-    IDENTIFIER.MemberParticipationController,
-  ).toDynamicValue((context: interfaces.Context) => {
-    const createMemberParticipation = context.container.get<CreateMemberParticipation>(
-      IDENTIFIER.CreateMemberParticipation,
-    );
-    const getMemberParticipation = context.container.get<GetMemberParticipation>(
-      IDENTIFIER.GetMemberParticipation,
-    );
-    const memberParticipationService = context.container.get<GetMatchedMember>(
-      IDENTIFIER.GetMatchedMember,
-    );
-    const updateHappeningMetadata = context.container.get<UpdateHappeningMetadata>(
-      IDENTIFIER.UpdateHappeningMetadata,
+DIContainer.bind<GetMemberParticipation>(IDENTIFIER.GetMemberParticipation).toDynamicValue(
+  (context: interfaces.Context) => {
+    const memberParticipationService = context.container.get<MemberParticipationService>(
+      IDENTIFIER.MemberParticipationService,
     );
 
-    const addParticipantMember = context.container.get<AddParticipantMember>(
-      IDENTIFIER.AddParticipantMember,
+    return new GetMemberParticipation(memberParticipationService);
+  },
+);
+
+DIContainer.bind<CreateMemberParticipation>(IDENTIFIER.CreateMemberParticipation).toDynamicValue(
+  (context: interfaces.Context) => {
+    const memberParticipationService = context.container.get<MemberParticipationService>(
+      IDENTIFIER.MemberParticipationService,
     );
-    const createPublishedHappening = context.container.get<CreatePublishedHappening>(
-      IDENTIFIER.CreatePublishedHappening,
+
+    return new CreateMemberParticipation(memberParticipationService);
+  },
+);
+
+DIContainer.bind<GetMatchedMember>(IDENTIFIER.GetMatchedMember).toDynamicValue(
+  (context: interfaces.Context) => {
+    const memberParticipationService = context.container.get<MemberParticipationService>(
+      IDENTIFIER.MemberParticipationService,
     );
 
-    const getPublishedHappening = context.container.get<GetPublishedHappening>(
-      IDENTIFIER.GetPublishedHappening,
+    return new GetMatchedMember(memberParticipationService);
+  },
+);
+
+DIContainer.bind<UpdateHappeningMetadata>(IDENTIFIER.UpdateHappeningMetadata).toDynamicValue(
+  (context: interfaces.Context) => {
+    const memberParticipationService = context.container.get<MemberParticipationService>(
+      IDENTIFIER.MemberParticipationService,
     );
 
-    const publishHappening = context.container.get<PublishHappening>(IDENTIFIER.PublishHappening);
+    return new UpdateHappeningMetadata(memberParticipationService);
+  },
+);
 
-    return new MemberParticipationController(
-      createMemberParticipation,
-      getMemberParticipation,
-      memberParticipationService,
-      updateHappeningMetadata,
-      addParticipantMember,
-      publishHappening,
-      createPublishedHappening,
-      getPublishedHappening,
+DIContainer.bind<AddParticipantMember>(IDENTIFIER.AddParticipantMember).toDynamicValue(
+  (context: interfaces.Context) => {
+    const memberParticipationService = context.container.get<MemberParticipationService>(
+      IDENTIFIER.MemberParticipationService,
     );
-  });
 
-  return DIContainer;
-};
+    return new AddParticipantMember(memberParticipationService);
+  },
+);
 
-export { DIContainerProvider };
+DIContainer.bind<PublishHappening>(IDENTIFIER.PublishHappening).toDynamicValue(
+  (context: interfaces.Context) => {
+    const memberParticipationService = context.container.get<MemberParticipationService>(
+      IDENTIFIER.MemberParticipationService,
+    );
+
+    return new PublishHappening(memberParticipationService);
+  },
+);
+
+DIContainer.bind<CreatePublishedHappening>(IDENTIFIER.CreatePublishedHappening).toDynamicValue(
+  (context: interfaces.Context) => {
+    const memberParticipationService = context.container.get<MemberParticipationService>(
+      IDENTIFIER.MemberParticipationService,
+    );
+
+    return new CreatePublishedHappening(memberParticipationService);
+  },
+);
+
+DIContainer.bind<GetPublishedHappening>(IDENTIFIER.GetPublishedHappening).toDynamicValue(
+  (context: interfaces.Context) => {
+    const memberParticipationService = context.container.get<MemberParticipationService>(
+      IDENTIFIER.MemberParticipationService,
+    );
+
+    return new GetPublishedHappening(memberParticipationService);
+  },
+);
+
+DIContainer.bind<MemberParticipationController>(
+  IDENTIFIER.MemberParticipationController,
+).toDynamicValue((context: interfaces.Context) => {
+  const createMemberParticipation = context.container.get<CreateMemberParticipation>(
+    IDENTIFIER.CreateMemberParticipation,
+  );
+  const getMemberParticipation = context.container.get<GetMemberParticipation>(
+    IDENTIFIER.GetMemberParticipation,
+  );
+  const memberParticipationService = context.container.get<GetMatchedMember>(
+    IDENTIFIER.GetMatchedMember,
+  );
+  const updateHappeningMetadata = context.container.get<UpdateHappeningMetadata>(
+    IDENTIFIER.UpdateHappeningMetadata,
+  );
+
+  const addParticipantMember = context.container.get<AddParticipantMember>(
+    IDENTIFIER.AddParticipantMember,
+  );
+  const createPublishedHappening = context.container.get<CreatePublishedHappening>(
+    IDENTIFIER.CreatePublishedHappening,
+  );
+
+  const getPublishedHappening = context.container.get<GetPublishedHappening>(
+    IDENTIFIER.GetPublishedHappening,
+  );
+
+  const publishHappening = context.container.get<PublishHappening>(IDENTIFIER.PublishHappening);
+
+  return new MemberParticipationController(
+    createMemberParticipation,
+    getMemberParticipation,
+    memberParticipationService,
+    updateHappeningMetadata,
+    addParticipantMember,
+    publishHappening,
+    createPublishedHappening,
+    getPublishedHappening,
+  );
+});
+
+export { DIContainer };

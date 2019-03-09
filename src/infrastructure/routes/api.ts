@@ -1,18 +1,9 @@
 import { Router, Request, Response } from 'express';
-import { DIContainerProvider } from '../di-container';
+import { DIContainer } from '../di-container';
 import IDENTIFIER from '../identifiers';
-import { MEMBER_INITIAL_LIST_MOCK } from '../../domain/member/member.mock';
-import { HAPPENING_INITIAL_LIST_MOCK } from '../../domain/happening/happening.mock';
-import { MEMBER_PARTICIPATIONS_INITIAL_MOCK } from '../../domain/member-participation/member-participation.mock';
 import { MemberParticipationController } from '../../interfaces/member-participation.controller';
 
 const router: Router = Router();
-
-const DIContainer = DIContainerProvider(
-  [...MEMBER_INITIAL_LIST_MOCK],
-  [...HAPPENING_INITIAL_LIST_MOCK],
-  [...MEMBER_PARTICIPATIONS_INITIAL_MOCK],
-);
 
 const memberParticipationController = DIContainer.get<MemberParticipationController>(
   IDENTIFIER.MemberParticipationController,

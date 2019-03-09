@@ -1,19 +1,16 @@
 import * as assert from 'assert';
 import * as sinon from 'sinon';
-import { Container } from 'inversify';
 import { HappeningFactory } from './happening.factory';
 import { Happening } from './happening';
-import { DIContainerProvider } from '../../infrastructure/di-container';
+import { DIContainer } from '../../infrastructure/di-container';
 import IDENTIFIER from '../../infrastructure/identifiers';
 import { Member } from '../member/member';
 
 describe('Happening', function() {
-  let DIContainer: Container;
   let happeningFactory: HappeningFactory;
   let happening: Happening;
 
   beforeEach(function() {
-    DIContainer = DIContainerProvider();
     happeningFactory = DIContainer.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
     happening = happeningFactory.create();
   });
