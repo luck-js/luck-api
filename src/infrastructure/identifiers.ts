@@ -19,6 +19,7 @@ const IDENTIFIER = {
   HappeningFactory: Symbol.for('HappeningFactory'),
 
   MemberParticipationService: Symbol.for('MemberParticipationService'),
+  CreateMemberParticipation: Symbol.for('CreateMemberParticipation'),
   GetMemberParticipation: Symbol.for('GetMemberParticipation'),
   GetMatchedMember: Symbol.for('GetMatchedMember'),
 
