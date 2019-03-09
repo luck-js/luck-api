@@ -63,10 +63,10 @@ router
 router
   .route('/happening/generate-detailed-participant-list-information/:id')
   .get((req: Request, res: Response) =>
-    memberParticipationController.createPublishedHappening(req, res),
+    memberParticipationController.getPublishedHappening(req, res),
   )
   .post((req: Request, res: Response) =>
-    happeningApi.generateDetailedParticipantListInformation(req, res),
+    memberParticipationController.createPublishedHappening(req, res),
   );
 
 export default router;

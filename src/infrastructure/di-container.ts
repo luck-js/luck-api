@@ -25,6 +25,7 @@ import { UpdateHappeningMetadata } from '../application/update-happening-metadat
 import { AddParticipantMember } from '../application/add-participant-member';
 import { PublishHappening } from '../application/publish-happening';
 import { CreatePublishedHappening } from '../application/create-published-happening';
+import { GetPublishedHappening } from '../application/get-published-happening';
 
 const DIContainerProvider = (
   MEMBER_INITIAL_LIST_MOCK?,
@@ -233,6 +234,16 @@ const DIContainerProvider = (
     },
   );
 
+  DIContainer.bind<GetPublishedHappening>(IDENTIFIER.GetPublishedHappening).toDynamicValue(
+    (context: interfaces.Context) => {
+      const memberParticipationService = context.container.get<MemberParticipationService>(
+        IDENTIFIER.MemberParticipationService,
+      );
+
+      return new GetPublishedHappening(memberParticipationService);
+    },
+  );
+
   DIContainer.bind<HappeningApi>(IDENTIFIER.HappeningApi).toDynamicValue(
     (context: interfaces.Context) => {
       const memberParticipationService = context.container.get<MemberParticipationService>(
@@ -266,6 +277,10 @@ const DIContainerProvider = (
       IDENTIFIER.CreatePublishedHappening,
     );
 
+    const getPublishedHappening = context.container.get<GetPublishedHappening>(
+      IDENTIFIER.GetPublishedHappening,
+    );
+
     const publishHappening = context.container.get<PublishHappening>(IDENTIFIER.PublishHappening);
 
     return new MemberParticipationController(
@@ -276,6 +291,7 @@ const DIContainerProvider = (
       addParticipantMember,
       publishHappening,
       createPublishedHappening,
+      getPublishedHappening,
     );
   });
 
