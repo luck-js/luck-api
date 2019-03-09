@@ -40,7 +40,9 @@ router
 
 router
   .route('/happening/edit/:id')
-  .post((req: Request, res: Response) => happeningApi.edit(req, res));
+  .post((req: Request, res: Response) =>
+    memberParticipationController.editHappeningMetadata(req, res),
+  );
 
 router
   .route('/happening/add-participant/:id')

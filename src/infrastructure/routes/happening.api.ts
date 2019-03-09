@@ -6,19 +6,6 @@ import { MemberParticipationService } from '../../domain/member-participation/me
 export class HappeningApi {
   constructor(private memberParticipationService: MemberParticipationService) {}
 
-  public edit(req: Request, res: Response) {
-    const { id } = req.params;
-    const option = req.body;
-    this.memberParticipationService
-      .updateHappeningMetadata(id, option)
-      .pipe(
-        take(1),
-        map(happening => res.json(happening)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();
-  }
-
   public publish(req: Request, res: Response) {
     const { id } = req.params;
     this.memberParticipationService
