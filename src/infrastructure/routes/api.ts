@@ -63,7 +63,7 @@ router
 router
   .route('/happening/generate-detailed-participant-list-information/:id')
   .get((req: Request, res: Response) =>
-    happeningApi.getGenerateDetailedParticipantListInformation(req, res),
+    memberParticipationController.createPublishedHappening(req, res),
   )
   .post((req: Request, res: Response) =>
     happeningApi.generateDetailedParticipantListInformation(req, res),

@@ -1,4 +1,4 @@
-import { INewParticipantView } from './member-view.model';
+import { INewParticipantView } from './new-member-view.model';
 
 export interface INewHappeningView {
   name: string;

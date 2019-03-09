@@ -1,5 +1,6 @@
 import { Member } from '../member/member';
 import { IHappeningMetadata } from './happening.model';
+import { RoleType } from '../member/event-member-role/event-member-role.model';
 
 export class Happening {
   constructor(
@@ -25,6 +26,10 @@ export class Happening {
 
   public getMembers(): Member[] {
     return this.members;
+  }
+
+  public getParticipants(): Member[] {
+    return this.members.filter(member => member.eventMemberRole.type !== RoleType.ORGANISER);
   }
 
   public updateMembers(members: Member[]): Member[] {

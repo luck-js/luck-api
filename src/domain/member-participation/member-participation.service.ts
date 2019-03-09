@@ -105,6 +105,19 @@ export class MemberParticipationService {
       }),
     );
   }
+
+  public addParticipantMembers(id: string, participants: { name: string }[]): Observable<Member[]> {
+    return this.get(id).pipe(
+      switchMap(memberParticipation => {
+        const participantMember = participants.map(({ name }) => {
+          return memberParticipation.happening.addMember(
+            this.memberFactory.create(RoleType.PARTICIPANT, name),
+          );
+        });
+        return this.update(memberParticipation).pipe(mapTo(participantMember));
+      }),
+    );
+  }
 }
 
 function mapToEntity({ id, member, happening }: MemberParticipation): IMemberParticipation {

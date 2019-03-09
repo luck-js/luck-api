@@ -23,6 +23,10 @@ export class MemberParticipation {
     return this.happening.getMembers();
   }
 
+  public getParticipants(): Member[] {
+    return this.happening.getParticipants();
+  }
+
   public getHappening(): Happening {
     return this.happening;
   }

@@ -31,19 +31,6 @@ export class HappeningApi {
       .subscribe();*/
   }
 
-  public generateDetailedParticipantListInformation(req: Request, res: Response) {
-    const { happening } = req.body;
-    const { id } = req.params;
-    /*this.memberParticipationService
-      .generateParticipantUniqueLinks(id, happening)
-      .pipe(
-        take(1),
-        map(createdHappening => res.json(createdHappening)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();*/
-  }
-
   private sendError(res: Response, code: number, text: string): Observable<null> {
     res.status(code);
     res.send(text);
