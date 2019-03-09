@@ -19,18 +19,6 @@ export class HappeningApi {
       .subscribe();*/
   }
 
-  public getGenerateDetailedParticipantListInformation(req: Request, res: Response) {
-    const { id } = req.params;
-    /*this.memberParticipationService
-      .getGeneratedParticipantUniqueLinks(id)
-      .pipe(
-        take(1),
-        map(createdHappening => res.json(createdHappening)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();*/
-  }
-
   private sendError(res: Response, code: number, text: string): Observable<null> {
     res.status(code);
     res.send(text);

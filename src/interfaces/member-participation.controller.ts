@@ -8,7 +8,7 @@ import { UpdateHappeningMetadata } from '../application/update-happening-metadat
 import { AddParticipantMember } from '../application/add-participant-member';
 import { PublishHappening } from '../application/publish-happening';
 import { CreatePublishedHappening } from '../application/create-published-happening';
-import { IPublishedHappeningView } from '../application/model/published-happening-view.model';
+import { GetPublishedHappening } from '../application/get-published-happening';
 
 export class MemberParticipationController {
   constructor(
@@ -19,6 +19,7 @@ export class MemberParticipationController {
     private addParticipantMemberApplication: AddParticipantMember,
     private publishHappeningApplication: PublishHappening,
     private createPublishedHappeningApplication: CreatePublishedHappening,
+    private getPublishedHappeningApplication: GetPublishedHappening,
   ) {}
 
   public createMemberParticipation(req: Request, res: Response) {
@@ -102,6 +103,18 @@ export class MemberParticipationController {
       .pipe(
         take(1),
         map(publishedHappeningView => res.json(publishedHappeningView)),
+        catchError(val => this.sendError(res, 400, val)),
+      )
+      .subscribe();
+  }
+
+  public getPublishedHappening(req: Request, res: Response) {
+    const { id } = req.params;
+    this.getPublishedHappeningApplication
+      .execute(id)
+      .pipe(
+        take(1),
+        map(createdHappening => res.json(createdHappening)),
         catchError(val => this.sendError(res, 400, val)),
       )
       .subscribe();
