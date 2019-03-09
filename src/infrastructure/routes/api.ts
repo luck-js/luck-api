@@ -16,10 +16,7 @@ const DIContainer = DIContainerProvider(
   [...HAPPENING_INITIAL_LIST_MOCK],
   [...MEMBER_PARTICIPATIONS_INITIAL_MOCK],
 );
-const getMemberParticipation = DIContainer.get<GetMemberParticipation>(
-  IDENTIFIER.GetMemberParticipation,
-);
-const getMatchedMember = DIContainer.get<GetMatchedMember>(IDENTIFIER.GetMatchedMember);
+
 const memberParticipationController = DIContainer.get<MemberParticipationController>(
   IDENTIFIER.MemberParticipationController,
 );
@@ -37,7 +34,9 @@ router
 
 router
   .route('/happening/create')
-  .post((req: Request, res: Response) => happeningApi.create(req, res));
+  .post((req: Request, res: Response) =>
+    memberParticipationController.createMemberParticipation(req, res),
+  );
 
 router
   .route('/happening/edit/:id')

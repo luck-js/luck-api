@@ -20,6 +20,7 @@ import { MemberService } from '../domain/member/member.service';
 import { GetMemberParticipation } from '../application/get-member-participation';
 import { GetMatchedMember } from '../application/matched-member';
 import { MemberParticipationController } from '../interfaces/member-participation.controller';
+import { CreateMemberParticipation } from '../application/create-member-participation';
 
 const DIContainerProvider = (
   MEMBER_INITIAL_LIST_MOCK?,
@@ -168,6 +169,16 @@ const DIContainerProvider = (
     },
   );
 
+  DIContainer.bind<CreateMemberParticipation>(IDENTIFIER.CreateMemberParticipation).toDynamicValue(
+    (context: interfaces.Context) => {
+      const memberParticipationService = context.container.get<MemberParticipationService>(
+        IDENTIFIER.MemberParticipationService,
+      );
+
+      return new CreateMemberParticipation(memberParticipationService);
+    },
+  );
+
   DIContainer.bind<GetMatchedMember>(IDENTIFIER.GetMatchedMember).toDynamicValue(
     (context: interfaces.Context) => {
       const memberParticipationService = context.container.get<MemberParticipationService>(
@@ -191,6 +202,9 @@ const DIContainerProvider = (
   DIContainer.bind<MemberParticipationController>(
     IDENTIFIER.MemberParticipationController,
   ).toDynamicValue((context: interfaces.Context) => {
+    const createMemberParticipation = context.container.get<CreateMemberParticipation>(
+      IDENTIFIER.CreateMemberParticipation,
+    );
     const getMemberParticipation = context.container.get<GetMemberParticipation>(
       IDENTIFIER.GetMemberParticipation,
     );
@@ -198,7 +212,11 @@ const DIContainerProvider = (
       IDENTIFIER.GetMatchedMember,
     );
 
-    return new MemberParticipationController(getMemberParticipation, memberParticipationService);
+    return new MemberParticipationController(
+      createMemberParticipation,
+      getMemberParticipation,
+      memberParticipationService,
+    );
   });
 
   return DIContainer;

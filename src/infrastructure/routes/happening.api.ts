@@ -1,21 +1,10 @@
 import { Request, Response } from 'express';
 import { catchError, map, take } from 'rxjs/operators';
-import { MemberParticipationService } from '../../domain/member-participation/member-participation.service';
 import { Observable, of } from 'rxjs';
+import { MemberParticipationService } from '../../domain/member-participation/member-participation.service';
 
 export class HappeningApi {
   constructor(private memberParticipationService: MemberParticipationService) {}
-
-  public create(req: Request, res: Response) {
-    this.memberParticipationService
-      .create()
-      .pipe(
-        take(1),
-        map(id => res.json(id)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();
-  }
 
   public edit(req: Request, res: Response) {
     const { id } = req.params;
