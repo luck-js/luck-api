@@ -32,6 +32,14 @@ export class Happening {
     return this.members.filter(member => member.eventMemberRole.type !== RoleType.ORGANISER);
   }
 
+  public getMatchedMember(matchedMemberId: string): Member {
+    if (!this.isPublish) {
+      throw new Error("Happening isn't publishing");
+    }
+
+    return this.members.find(member => matchedMemberId === member.id);
+  }
+
   public updateMembers(members: Member[]): Member[] {
     if (this.isPublish) {
       throw new Error('Happening is publishing');

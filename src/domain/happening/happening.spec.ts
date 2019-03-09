@@ -37,16 +37,27 @@ describe('Happening', function() {
     });
   });
 
-  describe('Publish happening event', function() {
+  describe('Not Published happening', function() {
     it("Members could updated when happening isn't publishing", function() {
       const members: Member[] = sinon.mock([Member]);
       assert.doesNotThrow(() => happening.updateMembers(members));
     });
 
+    it("Happening throw error when isn't publishing", function() {
+      assert.throws(() => happening.getMatchedMember('1'));
+    });
+  });
+
+  describe('Published happening', function() {
     it("Members couldn't updated when happening is publishing", function() {
       happening.publishEvent();
       const members: Member[] = sinon.mock([Member]);
       assert.throws(() => happening.updateMembers(members));
+    });
+
+    it("Happening don't throw error when is publishing", function() {
+      happening.publishEvent();
+      assert.doesNotThrow(() => happening.getMatchedMember('1'));
     });
   });
 });
