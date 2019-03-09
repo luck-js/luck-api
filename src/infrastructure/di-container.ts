@@ -21,6 +21,7 @@ import { GetMemberParticipation } from '../application/get-member-participation'
 import { GetMatchedMember } from '../application/matched-member';
 import { MemberParticipationController } from '../interfaces/member-participation.controller';
 import { CreateMemberParticipation } from '../application/create-member-participation';
+import { UpdateHappeningMetadata } from '../application/update-happening-metadata';
 
 const DIContainerProvider = (
   MEMBER_INITIAL_LIST_MOCK?,
@@ -189,6 +190,16 @@ const DIContainerProvider = (
     },
   );
 
+  DIContainer.bind<UpdateHappeningMetadata>(IDENTIFIER.UpdateHappeningMetadata).toDynamicValue(
+    (context: interfaces.Context) => {
+      const memberParticipationService = context.container.get<MemberParticipationService>(
+        IDENTIFIER.MemberParticipationService,
+      );
+
+      return new UpdateHappeningMetadata(memberParticipationService);
+    },
+  );
+
   DIContainer.bind<HappeningApi>(IDENTIFIER.HappeningApi).toDynamicValue(
     (context: interfaces.Context) => {
       const memberParticipationService = context.container.get<MemberParticipationService>(
@@ -211,11 +222,15 @@ const DIContainerProvider = (
     const memberParticipationService = context.container.get<GetMatchedMember>(
       IDENTIFIER.GetMatchedMember,
     );
+    const updateHappeningMetadata = context.container.get<UpdateHappeningMetadata>(
+      IDENTIFIER.UpdateHappeningMetadata,
+    );
 
     return new MemberParticipationController(
       createMemberParticipation,
       getMemberParticipation,
       memberParticipationService,
+      updateHappeningMetadata,
     );
   });
 
