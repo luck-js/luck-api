@@ -1,4 +1,4 @@
-import { MemberRepository } from './member.repository';
+import { MemberMongoRepository } from '../../infrastructure/mongo/member-mongo.repository';
 import { MemberFactory } from './member.factory';
 import { Member } from './member';
 import { forkJoin, Observable } from 'rxjs';
@@ -7,7 +7,10 @@ import { IMember } from './member.model';
 import { RoleType } from './event-member-role/event-member-role.model';
 
 export class MemberService {
-  constructor(private memberRepository: MemberRepository, private memberFactory: MemberFactory) {}
+  constructor(
+    private memberRepository: MemberMongoRepository,
+    private memberFactory: MemberFactory,
+  ) {}
 
   create(type: RoleType, name: string = ''): Member {
     return this.memberFactory.create(type, name);

@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { Container, interfaces } from 'inversify';
 import IDENTIFIER from './identifiers';
 import { MemberParticipationRepository } from '../domain/member-participation/member-participation.repository';
-import { MemberRepository } from '../domain/member/member.repository';
+import { MemberMongoRepository } from './mongo/member-mongo.repository';
 import { HappeningRepository } from '../domain/happening/happening.repository';
 import { HappeningFactory } from '../domain/happening/happening.factory';
 import { MatchingService } from '../domain/matching.service';
@@ -25,6 +25,7 @@ import { AddParticipantMember } from '../application/add-participant-member';
 import { PublishHappening } from '../application/publish-happening';
 import { CreatePublishedHappening } from '../application/create-published-happening';
 import { GetPublishedHappening } from '../application/get-published-happening';
+import { IMemberRepository } from '../domain/member/member.repository';
 
 const DIContainer = new Container();
 
@@ -34,9 +35,9 @@ DIContainer.bind<MemberParticipationRepository>(IDENTIFIER.MemberParticipationRe
   })
   .inSingletonScope();
 
-DIContainer.bind<MemberRepository>(IDENTIFIER.MemberRepository)
+DIContainer.bind<IMemberRepository>(IDENTIFIER.MemberRepository)
   .toDynamicValue((context: interfaces.Context) => {
-    return new MemberRepository();
+    return new MemberMongoRepository();
   })
   .inSingletonScope();
 
@@ -44,7 +45,9 @@ DIContainer.bind<MatchingService>(IDENTIFIER.MatchingService).to(MatchingService
 
 DIContainer.bind<MemberService>(IDENTIFIER.MemberService).toDynamicValue(
   (context: interfaces.Context) => {
-    const memberRepository = context.container.get<MemberRepository>(IDENTIFIER.MemberRepository);
+    const memberRepository = context.container.get<MemberMongoRepository>(
+      IDENTIFIER.MemberRepository,
+    );
     const memberFactory = context.container.get<MemberFactory>(IDENTIFIER.MemberFactory);
 
     return new MemberService(memberRepository, memberFactory);

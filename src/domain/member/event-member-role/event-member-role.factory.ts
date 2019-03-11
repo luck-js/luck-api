@@ -1,8 +1,9 @@
 import { injectable } from 'inversify';
-import { IEventMemberRole, RoleType } from './event-member-role.model';
+import { RoleType } from './event-member-role.model';
 import { EventMemberRole } from './event-member-role';
 import { Organiser } from './organiser/organiser';
 import { Participant } from './participant/participant';
+import { IEventMemberRole } from './event-member-role.model';
 
 @injectable()
 export class EventMemberRoleFactory {

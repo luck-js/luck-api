@@ -1,4 +1,5 @@
-import { IEventMemberRole, RoleType } from './event-member-role.model';
+import { RoleType } from './event-member-role.model';
+import { IEventMemberRole } from './event-member-role.model';
 
 export abstract class EventMemberRole implements IEventMemberRole {
   public type: RoleType;
