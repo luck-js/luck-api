@@ -6,7 +6,7 @@ import { mapTo } from 'rxjs/operators';
 
 @injectable()
 export class MemberMockRepository implements IMemberRepository {
-  constructor(private list: IMember[]) {}
+  constructor(private list: IMember[] = []) {}
 
   public add(member: IMember): Observable<IMember> {
     this.list.push(member);

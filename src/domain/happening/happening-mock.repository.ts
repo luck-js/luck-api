@@ -5,7 +5,7 @@ import { IHappening } from './happening.model';
 
 @injectable()
 export class HappeningMockRepository implements IHappeningRepository {
-  constructor(private list: IHappening[]) {}
+  constructor(private list: IHappening[] = []) {}
 
   public add(happening: IHappening): Observable<IHappening> {
     this.list.push(happening);
