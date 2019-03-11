@@ -1,4 +1,4 @@
-import { MemberMongoRepository } from '../../infrastructure/mongo/member-mongo.repository';
+import { MemberMongoRepository } from '../../infrastructure/mongo/member/member-mongo.repository';
 import { MemberFactory } from './member.factory';
 import { Member } from './member';
 import { forkJoin, Observable } from 'rxjs';

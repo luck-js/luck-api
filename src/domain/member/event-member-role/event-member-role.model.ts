@@ -5,6 +5,6 @@ export enum RoleType {
 
 export interface IEventMemberRole {
   type: RoleType;
-  abilityToRandom?: boolean;
-  matchedMemberId?: string;
+  abilityToRandom: boolean;
+  matchedMemberId: string;
 }

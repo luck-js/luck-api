@@ -1,4 +1,4 @@
-import { HappeningRepository } from './happening.repository';
+import { HappeningMongoRepository } from '../../infrastructure/mongo/happening/happening-mongo.repository';
 import { Happening } from './happening';
 import { Observable } from 'rxjs';
 import { HappeningFactory } from './happening.factory';
@@ -10,7 +10,7 @@ import { IHappening } from './happening.model';
 export class HappeningService {
   constructor(
     private memberService: MemberService,
-    private happeningRepository: HappeningRepository,
+    private happeningRepository: HappeningMongoRepository,
     private happeningFactory: HappeningFactory,
   ) {}
 
