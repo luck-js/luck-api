@@ -1,6 +1,6 @@
 const IDENTIFIER = {
   MemberParticipationRepository: Symbol.for('MemberParticipationRepository'),
-  MemberRepository: Symbol.for('MemberRepository'),
+  MemberRepository: Symbol.for('MemberMongoRepository'),
   HappeningRepository: Symbol.for('HappeningRepository'),
 
   DIFactoryHappening: Symbol.for('DIFactoryHappening'),
