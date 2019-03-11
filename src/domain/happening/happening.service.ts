@@ -1,4 +1,3 @@
-import { HappeningMongoRepository } from '../../infrastructure/mongo/happening/happening-mongo.repository';
 import { Happening } from './happening';
 import { Observable } from 'rxjs';
 import { HappeningFactory } from './happening.factory';
@@ -6,11 +5,12 @@ import { map, mapTo, switchMap } from 'rxjs/operators';
 import { MemberService } from '../member/member.service';
 import { Member } from '../member/member';
 import { IHappening } from './happening.model';
+import { IHappeningRepository } from './happening.repository';
 
 export class HappeningService {
   constructor(
     private memberService: MemberService,
-    private happeningRepository: HappeningMongoRepository,
+    private happeningRepository: IHappeningRepository,
     private happeningFactory: HappeningFactory,
   ) {}
 

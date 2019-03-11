@@ -1,7 +1,7 @@
 const IDENTIFIER = {
   MemberParticipationRepository: Symbol.for('MemberParticipationRepository'),
-  MemberRepository: Symbol.for('MemberMongoRepository'),
-  HappeningRepository: Symbol.for('HappeningMongoRepository'),
+  MemberRepository: Symbol.for('MemberRepository'),
+  HappeningRepository: Symbol.for('HappeningRepository'),
 
   MemberService: Symbol.for('MemberService'),
   HappeningService: Symbol.for('HappeningService'),

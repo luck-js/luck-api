@@ -1,16 +1,13 @@
-import { MemberMongoRepository } from '../../infrastructure/mongo/member/member-mongo.repository';
 import { MemberFactory } from './member.factory';
 import { Member } from './member';
 import { forkJoin, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { IMember } from './member.model';
 import { RoleType } from './event-member-role/event-member-role.model';
+import { IMemberRepository } from './member.repository';
 
 export class MemberService {
-  constructor(
-    private memberRepository: MemberMongoRepository,
-    private memberFactory: MemberFactory,
-  ) {}
+  constructor(private memberRepository: IMemberRepository, private memberFactory: MemberFactory) {}
 
   create(type: RoleType, name: string = ''): Member {
     return this.memberFactory.create(type, name);
