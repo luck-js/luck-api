@@ -2,16 +2,14 @@ import 'reflect-metadata';
 import { Container, interfaces } from 'inversify';
 import IDENTIFIER from './identifiers';
 import { MemberParticipationRepository } from '../domain/member-participation/member-participation.repository';
-import { MemberMongoRepository } from './mongo/member-mongo.repository';
-import { HappeningRepository } from '../domain/happening/happening.repository';
+import { MemberMongoRepository } from './mongo/member/member-mongo.repository';
+import { HappeningMongoRepository } from './mongo/happening/happening-mongo.repository';
 import { HappeningFactory } from '../domain/happening/happening.factory';
 import { MatchingService } from '../domain/matching.service';
 import { UuidGenerationService } from '../domain/member/uuid-generation.service';
 import { MemberParticipationFactory } from '../domain/member-participation/member-participation.factory';
 import { MemberFactory } from '../domain/member/member.factory';
-import { Member } from '../domain/member/member';
 import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
-import { IMember } from '../domain/member/member.model';
 import { MatchingMemberService } from '../domain/matching-member.service';
 import { EventMemberRoleFactory } from '../domain/member/event-member-role/event-member-role.factory';
 import { HappeningService } from '../domain/happening/happening.service';
@@ -26,6 +24,7 @@ import { PublishHappening } from '../application/publish-happening';
 import { CreatePublishedHappening } from '../application/create-published-happening';
 import { GetPublishedHappening } from '../application/get-published-happening';
 import { IMemberRepository } from '../domain/member/member.repository';
+import { IHappeningRepository } from '../domain/happening/happening.repository';
 
 const DIContainer = new Container();
 
@@ -57,7 +56,7 @@ DIContainer.bind<MemberService>(IDENTIFIER.MemberService).toDynamicValue(
 DIContainer.bind<HappeningService>(IDENTIFIER.HappeningService).toDynamicValue(
   (context: interfaces.Context) => {
     const memberService = context.container.get<MemberService>(IDENTIFIER.MemberService);
-    const happeningRepository = context.container.get<HappeningRepository>(
+    const happeningRepository = context.container.get<HappeningMongoRepository>(
       IDENTIFIER.HappeningRepository,
     );
     const happeningFactory = context.container.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
@@ -90,28 +89,18 @@ DIContainer.bind<MemberFactory>(IDENTIFIER.MemberFactory).toDynamicValue(
     const uuidGenerationService = context.container.get<UuidGenerationService>(
       IDENTIFIER.UuidGenerationService,
     );
-    const DIFactoryMember = context.container.get<(option: IMember) => Member>(
-      IDENTIFIER.DIFactoryMember,
-    );
+
     const eventMemberRoleFactory = context.container.get<EventMemberRoleFactory>(
       IDENTIFIER.EventMemberRoleFactory,
     );
 
-    return new MemberFactory(uuidGenerationService, eventMemberRoleFactory, DIFactoryMember);
+    return new MemberFactory(uuidGenerationService, eventMemberRoleFactory);
   },
 );
 
 DIContainer.bind<EventMemberRoleFactory>(IDENTIFIER.EventMemberRoleFactory).toDynamicValue(
   (context: interfaces.Context) => {
     return new EventMemberRoleFactory();
-  },
-);
-
-DIContainer.bind<(option: IMember) => Member>(IDENTIFIER.DIFactoryMember).toFactory<Member>(
-  context => {
-    return ({ id, name, eventMemberRole }: IMember) => {
-      return new Member(id, name, eventMemberRole);
-    };
   },
 );
 
@@ -125,9 +114,9 @@ DIContainer.bind<HappeningFactory>(IDENTIFIER.HappeningFactory).toDynamicValue(
   },
 );
 
-DIContainer.bind<HappeningRepository>(IDENTIFIER.HappeningRepository)
+DIContainer.bind<IHappeningRepository>(IDENTIFIER.HappeningRepository)
   .toDynamicValue((context: interfaces.Context) => {
-    return new HappeningRepository();
+    return new HappeningMongoRepository();
   })
   .inSingletonScope();
 

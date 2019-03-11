@@ -2,7 +2,7 @@ import { Document, model, Schema } from 'mongoose';
 import {
   IEventMemberRole,
   RoleType,
-} from '../../domain/member/event-member-role/event-member-role.model';
+} from '../../../domain/member/event-member-role/event-member-role.model';
 
 export interface IEventMemberRoleSchema extends IEventMemberRole, Document {}
 

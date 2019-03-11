@@ -5,24 +5,25 @@
  *   generate by https://www.json-generator.com/#
  */
 
-export const ORGANISER_INITIAL_MOCK = {
+import { IMember } from './member.model';
+import { RoleType } from './event-member-role/event-member-role.model';
+
+export const ORGANISER_INITIAL_MOCK: IMember = {
   id: '0',
   name: 'Janet',
-  relationId: '53ae0bde-1c3c-4db7-90f7-14366243cdb9',
   eventMemberRole: {
-    type: 'ORGANISER',
+    type: RoleType.ORGANISER,
     matchedMemberId: null,
     abilityToRandom: false,
   },
 };
 
-export const PARTICIPANT_INITIAL_LIST_MOCK = [
+export const PARTICIPANT_INITIAL_LIST_MOCK: IMember[] = [
   {
     id: '1',
     name: 'Kline',
-    relationId: '8f1b628e-ce03-442d-b100-b45bb25dd6e6',
     eventMemberRole: {
-      type: 'PARTICIPANT',
+      type: RoleType.PARTICIPANT,
       matchedMemberId: null,
       abilityToRandom: true,
     },
@@ -30,9 +31,8 @@ export const PARTICIPANT_INITIAL_LIST_MOCK = [
   {
     id: '2',
     name: 'Le',
-    relationId: '3b967f8a-159a-4b6c-be6e-793a86373137',
     eventMemberRole: {
-      type: 'PARTICIPANT',
+      type: RoleType.PARTICIPANT,
       matchedMemberId: null,
       abilityToRandom: true,
     },
@@ -40,9 +40,8 @@ export const PARTICIPANT_INITIAL_LIST_MOCK = [
   {
     id: '3',
     name: 'Barlow',
-    relationId: '45d3247e-42ce-4af9-b481-7f578fe7cb9f',
     eventMemberRole: {
-      type: 'PARTICIPANT',
+      type: RoleType.PARTICIPANT,
       matchedMemberId: null,
       abilityToRandom: true,
     },
@@ -50,9 +49,8 @@ export const PARTICIPANT_INITIAL_LIST_MOCK = [
   {
     id: '4',
     name: 'Jean',
-    relationId: '0d0596af-90ff-4b96-8443-5663d775a79b',
     eventMemberRole: {
-      type: 'PARTICIPANT',
+      type: RoleType.PARTICIPANT,
       matchedMemberId: null,
       abilityToRandom: true,
     },
@@ -60,9 +58,8 @@ export const PARTICIPANT_INITIAL_LIST_MOCK = [
   {
     id: '5',
     name: 'Sheila',
-    relationId: 'baaa99d3-a6aa-41c6-8f5c-601cdea6b586',
     eventMemberRole: {
-      type: 'PARTICIPANT',
+      type: RoleType.PARTICIPANT,
       matchedMemberId: null,
       abilityToRandom: true,
     },

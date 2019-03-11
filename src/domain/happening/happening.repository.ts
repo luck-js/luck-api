@@ -1,18 +1,10 @@
-import { injectable } from 'inversify';
-import { Observable, from } from 'rxjs';
-import HappeningModel, { IHappening } from './happening.model';
+import { Observable } from 'rxjs';
+import { IHappening } from './happening.model';
 
-@injectable()
-export class HappeningRepository {
-  public add({ id, name, description, isPublish, memberIds }: IHappening): Observable<IHappening> {
-    return from(new HappeningModel({ id, name, description, isPublish, memberIds }).save());
-  }
+export interface IHappeningRepository {
+  add(happening: IHappening): Observable<IHappening>;
 
-  public getByIndex(id: string): Observable<IHappening> {
-    return from(HappeningModel.findOne({ id: id }, null, { limit: 1 }).exec());
-  }
+  getByIndex(id: string): Observable<IHappening>;
 
-  public update(id: string, option: IHappening): Observable<IHappening> {
-    return from(HappeningModel.findOneAndUpdate({ id }, option, { new: true }).exec());
-  }
+  update(id: string, happening: IHappening): Observable<IHappening>;
 }

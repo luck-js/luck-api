@@ -1,6 +1,6 @@
 import { Document, model, Schema } from 'mongoose';
 import { EventMemberRoleSchema } from './event-member-role.schema';
-import { IMember } from '../../domain/member/member.model';
+import { IMember } from '../../../domain/member/member.model';
 
 export interface IMemberSchema extends IMember, Document {
   id: string;

@@ -1,8 +1,8 @@
 import { injectable } from 'inversify';
 import { Observable, from, forkJoin } from 'rxjs';
 import MemberModel from './member.schema';
-import { IMemberRepository } from '../../domain/member/member.repository';
-import { IMember } from '../../domain/member/member.model';
+import { IMemberRepository } from '../../../domain/member/member.repository';
+import { IMember } from '../../../domain/member/member.model';
 
 @injectable()
 export class MemberMongoRepository implements IMemberRepository {
