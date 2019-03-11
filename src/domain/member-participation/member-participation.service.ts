@@ -1,7 +1,6 @@
 import { injectable } from 'inversify';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, mapTo, switchMap } from 'rxjs/operators';
-import { MemberParticipationRepository } from './member-participation.repository';
 import { MemberParticipationFactory } from './member-participation.factory';
 import { Member } from '../member/member';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
@@ -12,6 +11,7 @@ import { IMemberParticipation } from './member-participation.model';
 import { MemberFactory } from '../member/member.factory';
 import { HappeningFactory } from '../happening/happening.factory';
 import { MatchingMemberService } from '../matching-member.service';
+import { IMemberParticipationRepository } from './member-participation.repository';
 
 @injectable()
 export class MemberParticipationService {
@@ -20,7 +20,7 @@ export class MemberParticipationService {
     private matchingMemberService: MatchingMemberService,
     private memberFactory: MemberFactory,
     private happeningFactory: HappeningFactory,
-    private memberParticipationRepository: MemberParticipationRepository,
+    private memberParticipationRepository: IMemberParticipationRepository,
     private memberParticipationFactory: MemberParticipationFactory,
   ) {}
 

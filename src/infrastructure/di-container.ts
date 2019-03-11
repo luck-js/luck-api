@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { Container, interfaces } from 'inversify';
 import IDENTIFIER from './identifiers';
-import { MemberParticipationRepository } from '../domain/member-participation/member-participation.repository';
+import { MemberParticipationMongoRepository } from './mongo/member-participation/member-participation-mongo.repository';
 import { MemberMongoRepository } from './mongo/member/member-mongo.repository';
 import { HappeningMongoRepository } from './mongo/happening/happening-mongo.repository';
 import { HappeningFactory } from '../domain/happening/happening.factory';
@@ -25,12 +25,13 @@ import { CreatePublishedHappening } from '../application/create-published-happen
 import { GetPublishedHappening } from '../application/get-published-happening';
 import { IMemberRepository } from '../domain/member/member.repository';
 import { IHappeningRepository } from '../domain/happening/happening.repository';
+import { IMemberParticipationRepository } from '../domain/member-participation/member-participation.repository';
 
 const DIContainer = new Container();
 
-DIContainer.bind<MemberParticipationRepository>(IDENTIFIER.MemberParticipationRepository)
+DIContainer.bind<IMemberParticipationRepository>(IDENTIFIER.MemberParticipationRepository)
   .toDynamicValue((context: interfaces.Context) => {
-    return new MemberParticipationRepository();
+    return new MemberParticipationMongoRepository();
   })
   .inSingletonScope();
 
@@ -44,9 +45,7 @@ DIContainer.bind<MatchingService>(IDENTIFIER.MatchingService).to(MatchingService
 
 DIContainer.bind<MemberService>(IDENTIFIER.MemberService).toDynamicValue(
   (context: interfaces.Context) => {
-    const memberRepository = context.container.get<MemberMongoRepository>(
-      IDENTIFIER.MemberRepository,
-    );
+    const memberRepository = context.container.get<IMemberRepository>(IDENTIFIER.MemberRepository);
     const memberFactory = context.container.get<MemberFactory>(IDENTIFIER.MemberFactory);
 
     return new MemberService(memberRepository, memberFactory);
@@ -56,7 +55,7 @@ DIContainer.bind<MemberService>(IDENTIFIER.MemberService).toDynamicValue(
 DIContainer.bind<HappeningService>(IDENTIFIER.HappeningService).toDynamicValue(
   (context: interfaces.Context) => {
     const memberService = context.container.get<MemberService>(IDENTIFIER.MemberService);
-    const happeningRepository = context.container.get<HappeningMongoRepository>(
+    const happeningRepository = context.container.get<IHappeningRepository>(
       IDENTIFIER.HappeningRepository,
     );
     const happeningFactory = context.container.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
@@ -129,7 +128,7 @@ DIContainer.bind<MemberParticipationService>(IDENTIFIER.MemberParticipationServi
     const happeningFactory = context.container.get<HappeningFactory>(IDENTIFIER.HappeningFactory);
 
     const memberFactory = context.container.get<MemberFactory>(IDENTIFIER.MemberFactory);
-    const memberParticipationRepository = context.container.get<MemberParticipationRepository>(
+    const memberParticipationRepository = context.container.get<IMemberParticipationRepository>(
       IDENTIFIER.MemberParticipationRepository,
     );
 
