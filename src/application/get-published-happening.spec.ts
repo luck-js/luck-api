@@ -33,4 +33,16 @@ describe('GetPublishedHappening', function() {
       );
     });
   });
+
+  it('executed method return members list with unique links', function() {
+    const memberParticipationId = MEMBER_PARTICIPATIONS_INITIAL_MOCK[0].id;
+
+    getPublishedHappening.execute(memberParticipationId).subscribe(publishedHappeningView => {
+      publishedHappeningView.participants.reduce((stateUniqueLinks, participant) => {
+        assert.ok(!stateUniqueLinks.some(uniqueLink => uniqueLink === participant.uniqueLink));
+        stateUniqueLinks.push(participant.uniqueLink);
+        return stateUniqueLinks;
+      }, []);
+    });
+  });
 });
