@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import { Request, Response } from 'express';
 import { catchError, map, take } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
@@ -10,6 +11,7 @@ import { PublishHappening } from '../application/publish-happening';
 import { CreatePublishedHappening } from '../application/create-published-happening';
 import { GetPublishedHappening } from '../application/get-published-happening';
 
+@injectable()
 export class MemberParticipationController {
   constructor(
     private createMemberParticipationApplication: CreateMemberParticipation,

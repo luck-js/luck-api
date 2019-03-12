@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import { Observable } from 'rxjs';
 import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
 import { map } from 'rxjs/operators';
@@ -5,6 +6,7 @@ import { Happening } from '../domain/happening/happening';
 import { IHappeningView } from './model/happening-view.model';
 import { IHappeningMetadata } from '../domain/happening/happening.model';
 
+@injectable()
 export class UpdateHappeningMetadata {
   constructor(private relationMemberHappeningService: MemberParticipationService) {}
 

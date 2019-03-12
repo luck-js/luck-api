@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import { Happening } from './happening';
 import { Observable } from 'rxjs';
 import { HappeningFactory } from './happening.factory';
@@ -7,6 +8,7 @@ import { Member } from '../member/member';
 import { IHappening } from './happening.model';
 import { IHappeningRepository } from './happening.repository';
 
+@injectable()
 export class HappeningService {
   constructor(
     private memberService: MemberService,
