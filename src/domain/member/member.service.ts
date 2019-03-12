@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import { MemberFactory } from './member.factory';
 import { Member } from './member';
 import { forkJoin, Observable } from 'rxjs';
@@ -6,6 +7,7 @@ import { IMember } from './member.model';
 import { RoleType } from './event-member-role/event-member-role.model';
 import { IMemberRepository } from './member.repository';
 
+@injectable()
 export class MemberService {
   constructor(private memberRepository: IMemberRepository, private memberFactory: MemberFactory) {}
 

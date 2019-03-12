@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import { Observable } from 'rxjs';
 import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
 import { map, switchMap } from 'rxjs/operators';
@@ -5,6 +6,7 @@ import { INewHappeningView } from './model/new-happening-view.model';
 import { MemberParticipation } from '../domain/member-participation/member-participation';
 import { IPublishedHappeningView } from './model/published-happening-view.model';
 
+@injectable()
 export class CreatePublishedHappening {
   constructor(private memberParticipationService: MemberParticipationService) {}
 
