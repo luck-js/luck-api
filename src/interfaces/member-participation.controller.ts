@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { catchError, map, take } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { GetMemberParticipation } from '../application/get-member-participation';
-import { GetMatchedMember } from '../application/matched-member';
+import { GetMatchedMember } from '../application/get-matched-member';
 import { CreateMemberParticipation } from '../application/create-member-participation';
 import { UpdateHappeningMetadata } from '../application/update-happening-metadata';
 import { AddParticipantMember } from '../application/add-participant-member';
