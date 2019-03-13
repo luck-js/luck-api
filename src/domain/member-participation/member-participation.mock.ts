@@ -34,4 +34,19 @@ export const MEMBER_PARTICIPATIONS_INITIAL_MOCK: IMemberParticipation[] = [
     memberId: '5',
     happeningId: '0',
   },
+  {
+    id: '45d3247e-ffff-4af9-b481-7f578fe7cb9f',
+    memberId: '0',
+    happeningId: '1',
+  },
+  {
+    id: '0d0596af-gggg-4b96-8443-5663d775a79b',
+    memberId: '11',
+    happeningId: '1',
+  },
+  {
+    id: 'baaa99d3-yyyy-41c6-8f5c-601cdea6b586',
+    memberId: '22',
+    happeningId: '1',
+  },
 ];
