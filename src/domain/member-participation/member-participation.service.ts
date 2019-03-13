@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, mapTo, switchMap } from 'rxjs/operators';
+import { map, mapTo, switchMap } from 'rxjs/operators';
 import { MemberParticipationFactory } from './member-participation.factory';
 import { Member } from '../member/member';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
@@ -85,10 +85,9 @@ export class MemberParticipationService {
     };
 
     return this.get(id).pipe(
-      filter(memberParticipation => !memberParticipation.happening.isPublish),
       switchMap(memberParticipation => {
-        memberParticipation.publishHappening();
         memberParticipation.updateMembers(matchMember(memberParticipation.happening.getMembers()));
+        memberParticipation.publishHappening();
         return this.update(memberParticipation);
       }),
       mapTo(null),
