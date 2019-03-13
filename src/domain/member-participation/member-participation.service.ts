@@ -106,13 +106,18 @@ export class MemberParticipationService {
   }
 
   public addParticipantMember(id: string, name: string): Observable<Member> {
+    const newMemberParticipation = happening => {
+      const participantMember = happening.addMember(
+        this.memberFactory.create(RoleType.PARTICIPANT, name),
+      );
+
+      return this.memberParticipationFactory.create(participantMember, happening);
+    };
+
     return this.get(id).pipe(
-      switchMap(memberParticipation => {
-        const participantMember = memberParticipation.happening.addMember(
-          this.memberFactory.create(RoleType.PARTICIPANT, name),
-        );
-        return this.update(memberParticipation).pipe(mapTo(participantMember));
-      }),
+      map(memberParticipation => newMemberParticipation(memberParticipation.happening)),
+      switchMap(memberParticipation => this.add(memberParticipation)),
+      map(memberParticipation => memberParticipation.getMember()),
     );
   }
 
