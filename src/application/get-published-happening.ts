@@ -11,19 +11,18 @@ export class GetPublishedHappening {
 
   public execute(id: string): Observable<IPublishedHappeningView> {
     return this.memberParticipationService
-      .get(id)
-      .pipe(map(memberParticipation => mapToPublishedHappeningView(memberParticipation)));
+      .getListByHappeningId(id)
+      .pipe(map(memberParticipations => mapToPublishedHappeningView(memberParticipations)));
   }
 }
 
 function mapToPublishedHappeningView(
-  memberParticipation: MemberParticipation,
+  memberParticipations: MemberParticipation[],
 ): IPublishedHappeningView {
-  const { name, description } = memberParticipation.happening;
-  const participants = memberParticipation.getParticipants().map(participant => ({
-    name: participant.name,
-    // TODO: get unique link from Member -> MemberParticipation relation
-    uniqueLink: null,
+  const { name, description } = memberParticipations[0].happening;
+  const participants = memberParticipations.map(memberParticipation => ({
+    name: memberParticipation.getMember().name,
+    uniqueLink: memberParticipation.id,
   }));
 
   return {

@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, forkJoin, Observable } from 'rxjs';
 import { map, mapTo, switchMap } from 'rxjs/operators';
 import { MemberParticipationFactory } from './member-participation.factory';
 import { Member } from '../member/member';
@@ -63,6 +63,17 @@ export class MemberParticipationService {
     return combineLatest([memberParticipation$, happening$]).pipe(
       map(([memberParticipation, happening]) =>
         recreateMemberParticipation(memberParticipation, happening),
+      ),
+    );
+  }
+
+  getListByHappeningId(id: string): Observable<MemberParticipation[]> {
+    return this.memberParticipationRepository.getByIndex(id).pipe(
+      switchMap(memberParticipation =>
+        this.memberParticipationRepository.getByHappeningIndex(memberParticipation.happeningId),
+      ),
+      switchMap(memberParticipations =>
+        forkJoin(memberParticipations.map(memberParticipation => this.get(memberParticipation.id))),
       ),
     );
   }
