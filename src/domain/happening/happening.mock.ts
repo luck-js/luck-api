@@ -15,7 +15,7 @@ export const HAPPENING_INITIAL_LIST_MOCK: IHappening[] = [
     id: '1',
     name: 'Happening Sloan',
     description: '',
-    isPublish: false,
-    memberIds: [],
+    isPublish: true,
+    memberIds: ['0', '11', '22'],
   },
 ];

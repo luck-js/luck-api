@@ -64,6 +64,24 @@ export const PARTICIPANT_INITIAL_LIST_MOCK: IMember[] = [
       abilityToRandom: true,
     },
   },
+  {
+    id: '11',
+    name: 'Jean 11',
+    eventMemberRole: {
+      type: RoleType.PARTICIPANT,
+      matchedMemberId: '22',
+      abilityToRandom: true,
+    },
+  },
+  {
+    id: '22',
+    name: 'Sheila 22',
+    eventMemberRole: {
+      type: RoleType.PARTICIPANT,
+      matchedMemberId: '11',
+      abilityToRandom: true,
+    },
+  },
 ];
 
 export const MEMBER_INITIAL_LIST_MOCK = [ORGANISER_INITIAL_MOCK, ...PARTICIPANT_INITIAL_LIST_MOCK];
