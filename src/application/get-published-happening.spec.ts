@@ -1,17 +1,19 @@
 import 'reflect-metadata';
 import IDENTIFIER from '../infrastructure/identifiers';
 import * as assert from 'assert';
-import { ApplicationContainer } from './application.container';
+import { ApplicationContainerModule } from './application.container-module';
 import { GetPublishedHappening } from './get-published-happening';
 import { MEMBER_PARTICIPATIONS_INITIAL_MOCK } from '../domain/member-participation/member-participation.mock';
 import { MEMBER_INITIAL_LIST_MOCK } from '../domain/member/member.mock';
 import { HAPPENING_INITIAL_LIST_MOCK } from '../domain/happening/happening.mock';
+import { DIContainer } from '../infrastructure/di-container';
 
 describe('GetPublishedHappening', function() {
   let getPublishedHappening: GetPublishedHappening;
 
   beforeEach(function() {
-    getPublishedHappening = ApplicationContainer.get<GetPublishedHappening>(
+    DIContainer.load(ApplicationContainerModule);
+    getPublishedHappening = DIContainer.get<GetPublishedHappening>(
       IDENTIFIER.GetPublishedHappening,
     );
   });

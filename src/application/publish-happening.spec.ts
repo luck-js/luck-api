@@ -1,15 +1,17 @@
 import 'reflect-metadata';
 import IDENTIFIER from '../infrastructure/identifiers';
 import * as assert from 'assert';
-import { ApplicationContainer } from './application.container';
+import { ApplicationContainerModule } from './application.container-module';
 import { PublishHappening } from './publish-happening';
 import { MEMBER_PARTICIPATIONS_INITIAL_MOCK } from '../domain/member-participation/member-participation.mock';
+import { DIContainer } from '../infrastructure/di-container';
 
 describe('PublishHappening', function() {
   let publishHappening: PublishHappening;
 
   beforeEach(function() {
-    publishHappening = ApplicationContainer.get<PublishHappening>(IDENTIFIER.PublishHappening);
+    DIContainer.load(ApplicationContainerModule);
+    publishHappening = DIContainer.get<PublishHappening>(IDENTIFIER.PublishHappening);
   });
 
   it('executed method not should any error', function(done) {

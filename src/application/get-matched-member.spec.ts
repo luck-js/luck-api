@@ -1,16 +1,18 @@
 import 'reflect-metadata';
 import IDENTIFIER from '../infrastructure/identifiers';
 import * as assert from 'assert';
-import { ApplicationContainer } from './application.container';
+import { ApplicationContainerModule } from './application.container-module';
 import { GetMatchedMember } from './get-matched-member';
 import { MEMBER_PARTICIPATIONS_INITIAL_MOCK } from '../domain/member-participation/member-participation.mock';
 import { MEMBER_INITIAL_LIST_MOCK } from '../domain/member/member.mock';
+import { DIContainer } from '../infrastructure/di-container';
 
 describe('GetMatchedMember', function() {
   let getMatchedMember: GetMatchedMember;
 
   beforeEach(function() {
-    getMatchedMember = ApplicationContainer.get<GetMatchedMember>(IDENTIFIER.GetMatchedMember);
+    DIContainer.load(ApplicationContainerModule);
+    getMatchedMember = DIContainer.get<GetMatchedMember>(IDENTIFIER.GetMatchedMember);
   });
 
   it('getMatchedMember execute in initial happening state should throw error', function(done) {
