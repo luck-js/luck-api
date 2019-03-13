@@ -16,7 +16,7 @@ describe('GetMemberParticipation', function() {
     );
   });
 
-  it('executed method return memberParticipation view value object', function() {
+  it('executed method return memberParticipation view value object', function(done) {
     const memberParticipationId = MEMBER_PARTICIPATIONS_INITIAL_MOCK[0].id;
 
     const happeningName = HAPPENING_INITIAL_LIST_MOCK[0].name;
@@ -34,6 +34,8 @@ describe('GetMemberParticipation', function() {
 
       assert.strictEqual(memberParticipationView.member.id, memberId);
       assert.strictEqual(memberParticipationView.member.name, memberName);
+
+      done();
     });
   });
 });
