@@ -7,13 +7,13 @@ import { IMemberParticipation } from './member-participation.model';
 export class MemberParticipationMockRepository implements IMemberParticipationRepository {
   constructor(private list: IMemberParticipation[] = []) {}
 
-  public add(happening: IMemberParticipation): Observable<IMemberParticipation> {
-    this.list.push(happening);
-    return of(happening);
+  public add(memberParticipation: IMemberParticipation): Observable<IMemberParticipation> {
+    this.list.push(memberParticipation);
+    return of(memberParticipation);
   }
 
   public getByIndex(id: string): Observable<IMemberParticipation> {
-    return of(this.list.find(happening => happening.id === id));
+    return of(this.list.find(memberParticipation => memberParticipation.id === id));
   }
 
   public update(memberParticipation: IMemberParticipation): Observable<IMemberParticipation> {
@@ -27,5 +27,11 @@ export class MemberParticipationMockRepository implements IMemberParticipationRe
     }, []);
 
     return of(memberParticipation);
+  }
+
+  getByHappeningIndex(happeningId: string): Observable<IMemberParticipation[]> {
+    return of(
+      this.list.filter(memberParticipation => memberParticipation.happeningId === happeningId),
+    );
   }
 }

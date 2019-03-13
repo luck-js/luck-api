@@ -7,4 +7,6 @@ export interface IMemberParticipationRepository {
   update(memberParticipation: IMemberParticipation): Observable<IMemberParticipation>;
 
   getByIndex(id: string): Observable<IMemberParticipation>;
+
+  getByHappeningIndex(id: string): Observable<IMemberParticipation[]>;
 }

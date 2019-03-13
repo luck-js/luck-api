@@ -23,4 +23,8 @@ export class MemberParticipationMongoRepository implements IMemberParticipationR
   public getByIndex(id: string): Observable<IMemberParticipation> {
     return from(MemberParticipationModel.findOne({ id }, null, { limit: 1 }).exec());
   }
+
+  getByHappeningIndex(happeningId: string): Observable<IMemberParticipation[]> {
+    return from(MemberParticipationModel.find({ happeningId }, null, {}).exec());
+  }
 }
