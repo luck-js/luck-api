@@ -4,15 +4,15 @@ import { AddParticipantMember } from './add-participant-member';
 
 import { MEMBER_PARTICIPATIONS_INITIAL_MOCK } from '../domain/member-participation/member-participation.mock';
 import * as assert from 'assert';
-import { ApplicationContainer } from './application.container';
+import { ApplicationContainerModule } from './application.container-module';
+import { DIContainer } from '../infrastructure/di-container';
 
 describe('AddParticipantMember', function() {
   let addParticipantMember: AddParticipantMember;
 
   beforeEach(function() {
-    addParticipantMember = ApplicationContainer.get<AddParticipantMember>(
-      IDENTIFIER.AddParticipantMember,
-    );
+    DIContainer.load(ApplicationContainerModule);
+    addParticipantMember = DIContainer.get<AddParticipantMember>(IDENTIFIER.AddParticipantMember);
   });
 
   it('executed method return member view value object', function(done) {

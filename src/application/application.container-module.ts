@@ -1,6 +1,5 @@
 import IDENTIFIER from '../infrastructure/identifiers';
 import { ContainerModule, interfaces } from 'inversify';
-import { DIContainer as ApplicationContainer } from '../infrastructure/di-container';
 import { IMemberParticipationRepository } from '../domain/member-participation/member-participation.repository';
 import { IHappeningRepository } from '../domain/happening/happening.repository';
 import { IMemberRepository } from '../domain/member/member.repository';
@@ -42,6 +41,4 @@ const ApplicationContainerModule = new ContainerModule(
   },
 );
 
-ApplicationContainer.load(ApplicationContainerModule);
-
-export { ApplicationContainer };
+export { ApplicationContainerModule };
