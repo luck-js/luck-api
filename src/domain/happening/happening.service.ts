@@ -26,7 +26,7 @@ export class HappeningService {
 
   public update(happening: Happening): Observable<Happening> {
     return this.updateMembers(happening.members).pipe(
-      switchMap(() => this.happeningRepository.update(happening.id, mapToEntity(happening))),
+      switchMap(() => this.happeningRepository.update(mapToEntity(happening))),
       mapTo(happening),
       // map(happening => this.happeningFactory.recreate(happening)),
     );

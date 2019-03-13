@@ -1,20 +1,19 @@
 import { injectable } from 'inversify';
-import { Observable, forkJoin, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { IMember } from './member.model';
 import { IMemberRepository } from './member.repository';
-import { mapTo } from 'rxjs/operators';
 
 @injectable()
 export class MemberMockRepository implements IMemberRepository {
   constructor(private list: IMember[] = []) {}
 
   public add(member: IMember): Observable<IMember> {
-    this.list.push(member);
+    this.update(member);
     return of(member);
   }
 
   public addList(members: IMember[]): Observable<IMember[]> {
-    return forkJoin(members.map(el => this.add(el))).pipe(mapTo(this.list));
+    return this.updateList(members);
   }
 
   public getByIndex(id: string): Observable<IMember> {
@@ -27,7 +26,7 @@ export class MemberMockRepository implements IMemberRepository {
   }
 
   private update(member: IMember): void {
-    if (this.list.some(prevMember => prevMember.id !== member.id)) {
+    if (!this.list.some(prevMember => Number(prevMember.id) === Number(member.id))) {
       this.list.push(member);
       return;
     }
