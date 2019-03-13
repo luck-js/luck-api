@@ -15,7 +15,7 @@ describe('AddParticipantMember', function() {
     );
   });
 
-  it('executed method return member view value object', function() {
+  it('executed method return member view value object', function(done) {
     const memberParticipationId = MEMBER_PARTICIPATIONS_INITIAL_MOCK[0].id;
     const newParticipantMemberName = 'addedParticipantMember';
     addParticipantMember
@@ -23,6 +23,8 @@ describe('AddParticipantMember', function() {
       .subscribe(memberView => {
         assert.strictEqual(memberView.name, newParticipantMemberName);
         assert.strictEqual(typeof memberView.id, 'string');
+
+        done();
       });
   });
 });

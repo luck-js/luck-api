@@ -13,7 +13,7 @@ describe('CreateMemberParticipation', function() {
     );
   });
 
-  it('executed method return memberParticipation view value object', function() {
+  it('executed method return memberParticipation view value object', function(done) {
     createMemberParticipation.execute().subscribe(memberParticipationView => {
       assert.strictEqual(typeof memberParticipationView.happening.id, 'string');
       assert.strictEqual(memberParticipationView.happening.description, '');
@@ -22,6 +22,8 @@ describe('CreateMemberParticipation', function() {
 
       assert.strictEqual(typeof memberParticipationView.member.id, 'string');
       assert.strictEqual(memberParticipationView.member.name, '');
+
+      done();
     });
   });
 });

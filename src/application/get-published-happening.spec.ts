@@ -16,7 +16,7 @@ describe('GetPublishedHappening', function() {
     );
   });
 
-  it('executed method return memberParticipation view value object', function() {
+  it('executed method return memberParticipation view value object', function(done) {
     const memberParticipationId = MEMBER_PARTICIPATIONS_INITIAL_MOCK[0].id;
 
     const happeningName = HAPPENING_INITIAL_LIST_MOCK[0].name;
@@ -31,10 +31,11 @@ describe('GetPublishedHappening', function() {
           MEMBER_INITIAL_LIST_MOCK.some(member => member.name === participant.name),
         ),
       );
+      done();
     });
   });
 
-  it('executed method return members list with unique links', function() {
+  it('executed method return members list with unique links', function(done) {
     const memberParticipationId = MEMBER_PARTICIPATIONS_INITIAL_MOCK[0].id;
 
     getPublishedHappening.execute(memberParticipationId).subscribe(publishedHappeningView => {
@@ -43,6 +44,7 @@ describe('GetPublishedHappening', function() {
         stateUniqueLinks.push(participant.uniqueLink);
         return stateUniqueLinks;
       }, []);
+      done();
     });
   });
 });
