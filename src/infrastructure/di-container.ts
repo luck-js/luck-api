@@ -15,7 +15,7 @@ import { EventMemberRoleFactory } from '../domain/member/event-member-role/event
 import { HappeningService } from '../domain/happening/happening.service';
 import { MemberService } from '../domain/member/member.service';
 import { GetMemberParticipation } from '../application/get-member-participation';
-import { GetMatchedMember } from '../application/matched-member';
+import { GetMatchedMember } from '../application/get-matched-member';
 import { MemberParticipationController } from '../interfaces/member-participation.controller';
 import { CreateMemberParticipation } from '../application/create-member-participation';
 import { UpdateHappeningMetadata } from '../application/update-happening-metadata';
