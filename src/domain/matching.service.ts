@@ -7,52 +7,52 @@ export interface MatchedElement {
 
 @injectable()
 export class MatchingService {
-  randomElements(elementList: MatchedElement[]): MatchedElement[] {
-    return elementList.reduce((matchedElementList, element, index) => {
-      let idElementRandom;
+  randomMatchedElements(matchedElements: MatchedElement[]): MatchedElement[] {
+    return matchedElements.reduce((matchedElementsState, matchedElement, index) => {
+      let randomId;
 
-      const idListOfElementToRandom = pullOutIdsToRandom(
-        matchedElementList,
-        elementList,
-        element.id,
+      const toRandomIds = pullOutToRandomIds(
+        matchedElementsState,
+        matchedElements,
+        matchedElement.id,
       );
-      const preLastElementIndex = elementList.length - 2;
+      const preLastMatchedElementIndex = matchedElements.length - 2;
       const isChanceOfConflictFlagFn = () => {
-        const lastElement = elementList[elementList.length - 1];
-        const id = lastElement && lastElement.id;
-        return isChanceOfConflict(idListOfElementToRandom, id);
+        const lastMatchedElement = matchedElements[matchedElements.length - 1];
+        const id = lastMatchedElement && lastMatchedElement.id;
+        return isChanceOfConflict(toRandomIds, id);
       };
 
-      if (preLastElementIndex === index && isChanceOfConflictFlagFn()) {
-        idElementRandom = elementList[elementList.length - 1].id;
+      if (preLastMatchedElementIndex === index && isChanceOfConflictFlagFn()) {
+        randomId = matchedElements[matchedElements.length - 1].id;
       } else {
-        idElementRandom = randomElementId(idListOfElementToRandom);
+        randomId = getRandomId(toRandomIds);
       }
 
-      matchedElementList.push(Object.assign({}, element, { matchedId: idElementRandom }));
+      matchedElementsState.push(Object.assign({}, matchedElement, { matchedId: randomId }));
 
-      return matchedElementList;
+      return matchedElementsState;
     }, []);
   }
 }
 
-function randomElementId(idListOfElementToRandom: string[]): string {
-  return idListOfElementToRandom[Math.floor(Math.random() * idListOfElementToRandom.length)];
+function getRandomId(toRandomIds: string[]): string {
+  return toRandomIds[Math.floor(Math.random() * toRandomIds.length)];
 }
 
-function isChanceOfConflict(idListOfElementToRandom: string[], lastElementId: string): boolean {
-  return idListOfElementToRandom.some(id => id === lastElementId);
+function isChanceOfConflict(toRandomIds: string[], lastElementId: string): boolean {
+  return toRandomIds.some(id => id === lastElementId);
 }
 
-function pullOutIdsToRandom(
-  matchedElementList: MatchedElement[],
-  elementList: MatchedElement[],
-  currentElementId: string,
+function pullOutToRandomIds(
+  matchedElementsState: MatchedElement[],
+  matchedElements: MatchedElement[],
+  matchedElementId: string,
 ): string[] {
-  return matchedElementList
+  return matchedElementsState
     .reduce((previousState, matchedElement) => {
       return previousState.filter(el => el.id !== matchedElement.matchedId);
-    }, elementList)
+    }, matchedElements)
     .map(el => el.id)
-    .filter(id => id !== currentElementId);
+    .filter(id => id !== matchedElementId);
 }

@@ -8,7 +8,7 @@ export class MatchingMemberService {
     return members.filter(member => member.eventMemberRole.abilityToRandom);
   }
 
-  static mapMembersToMatchingElements(members: Member[]): MatchedElement[] {
+  static mapMembersToMatchedElements(members: Member[]): MatchedElement[] {
     return members.map(member => {
       const id = member.id;
       const matchedId = member.MatchedMemberId;
@@ -19,30 +19,26 @@ export class MatchingMemberService {
   constructor(private matchingService: MatchingService) {}
 
   matchMembers(members: Member[]): Member[] {
-    return this.matchMembersWhoAbleToRandom(members);
-  }
-
-  private matchMembersWhoAbleToRandom(members: Member[]): Member[] {
     const participants = MatchingMemberService.filterMembersWhoAbleToRandom(members);
-    const matchedElements = MatchingMemberService.mapMembersToMatchingElements(participants);
-    const newMatchedElements = this.matchingService.randomElements(matchedElements);
-    return this.mapMatchingElementsToElements(members, newMatchedElements);
+    const toMatchedElements = MatchingMemberService.mapMembersToMatchedElements(participants);
+    const matchedElements = this.matchingService.randomMatchedElements(toMatchedElements);
+    return this.mapMatchedElementsToMembers(members, matchedElements);
   }
 
-  private mapMatchingElementsToElements(
+  private mapMatchedElementsToMembers(
     members: Member[],
     matchedElements: MatchedElement[],
   ): Member[] {
-    return members.reduce((prevState, member) => {
-      const element = matchedElements.find(element => element.id === member.id);
+    return members.reduce((membersState, member) => {
+      const matchedElement = matchedElements.find(element => element.id === member.id);
 
-      if (!element) {
-        prevState.push(member);
-        return prevState;
+      if (!matchedElement) {
+        membersState.push(member);
+        return membersState;
       } else {
-        member.MatchedMemberId = element.matchedId;
-        prevState.push(member);
-        return prevState;
+        member.MatchedMemberId = matchedElement.matchedId;
+        membersState.push(member);
+        return membersState;
       }
     }, []);
   }
