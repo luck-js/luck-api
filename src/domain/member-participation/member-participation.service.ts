@@ -35,17 +35,15 @@ export class MemberParticipationService {
   }
 
   public add(memberParticipation: MemberParticipation): Observable<MemberParticipation> {
-    return this.memberParticipationRepository.add(mapToEntity(memberParticipation)).pipe(
-      mapTo(memberParticipation),
-      // map(memberParticipation => this.memberParticipationFactory.recreate(memberParticipation)),
-    );
+    return this.memberParticipationRepository
+      .add(mapToEntity(memberParticipation))
+      .pipe(mapTo(memberParticipation));
   }
 
   public update(memberParticipation: MemberParticipation): Observable<MemberParticipation> {
-    return this.memberParticipationRepository.update(mapToEntity(memberParticipation)).pipe(
-      mapTo(memberParticipation),
-      // map(memberParticipation => this.memberParticipationFactory.recreate(memberParticipation)),
-    );
+    return this.memberParticipationRepository
+      .update(mapToEntity(memberParticipation))
+      .pipe(mapTo(memberParticipation));
   }
 
   public get(id: string): Observable<MemberParticipation> {

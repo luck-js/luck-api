@@ -17,7 +17,6 @@ export class MemberService {
 
   addList(members: Member[]): Observable<Member[]> {
     return this.memberRepository.addList(mapToEntity(members)).pipe(mapTo(members));
-    // .pipe(map(members => members.map(member => this.memberFactory.recreate(member))));
   }
 
   updateList(members: Member[]): Observable<Member[]> {

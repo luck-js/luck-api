@@ -20,7 +20,6 @@ export class HappeningService {
     return this.addMembers(happening.members).pipe(
       switchMap(() => this.happeningRepository.add(mapToEntity(happening))),
       mapTo(happening),
-      // map(happening => this.happeningFactory.recreate(happening)),
     );
   }
 
@@ -28,7 +27,6 @@ export class HappeningService {
     return this.updateMembers(happening.members).pipe(
       switchMap(() => this.happeningRepository.update(mapToEntity(happening))),
       mapTo(happening),
-      // map(happening => this.happeningFactory.recreate(happening)),
     );
   }
 
