@@ -24,7 +24,7 @@ export class MemberParticipationService {
     private memberParticipationFactory: MemberParticipationFactory,
   ) {}
 
-  public create(): Observable<MemberParticipation> {
+  create(): Observable<MemberParticipation> {
     const happening = this.happeningFactory.create();
     const member = happening.addMember(this.memberFactory.create(RoleType.ORGANISER));
     const memberParticipation = this.memberParticipationFactory.create(member, happening);
@@ -34,19 +34,19 @@ export class MemberParticipationService {
       .pipe(switchMap(() => this.add(memberParticipation)));
   }
 
-  public add(memberParticipation: MemberParticipation): Observable<MemberParticipation> {
+  add(memberParticipation: MemberParticipation): Observable<MemberParticipation> {
     return this.memberParticipationRepository
       .add(mapToEntity(memberParticipation))
       .pipe(mapTo(memberParticipation));
   }
 
-  public update(memberParticipation: MemberParticipation): Observable<MemberParticipation> {
+  update(memberParticipation: MemberParticipation): Observable<MemberParticipation> {
     return this.memberParticipationRepository
       .update(mapToEntity(memberParticipation))
       .pipe(mapTo(memberParticipation));
   }
 
-  public get(id: string): Observable<MemberParticipation> {
+  get(id: string): Observable<MemberParticipation> {
     const memberParticipation$ = this.memberParticipationRepository.getByIndex(id);
     const happening$ = memberParticipation$.pipe(
       switchMap(memberParticipation => this.happeningService.get(memberParticipation.happeningId)),
@@ -76,7 +76,7 @@ export class MemberParticipationService {
     );
   }
 
-  public updateHappeningMetadata(
+  updateHappeningMetadata(
     id: string,
     happeningMetadata: IHappeningMetadata,
   ): Observable<MemberParticipation> {
@@ -90,7 +90,7 @@ export class MemberParticipationService {
     );
   }
 
-  public publishHappening(id: string): Observable<void> {
+  publishHappening(id: string): Observable<void> {
     const matchMember = (members: Member[]) => {
       return this.matchingMemberService.matchMembers(members);
     };
@@ -105,7 +105,7 @@ export class MemberParticipationService {
     );
   }
 
-  public addParticipantMember(id: string, name: string): Observable<Member> {
+  addParticipantMember(id: string, name: string): Observable<Member> {
     const createMemberParticipation = happening => {
       const participantMember = happening.addMember(
         this.memberFactory.create(RoleType.PARTICIPANT, name),
@@ -126,7 +126,7 @@ export class MemberParticipationService {
     );
   }
 
-  public addParticipantMembers(id: string, participants: { name: string }[]): Observable<Member[]> {
+  addParticipantMembers(id: string, participants: { name: string }[]): Observable<Member[]> {
     const createMemberParticipation = (happening, name) => {
       const participantMember = happening.addMember(
         this.memberFactory.create(RoleType.PARTICIPANT, name),

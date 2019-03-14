@@ -7,16 +7,16 @@ import { IMemberParticipation } from './member-participation.model';
 export class MemberParticipationMockRepository implements IMemberParticipationRepository {
   constructor(private list: IMemberParticipation[] = []) {}
 
-  public add(memberParticipation: IMemberParticipation): Observable<IMemberParticipation> {
+  add(memberParticipation: IMemberParticipation): Observable<IMemberParticipation> {
     this.list.push(memberParticipation);
     return of(memberParticipation);
   }
 
-  public getByIndex(id: string): Observable<IMemberParticipation> {
+  getByIndex(id: string): Observable<IMemberParticipation> {
     return of(this.list.find(memberParticipation => memberParticipation.id === id));
   }
 
-  public update(memberParticipation: IMemberParticipation): Observable<IMemberParticipation> {
+  update(memberParticipation: IMemberParticipation): Observable<IMemberParticipation> {
     this.list = this.list.reduce((state, prevMemberParticipation) => {
       prevMemberParticipation =
         prevMemberParticipation.id !== memberParticipation.id

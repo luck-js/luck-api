@@ -10,7 +10,7 @@ import { IMemberView } from './model/member-view.model';
 export class GetMatchedMember {
   constructor(private relationMemberHappeningService: MemberParticipationService) {}
 
-  public execute(id: string): Observable<IMatchedMemberView> {
+  execute(id: string): Observable<IMatchedMemberView> {
     return this.relationMemberHappeningService.get(id).pipe(
       map(memberParticipation => ({
         me: mapToMemberView(memberParticipation.getMember()),

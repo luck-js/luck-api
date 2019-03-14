@@ -9,7 +9,7 @@ import { IMemberView } from './model/member-view.model';
 export class AddParticipantMember {
   constructor(private relationMemberHappeningService: MemberParticipationService) {}
 
-  public execute(id: string, name: string): Observable<IMemberView> {
+  execute(id: string, name: string): Observable<IMemberView> {
     return this.relationMemberHappeningService
       .addParticipantMember(id, name)
       .pipe(map(member => mapToMemberView(member)));

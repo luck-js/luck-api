@@ -7,7 +7,7 @@ export interface MatchedElement {
 
 @injectable()
 export class MatchingService {
-  public randomElements(elementList: MatchedElement[]): MatchedElement[] {
+  randomElements(elementList: MatchedElement[]): MatchedElement[] {
     return elementList.reduce((matchedElementList, element, index) => {
       let idElementRandom;
 

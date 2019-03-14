@@ -24,7 +24,7 @@ export class MemberParticipationController {
     private getPublishedHappeningApplication: GetPublishedHappening,
   ) {}
 
-  public createMemberParticipation(req: Request, res: Response) {
+  createMemberParticipation(req: Request, res: Response) {
     this.createMemberParticipationApplication
       .execute()
       .pipe(
@@ -35,7 +35,7 @@ export class MemberParticipationController {
       .subscribe();
   }
 
-  public getMemberParticipation(req: Request, res: Response) {
+  getMemberParticipation(req: Request, res: Response) {
     const { id } = req.params;
     this.getMemberParticipationApplication
       .execute(id)
@@ -47,7 +47,7 @@ export class MemberParticipationController {
       .subscribe();
   }
 
-  public getMatchedMember(req: Request, res: Response) {
+  getMatchedMember(req: Request, res: Response) {
     const { id } = req.params;
     this.getMatchedMemberApplication
       .execute(id)
@@ -59,7 +59,7 @@ export class MemberParticipationController {
       .subscribe();
   }
 
-  public editHappeningMetadata(req: Request, res: Response) {
+  editHappeningMetadata(req: Request, res: Response) {
     const { id } = req.params;
     const option = req.body;
     this.updateHappeningMetadataApplication
@@ -72,7 +72,7 @@ export class MemberParticipationController {
       .subscribe();
   }
 
-  public addParticipantMember(req: Request, res: Response) {
+  addParticipantMember(req: Request, res: Response) {
     const { id } = req.params;
     const { name } = req.body;
     this.addParticipantMemberApplication
@@ -85,7 +85,7 @@ export class MemberParticipationController {
       .subscribe();
   }
 
-  public publishHappening(req: Request, res: Response) {
+  publishHappening(req: Request, res: Response) {
     const { id } = req.params;
     this.publishHappeningApplication
       .execute(id)
@@ -97,7 +97,7 @@ export class MemberParticipationController {
       .subscribe();
   }
 
-  public createPublishedHappening(req: Request, res: Response) {
+  createPublishedHappening(req: Request, res: Response) {
     const { happening } = req.body;
     const { id } = req.params;
     this.createPublishedHappeningApplication
@@ -110,7 +110,7 @@ export class MemberParticipationController {
       .subscribe();
   }
 
-  public getPublishedHappening(req: Request, res: Response) {
+  getPublishedHappening(req: Request, res: Response) {
     const { id } = req.params;
     this.getPublishedHappeningApplication
       .execute(id)
@@ -122,7 +122,7 @@ export class MemberParticipationController {
       .subscribe();
   }
 
-  public getFromPublishedHappeningParticipants(req: Request, res: Response) {
+  getFromPublishedHappeningParticipants(req: Request, res: Response) {
     const { id } = req.params;
     this.getPublishedHappeningApplication
       .execute(id)

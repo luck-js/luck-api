@@ -10,7 +10,7 @@ import { IHappeningMetadata } from '../domain/happening/happening.model';
 export class UpdateHappeningMetadata {
   constructor(private relationMemberHappeningService: MemberParticipationService) {}
 
-  public execute(id: string, happeningMetadata: IHappeningMetadata): Observable<IHappeningView> {
+  execute(id: string, happeningMetadata: IHappeningMetadata): Observable<IHappeningView> {
     return this.relationMemberHappeningService
       .updateHappeningMetadata(id, happeningMetadata)
       .pipe(map(memberParticipation => mapToHappeningView(memberParticipation.happening)));

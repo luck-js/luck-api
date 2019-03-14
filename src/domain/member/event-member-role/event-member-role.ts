@@ -2,15 +2,15 @@ import { RoleType } from './event-member-role.model';
 import { IEventMemberRole } from './event-member-role.model';
 
 export abstract class EventMemberRole implements IEventMemberRole {
-  public type: RoleType;
+  type: RoleType;
 
   protected constructor(public abilityToRandom: boolean, public matchedMemberId: string) {}
 
-  public get MatchedMemberId(): string {
+  get MatchedMemberId(): string {
     return this.matchedMemberId;
   }
 
-  public set MatchedMemberId(id: string) {
+  set MatchedMemberId(id: string) {
     this.matchedMemberId = id;
   }
 }

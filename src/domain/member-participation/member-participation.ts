@@ -7,35 +7,35 @@ import { IHappeningMetadata } from '../happening/happening.model';
 export class MemberParticipation {
   constructor(public id: string, public member: Member, public happening: Happening) {}
 
-  public getMember(): Member {
+  getMember(): Member {
     return this.member;
   }
 
-  public updateMembers(members: Member[]): Member[] {
+  updateMembers(members: Member[]): Member[] {
     return this.happening.updateMembers(members);
   }
 
-  public getMembers(): Member[] {
+  getMembers(): Member[] {
     return this.happening.getMembers();
   }
 
-  public getParticipants(): Member[] {
+  getParticipants(): Member[] {
     return this.happening.getParticipants();
   }
 
-  public getMatchedMember(): Member {
+  getMatchedMember(): Member {
     return this.happening.getMatchedMember(this.member.MatchedMemberId);
   }
 
-  public getHappening(): Happening {
+  getHappening(): Happening {
     return this.happening;
   }
 
-  public publishHappening(): void {
+  publishHappening(): void {
     this.happening.publishEvent();
   }
 
-  public updateHappeningMetadata(happeningMetadata: IHappeningMetadata): Happening {
+  updateHappeningMetadata(happeningMetadata: IHappeningMetadata): Happening {
     this.happening.updateMetadata(happeningMetadata);
     return this.happening;
   }

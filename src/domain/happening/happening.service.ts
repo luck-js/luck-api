@@ -16,21 +16,21 @@ export class HappeningService {
     private happeningFactory: HappeningFactory,
   ) {}
 
-  public add(happening: Happening): Observable<Happening> {
+  add(happening: Happening): Observable<Happening> {
     return this.addMembers(happening.members).pipe(
       switchMap(() => this.happeningRepository.add(mapToEntity(happening))),
       mapTo(happening),
     );
   }
 
-  public update(happening: Happening): Observable<Happening> {
+  update(happening: Happening): Observable<Happening> {
     return this.updateMembers(happening.members).pipe(
       switchMap(() => this.happeningRepository.update(mapToEntity(happening))),
       mapTo(happening),
     );
   }
 
-  public get(id: string): Observable<Happening> {
+  get(id: string): Observable<Happening> {
     const mapToHappening = ({ id, name, description, isPublish, memberIds }: IHappening) => {
       return this.memberService
         .getList(memberIds)

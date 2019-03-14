@@ -12,14 +12,14 @@ export class MemberFactory {
     private eventMemberRoleFactory: EventMemberRoleFactory,
   ) {}
 
-  public create(type: RoleType, name: string = ''): Member {
+  create(type: RoleType, name: string = ''): Member {
     const id = this.uuidGenerationService.createNewUuid();
     const eventMemberRole = this.eventMemberRoleFactory.create(type);
 
     return new Member(id, name, eventMemberRole);
   }
 
-  public recreate(member: IMember): Member {
+  recreate(member: IMember): Member {
     const { id, name } = member;
     const eventMemberRole = this.eventMemberRoleFactory.recreate(member.eventMemberRole);
 

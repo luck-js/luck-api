@@ -8,13 +8,13 @@ import { Member } from '../member/member';
 export class MemberParticipationFactory {
   constructor(private uuidGenerationService: UuidGenerationService) {}
 
-  public create(member: Member, happening: Happening): MemberParticipation {
+  create(member: Member, happening: Happening): MemberParticipation {
     const id = this.uuidGenerationService.createNewUuid();
 
     return new MemberParticipation(id, member, happening);
   }
 
-  public recreate(id: string, member: Member, happening: Happening): MemberParticipation {
+  recreate(id: string, member: Member, happening: Happening): MemberParticipation {
     return new MemberParticipation(id, member, happening);
   }
 }

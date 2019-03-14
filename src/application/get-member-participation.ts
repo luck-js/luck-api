@@ -12,7 +12,7 @@ import { IHappeningView } from './model/happening-view.model';
 export class GetMemberParticipation {
   constructor(private relationMemberHappeningService: MemberParticipationService) {}
 
-  public execute(id: string): Observable<IMemberParticipationView> {
+  execute(id: string): Observable<IMemberParticipationView> {
     return this.relationMemberHappeningService.get(id).pipe(
       map(memberParticipation => ({
         happening: mapToHappeningView(memberParticipation.happening),

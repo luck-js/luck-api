@@ -7,21 +7,21 @@ import { IMemberRepository } from './member.repository';
 export class MemberMockRepository implements IMemberRepository {
   constructor(private list: IMember[] = []) {}
 
-  public add(member: IMember): Observable<IMember> {
+  add(member: IMember): Observable<IMember> {
     this.list.push(member);
     return of(member);
   }
 
-  public addList(members: IMember[]): Observable<IMember[]> {
+  addList(members: IMember[]): Observable<IMember[]> {
     members.forEach(member => this.list.push(member));
     return of(this.list);
   }
 
-  public getByIndex(id: string): Observable<IMember> {
+  getByIndex(id: string): Observable<IMember> {
     return of(this.list.find(member => member.id === id));
   }
 
-  public updateList(members: IMember[]): Observable<IMember[]> {
+  updateList(members: IMember[]): Observable<IMember[]> {
     members.forEach(el => this.update(el));
     return of(this.list);
   }

@@ -7,9 +7,9 @@ import api from './routes/api';
 import config from './config/main';
 
 export class Server {
-  public app: express.Application;
+  app: express.Application;
 
-  public static bootstrap(): Server {
+  static bootstrap(): Server {
     return new Server();
   }
 
@@ -26,7 +26,7 @@ export class Server {
    * @class Server
    * @method config
    */
-  public configure() {
+  configure() {
     mongoose
       .connect(config.database, { useNewUrlParser: true })
       .then(resolve => console.log(`MongoDB is connected on ${config.database}`))
