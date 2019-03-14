@@ -18,7 +18,7 @@ export class MatchingMemberService {
 
   constructor(private matchingService: MatchingService) {}
 
-  public matchMembers(memberList: Member[]): Member[] {
+  matchMembers(memberList: Member[]): Member[] {
     return this.matchMembersWhoAbleToRandom(memberList);
   }
 

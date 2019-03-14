@@ -9,11 +9,11 @@ import { IEventMemberRole } from './event-member-role.model';
 export class EventMemberRoleFactory {
   constructor() {}
 
-  public create(type: RoleType): EventMemberRole {
+  create(type: RoleType): EventMemberRole {
     return this.switchInstanceHelper(type);
   }
 
-  public recreate({ type, abilityToRandom, matchedMemberId }: IEventMemberRole): EventMemberRole {
+  recreate({ type, abilityToRandom, matchedMemberId }: IEventMemberRole): EventMemberRole {
     return this.switchInstanceHelper(type, abilityToRandom, matchedMemberId);
   }
 

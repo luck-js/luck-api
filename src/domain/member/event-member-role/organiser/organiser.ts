@@ -2,13 +2,13 @@ import { EventMemberRole } from '../event-member-role';
 import { RoleType } from '../event-member-role.model';
 
 export class Organiser extends EventMemberRole {
-  public type = RoleType.ORGANISER;
+  type = RoleType.ORGANISER;
 
   constructor(abilityToRandom: boolean = false, matchedMemberId: string = null) {
     super(abilityToRandom, matchedMemberId);
   }
 
-  public get MatchedMemberId(): string {
+  get MatchedMemberId(): string {
     if (!this.abilityToRandom) {
       throw new Error("Organiser isn't ability to random");
     } else {
@@ -16,7 +16,7 @@ export class Organiser extends EventMemberRole {
     }
   }
 
-  public set MatchedMemberId(id: string) {
+  set MatchedMemberId(id: string) {
     throw new Error('Organiser does not take part in the matching yet');
   }
 }

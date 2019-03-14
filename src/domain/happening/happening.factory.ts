@@ -7,12 +7,12 @@ import { Member } from '../member/member';
 export class HappeningFactory {
   constructor(private uuidGenerationService: UuidGenerationService) {}
 
-  public create(): Happening {
+  create(): Happening {
     const id = this.uuidGenerationService.createNewUuid();
     return new Happening(id);
   }
 
-  public recreate(
+  recreate(
     id: string,
     name: string,
     description: string,

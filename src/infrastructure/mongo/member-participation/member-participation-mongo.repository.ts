@@ -6,11 +6,11 @@ import { IMemberParticipationRepository } from '../../../domain/member-participa
 
 @injectable()
 export class MemberParticipationMongoRepository implements IMemberParticipationRepository {
-  public add(memberParticipation: IMemberParticipation): Observable<IMemberParticipation> {
+  add(memberParticipation: IMemberParticipation): Observable<IMemberParticipation> {
     return from(new MemberParticipationModel(memberParticipation).save());
   }
 
-  public update(memberParticipation: IMemberParticipation): Observable<IMemberParticipation> {
+  update(memberParticipation: IMemberParticipation): Observable<IMemberParticipation> {
     return from(
       MemberParticipationModel.findOneAndUpdate(
         { id: memberParticipation.id },
@@ -20,7 +20,7 @@ export class MemberParticipationMongoRepository implements IMemberParticipationR
     );
   }
 
-  public getByIndex(id: string): Observable<IMemberParticipation> {
+  getByIndex(id: string): Observable<IMemberParticipation> {
     return from(MemberParticipationModel.findOne({ id }, null, { limit: 1 }).exec());
   }
 

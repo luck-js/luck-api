@@ -6,19 +6,19 @@ import { IMember } from '../../../domain/member/member.model';
 
 @injectable()
 export class MemberMongoRepository implements IMemberRepository {
-  public add({ id, name, eventMemberRole }: IMember): Observable<IMember> {
+  add({ id, name, eventMemberRole }: IMember): Observable<IMember> {
     return from(new MemberModel({ id, name, eventMemberRole }).save());
   }
 
-  public addList(members: IMember[]): Observable<IMember[]> {
+  addList(members: IMember[]): Observable<IMember[]> {
     return forkJoin(members.map(el => this.add(el)));
   }
 
-  public getByIndex(id: string): Observable<IMember> {
+  getByIndex(id: string): Observable<IMember> {
     return from(MemberModel.findOne({ id }, null, { limit: 1 }).exec());
   }
 
-  public updateList(members: IMember[]): Observable<IMember[]> {
+  updateList(members: IMember[]): Observable<IMember[]> {
     return forkJoin(members.map(el => this.update(el)));
   }
 

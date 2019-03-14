@@ -7,16 +7,16 @@ import { IHappening } from './happening.model';
 export class HappeningMockRepository implements IHappeningRepository {
   constructor(private list: IHappening[] = []) {}
 
-  public add(happening: IHappening): Observable<IHappening> {
+  add(happening: IHappening): Observable<IHappening> {
     this.list.push(happening);
     return of(happening);
   }
 
-  public getByIndex(id: string): Observable<IHappening> {
+  getByIndex(id: string): Observable<IHappening> {
     return of(this.list.find(happening => happening.id === id));
   }
 
-  public update(happening: IHappening): Observable<IHappening> {
+  update(happening: IHappening): Observable<IHappening> {
     if (!this.list.some(prevMember => Number(prevMember.id) === Number(happening.id))) {
       return this.add(happening);
     }

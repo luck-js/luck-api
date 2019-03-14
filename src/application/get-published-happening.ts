@@ -9,7 +9,7 @@ import { IPublishedHappeningView } from './model/published-happening-view.model'
 export class GetPublishedHappening {
   constructor(private memberParticipationService: MemberParticipationService) {}
 
-  public execute(id: string): Observable<IPublishedHappeningView> {
+  execute(id: string): Observable<IPublishedHappeningView> {
     return this.memberParticipationService
       .getListByHappeningId(id)
       .pipe(map(memberParticipations => mapToPublishedHappeningView(memberParticipations)));

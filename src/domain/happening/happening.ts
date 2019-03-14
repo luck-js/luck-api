@@ -11,7 +11,7 @@ export class Happening {
     public members: Member[] = [],
   ) {}
 
-  public addMember(member: Member): Member {
+  addMember(member: Member): Member {
     if (this.isPublish) {
       throw new Error('Happening is publishing');
     }
@@ -20,19 +20,19 @@ export class Happening {
     return member;
   }
 
-  public getMember(id: string): Member {
+  getMember(id: string): Member {
     return this.members.find(member => member.id === id);
   }
 
-  public getMembers(): Member[] {
+  getMembers(): Member[] {
     return this.members;
   }
 
-  public getParticipants(): Member[] {
+  getParticipants(): Member[] {
     return this.members.filter(member => member.eventMemberRole.type !== RoleType.ORGANISER);
   }
 
-  public getMatchedMember(matchedMemberId: string): Member {
+  getMatchedMember(matchedMemberId: string): Member {
     if (!this.isPublish) {
       throw new Error("Happening isn't publishing");
     }
@@ -40,7 +40,7 @@ export class Happening {
     return this.members.find(member => matchedMemberId === member.id);
   }
 
-  public updateMembers(members: Member[]): Member[] {
+  updateMembers(members: Member[]): Member[] {
     if (this.isPublish) {
       throw new Error('Happening is publishing');
     }
@@ -49,11 +49,11 @@ export class Happening {
     return this.members;
   }
 
-  public publishEvent(): void {
+  publishEvent(): void {
     this.isPublish = true;
   }
 
-  public updateMetadata(happeningMetadata: IHappeningMetadata): void {
+  updateMetadata(happeningMetadata: IHappeningMetadata): void {
     const { name, description } = happeningMetadata;
     this.name = name;
     this.description = description;

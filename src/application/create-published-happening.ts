@@ -10,7 +10,7 @@ import { IPublishedHappeningView } from './model/published-happening-view.model'
 export class CreatePublishedHappening {
   constructor(private memberParticipationService: MemberParticipationService) {}
 
-  public execute(
+  execute(
     id: string,
     { name, description, participants }: INewHappeningView,
   ): Observable<IPublishedHappeningView> {
