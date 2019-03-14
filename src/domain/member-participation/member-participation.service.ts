@@ -29,20 +29,20 @@ export class MemberParticipationService {
     const member = happening.addMember(this.memberFactory.create(RoleType.ORGANISER));
     const memberParticipation = this.memberParticipationFactory.create(member, happening);
 
-    return this.add(memberParticipation);
+    return this.happeningService
+      .add(memberParticipation.happening)
+      .pipe(switchMap(() => this.add(memberParticipation)));
   }
 
   public add(memberParticipation: MemberParticipation): Observable<MemberParticipation> {
-    return this.happeningService.add(memberParticipation.happening).pipe(
-      switchMap(() => this.memberParticipationRepository.add(mapToEntity(memberParticipation))),
+    return this.memberParticipationRepository.add(mapToEntity(memberParticipation)).pipe(
       mapTo(memberParticipation),
       // map(memberParticipation => this.memberParticipationFactory.recreate(memberParticipation)),
     );
   }
 
   public update(memberParticipation: MemberParticipation): Observable<MemberParticipation> {
-    return this.happeningService.update(memberParticipation.happening).pipe(
-      // switchMap(() => this.memberParticipationRepository.update(mapToEntity(memberParticipation))),
+    return this.memberParticipationRepository.update(mapToEntity(memberParticipation)).pipe(
       mapTo(memberParticipation),
       // map(memberParticipation => this.memberParticipationFactory.recreate(memberParticipation)),
     );
@@ -85,7 +85,9 @@ export class MemberParticipationService {
     return this.get(id).pipe(
       switchMap(memberParticipation => {
         memberParticipation.updateHappeningMetadata(happeningMetadata);
-        return this.update(memberParticipation);
+        return this.happeningService
+          .update(memberParticipation.happening)
+          .pipe(mapTo(memberParticipation));
       }),
     );
   }
@@ -99,14 +101,14 @@ export class MemberParticipationService {
       switchMap(memberParticipation => {
         memberParticipation.updateMembers(matchMember(memberParticipation.happening.getMembers()));
         memberParticipation.publishHappening();
-        return this.update(memberParticipation);
+        return this.happeningService.update(memberParticipation.happening);
       }),
       mapTo(null),
     );
   }
 
   public addParticipantMember(id: string, name: string): Observable<Member> {
-    const newMemberParticipation = happening => {
+    const createMemberParticipation = happening => {
       const participantMember = happening.addMember(
         this.memberFactory.create(RoleType.PARTICIPANT, name),
       );
@@ -115,22 +117,39 @@ export class MemberParticipationService {
     };
 
     return this.get(id).pipe(
-      map(memberParticipation => newMemberParticipation(memberParticipation.happening)),
+      switchMap(memberParticipation => {
+        const newMemberParticipation = createMemberParticipation(memberParticipation.happening);
+        return this.happeningService
+          .update(memberParticipation.happening)
+          .pipe(mapTo(newMemberParticipation));
+      }),
       switchMap(memberParticipation => this.add(memberParticipation)),
       map(memberParticipation => memberParticipation.getMember()),
     );
   }
 
   public addParticipantMembers(id: string, participants: { name: string }[]): Observable<Member[]> {
+    const createMemberParticipation = (happening, name) => {
+      const participantMember = happening.addMember(
+        this.memberFactory.create(RoleType.PARTICIPANT, name),
+      );
+
+      return this.memberParticipationFactory.create(participantMember, happening);
+    };
+
     return this.get(id).pipe(
       switchMap(memberParticipation => {
-        const participantMember = participants.map(({ name }) => {
-          return memberParticipation.happening.addMember(
-            this.memberFactory.create(RoleType.PARTICIPANT, name),
-          );
-        });
-        return this.update(memberParticipation).pipe(mapTo(participantMember));
+        const memberParticipations = participants.map(({ name }) =>
+          createMemberParticipation(memberParticipation.happening, name),
+        );
+        return this.happeningService
+          .update(memberParticipation.happening)
+          .pipe(mapTo(memberParticipations));
       }),
+      switchMap(memberParticipations =>
+        forkJoin(memberParticipations.map(memberParticipation => this.add(memberParticipation))),
+      ),
+      map(memberParticipations => memberParticipations[0].getMembers()),
     );
   }
 }

@@ -18,20 +18,19 @@ export class CreatePublishedHappening {
     return this.memberParticipationService.addParticipantMembers(id, participants).pipe(
       switchMap(() => this.memberParticipationService.publishHappening(id)),
       switchMap(() => this.memberParticipationService.updateHappeningMetadata(id, metadata)),
-      switchMap(() => this.memberParticipationService.get(id)),
-      map(memberParticipation => mapToPublishedHappeningView(memberParticipation)),
+      switchMap(() => this.memberParticipationService.getListByHappeningId(id)),
+      map(memberParticipations => mapToPublishedHappeningView(memberParticipations)),
     );
   }
 }
 
 function mapToPublishedHappeningView(
-  memberParticipation: MemberParticipation,
+  memberParticipations: MemberParticipation[],
 ): IPublishedHappeningView {
-  const { name, description } = memberParticipation.happening;
-  const participants = memberParticipation.getParticipants().map(participant => ({
-    name: participant.name,
-    // TODO: get unique link from Member -> MemberParticipation relation
-    uniqueLink: null,
+  const { name, description } = memberParticipations[0].happening;
+  const participants = memberParticipations.map(memberParticipation => ({
+    name: memberParticipation.getMember().name,
+    uniqueLink: memberParticipation.id,
   }));
 
   return {
