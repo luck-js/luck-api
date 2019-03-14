@@ -4,12 +4,12 @@ import { Member } from './member/member';
 
 @injectable()
 export class MatchingMemberService {
-  static filterMembersWhoAbleToRandom(memberList: Member[]): Member[] {
-    return memberList.filter(member => member.eventMemberRole.abilityToRandom);
+  static filterMembersWhoAbleToRandom(members: Member[]): Member[] {
+    return members.filter(member => member.eventMemberRole.abilityToRandom);
   }
 
-  static mapMemberListToMatchingElementList(memberList: Member[]): MatchedElement[] {
-    return memberList.map(member => {
+  static mapMembersToMatchingElements(members: Member[]): MatchedElement[] {
+    return members.map(member => {
       const id = member.id;
       const matchedId = member.MatchedMemberId;
       return { id, matchedId };
@@ -18,25 +18,23 @@ export class MatchingMemberService {
 
   constructor(private matchingService: MatchingService) {}
 
-  matchMembers(memberList: Member[]): Member[] {
-    return this.matchMembersWhoAbleToRandom(memberList);
+  matchMembers(members: Member[]): Member[] {
+    return this.matchMembersWhoAbleToRandom(members);
   }
 
-  private matchMembersWhoAbleToRandom(memberList: Member[]): Member[] {
-    const participantList = MatchingMemberService.filterMembersWhoAbleToRandom(memberList);
-    const matchedElementList = MatchingMemberService.mapMemberListToMatchingElementList(
-      participantList,
-    );
-    const newMatchedElementList = this.matchingService.randomElements(matchedElementList);
-    return this.mapMatchingElementListToElementList(memberList, newMatchedElementList);
+  private matchMembersWhoAbleToRandom(members: Member[]): Member[] {
+    const participants = MatchingMemberService.filterMembersWhoAbleToRandom(members);
+    const matchedElements = MatchingMemberService.mapMembersToMatchingElements(participants);
+    const newMatchedElements = this.matchingService.randomElements(matchedElements);
+    return this.mapMatchingElementsToElements(members, newMatchedElements);
   }
 
-  private mapMatchingElementListToElementList(
-    memberList: Member[],
-    matchedElementList: MatchedElement[],
+  private mapMatchingElementsToElements(
+    members: Member[],
+    matchedElements: MatchedElement[],
   ): Member[] {
-    return memberList.reduce((prevState, member) => {
-      const element = matchedElementList.find(element => element.id === member.id);
+    return members.reduce((prevState, member) => {
+      const element = matchedElements.find(element => element.id === member.id);
 
       if (!element) {
         prevState.push(member);
