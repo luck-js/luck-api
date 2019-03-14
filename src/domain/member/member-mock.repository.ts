@@ -8,12 +8,13 @@ export class MemberMockRepository implements IMemberRepository {
   constructor(private list: IMember[] = []) {}
 
   public add(member: IMember): Observable<IMember> {
-    this.update(member);
+    this.list.push(member);
     return of(member);
   }
 
   public addList(members: IMember[]): Observable<IMember[]> {
-    return this.updateList(members);
+    members.forEach(member => this.list.push(member));
+    return of(this.list);
   }
 
   public getByIndex(id: string): Observable<IMember> {

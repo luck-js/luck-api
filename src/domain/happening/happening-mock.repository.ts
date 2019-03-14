@@ -8,7 +8,8 @@ export class HappeningMockRepository implements IHappeningRepository {
   constructor(private list: IHappening[] = []) {}
 
   public add(happening: IHappening): Observable<IHappening> {
-    return this.update(happening);
+    this.list.push(happening);
+    return of(happening);
   }
 
   public getByIndex(id: string): Observable<IHappening> {
@@ -17,8 +18,7 @@ export class HappeningMockRepository implements IHappeningRepository {
 
   public update(happening: IHappening): Observable<IHappening> {
     if (!this.list.some(prevMember => Number(prevMember.id) === Number(happening.id))) {
-      this.list.push(happening);
-      return of(happening);
+      return this.add(happening);
     }
 
     this.list = this.list.reduce((state, prevHappening) => {
