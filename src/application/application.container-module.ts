@@ -17,11 +17,11 @@ const ApplicationContainerModule = new ContainerModule(
     isBound: interfaces.IsBound,
     rebind: interfaces.Rebind,
   ) => {
-    const memberMockRepository = new MemberMockRepository(MEMBER_INITIAL_LIST_MOCK);
-    const happeningMockRepository = new HappeningMockRepository(HAPPENING_INITIAL_LIST_MOCK);
-    const memberParticipationMockRepository = new MemberParticipationMockRepository(
-      MEMBER_PARTICIPATIONS_INITIAL_MOCK,
-    );
+    const memberMockRepository = new MemberMockRepository([...MEMBER_INITIAL_LIST_MOCK]);
+    const happeningMockRepository = new HappeningMockRepository([...HAPPENING_INITIAL_LIST_MOCK]);
+    const memberParticipationMockRepository = new MemberParticipationMockRepository([
+      ...MEMBER_PARTICIPATIONS_INITIAL_MOCK,
+    ]);
 
     rebind<IMemberParticipationRepository>(IDENTIFIER.MemberParticipationRepository)
       .toDynamicValue((context: interfaces.Context) => {
