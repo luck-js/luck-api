@@ -29,19 +29,21 @@ import { IMemberParticipationRepository } from '../domain/member-participation/m
 
 const DIContainer = new Container();
 
-DIContainer.bind<IMemberParticipationRepository>(IDENTIFIER.MemberParticipationRepository)
-  .toDynamicValue((context: interfaces.Context) => {
-    return new MemberParticipationMongoRepository();
-  })
-  .inSingletonScope();
+DIContainer.bind<IMemberRepository>(IDENTIFIER.MemberRepository).to(MemberMongoRepository);
 
-DIContainer.bind<IMemberRepository>(IDENTIFIER.MemberRepository)
-  .toDynamicValue((context: interfaces.Context) => {
-    return new MemberMongoRepository();
-  })
-  .inSingletonScope();
+DIContainer.bind<IHappeningRepository>(IDENTIFIER.HappeningRepository).to(HappeningMongoRepository);
+
+DIContainer.bind<IMemberParticipationRepository>(IDENTIFIER.MemberParticipationRepository).to(
+  MemberParticipationMongoRepository,
+);
 
 DIContainer.bind<MatchingService>(IDENTIFIER.MatchingService).to(MatchingService);
+
+DIContainer.bind<UuidGenerationService>(IDENTIFIER.UuidGenerationService).to(UuidGenerationService);
+
+DIContainer.bind<EventMemberRoleFactory>(IDENTIFIER.EventMemberRoleFactory).to(
+  EventMemberRoleFactory,
+);
 
 DIContainer.bind<MemberService>(IDENTIFIER.MemberService).toDynamicValue(
   (context: interfaces.Context) => {
@@ -72,8 +74,6 @@ DIContainer.bind<MatchingMemberService>(IDENTIFIER.MatchingMemberService).toDyna
   },
 );
 
-DIContainer.bind<UuidGenerationService>(IDENTIFIER.UuidGenerationService).to(UuidGenerationService);
-
 DIContainer.bind<MemberParticipationFactory>(IDENTIFIER.MemberParticipationFactory).toDynamicValue(
   (context: interfaces.Context) => {
     const uuidGenerationService = context.container.get<UuidGenerationService>(
@@ -97,12 +97,6 @@ DIContainer.bind<MemberFactory>(IDENTIFIER.MemberFactory).toDynamicValue(
   },
 );
 
-DIContainer.bind<EventMemberRoleFactory>(IDENTIFIER.EventMemberRoleFactory).toDynamicValue(
-  (context: interfaces.Context) => {
-    return new EventMemberRoleFactory();
-  },
-);
-
 DIContainer.bind<HappeningFactory>(IDENTIFIER.HappeningFactory).toDynamicValue(
   (context: interfaces.Context) => {
     const uuidGenerationService = context.container.get<UuidGenerationService>(
@@ -112,12 +106,6 @@ DIContainer.bind<HappeningFactory>(IDENTIFIER.HappeningFactory).toDynamicValue(
     return new HappeningFactory(uuidGenerationService);
   },
 );
-
-DIContainer.bind<IHappeningRepository>(IDENTIFIER.HappeningRepository)
-  .toDynamicValue((context: interfaces.Context) => {
-    return new HappeningMongoRepository();
-  })
-  .inSingletonScope();
 
 DIContainer.bind<MemberParticipationService>(IDENTIFIER.MemberParticipationService).toDynamicValue(
   (context: interfaces.Context) => {
