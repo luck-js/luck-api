@@ -1,10 +1,6 @@
 /*
  *   generate by https://www.json-generator.com/#
  */
-/*
- *   generate by https://www.json-generator.com/#
- */
-
 import { IMember } from './member.model';
 import { RoleType } from './event-member-role/event-member-role.model';
 

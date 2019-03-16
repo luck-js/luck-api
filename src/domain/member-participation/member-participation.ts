@@ -15,20 +15,8 @@ export class MemberParticipation {
     return this.happening.updateMembers(members);
   }
 
-  getMembers(): Member[] {
-    return this.happening.getMembers();
-  }
-
-  getParticipants(): Member[] {
-    return this.happening.getParticipants();
-  }
-
   getMatchedMember(): Member {
     return this.happening.getMatchedMember(this.member.MatchedMemberId);
-  }
-
-  getHappening(): Happening {
-    return this.happening;
   }
 
   publishHappening(): void {
