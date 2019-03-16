@@ -8,7 +8,7 @@
     "lint": "tslint --outputAbsolutePaths -c tslint.json \"./src/**/*.ts\"",
     "lint-fix": "tslint --fix \"./src/**/*.ts\"",
     "build": "tsc && node bin/index.js",
-    "watch": "nodemon --exec ts-node -- ./src/index.ts"
+    "watch": "nodemon --exec ts-node -- ./src/infrastructure/index.ts"
   },
   "husky": {
     "hooks": {
