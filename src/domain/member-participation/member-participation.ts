@@ -15,6 +15,10 @@ export class MemberParticipation {
     return this.happening.updateMembers(members);
   }
 
+  getMembers(): Member[] {
+    return this.happening.getMembers();
+  }
+
   getMatchedMember(): Member {
     return this.happening.getMatchedMember(this.member.MatchedMemberId);
   }

@@ -147,7 +147,7 @@ export class MemberParticipationService {
       switchMap(memberParticipations =>
         forkJoin(memberParticipations.map(memberParticipation => this.add(memberParticipation))),
       ),
-      map(memberParticipations => memberParticipations[0].getMembers()),
+      map((memberParticipations: MemberParticipation[]) => memberParticipations[0].getMembers()),
     );
   }
 }
