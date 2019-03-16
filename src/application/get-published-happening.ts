@@ -20,10 +20,12 @@ function mapToPublishedHappeningView(
   memberParticipations: MemberParticipation[],
 ): IPublishedHappeningView {
   const { name, description } = memberParticipations[0].happening;
-  const participants = memberParticipations.map(memberParticipation => ({
-    name: memberParticipation.getMember().name,
-    uniqueLink: memberParticipation.id,
-  }));
+  const participants = memberParticipations
+    .filter(memberParticipation => memberParticipation.getMember().eventMemberRole.abilityToRandom)
+    .map(memberParticipation => ({
+      name: memberParticipation.getMember().name,
+      uniqueLink: memberParticipation.id,
+    }));
 
   return {
     name,
