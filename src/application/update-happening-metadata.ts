@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
 import { map } from 'rxjs/operators';
 import { Happening } from '../domain/happening/happening';
@@ -11,6 +11,12 @@ export class UpdateHappeningMetadata {
   constructor(private relationMemberHappeningService: MemberParticipationService) {}
 
   execute(id: string, happeningMetadata: IHappeningMetadata): Observable<IHappeningView> {
+    if (
+      typeof happeningMetadata.name === 'undefined' ||
+      typeof happeningMetadata.description === 'undefined'
+    ) {
+      return throwError(new Error('happeningMetadata is not complete'));
+    }
     return this.relationMemberHappeningService
       .updateHappeningMetadata(id, happeningMetadata)
       .pipe(map(memberParticipation => mapToHappeningView(memberParticipation.happening)));
