@@ -16,7 +16,10 @@ export class HappeningMongoRepository implements IHappeningRepository {
 
   update(happening: IHappening): Observable<IHappening> {
     return from(
-      HappeningModel.findOneAndUpdate({ id: happening.id }, happening, { new: true }).exec(),
+      HappeningModel.findOneAndUpdate({ id: happening.id }, happening, {
+        upsert: true,
+        new: true,
+      }).exec(),
     );
   }
 }

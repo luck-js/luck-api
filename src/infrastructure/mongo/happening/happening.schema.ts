@@ -23,7 +23,7 @@ const HappeningSchema: Schema = new Schema(
       type: Boolean,
       required: true,
     },
-    memberIdList: {
+    memberIds: {
       type: [String],
       required: true,
     },
