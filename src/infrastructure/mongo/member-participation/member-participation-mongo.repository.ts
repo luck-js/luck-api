@@ -15,7 +15,7 @@ export class MemberParticipationMongoRepository implements IMemberParticipationR
       MemberParticipationModel.findOneAndUpdate(
         { id: memberParticipation.id },
         memberParticipation,
-        { new: true },
+        { upsert: true, new: true },
       ).exec(),
     );
   }

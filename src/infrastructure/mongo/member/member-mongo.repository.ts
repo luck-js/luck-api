@@ -23,6 +23,8 @@ export class MemberMongoRepository implements IMemberRepository {
   }
 
   private update(member: IMember): Observable<IMember> {
-    return from(MemberModel.findOneAndUpdate({ id: member.id }, member, { new: true }).exec());
+    return from(
+      MemberModel.findOneAndUpdate({ id: member.id }, member, { upsert: true, new: true }).exec(),
+    );
   }
 }
