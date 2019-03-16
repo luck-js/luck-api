@@ -1,10 +1,5 @@
-import { Document, model, Schema } from 'mongoose';
-import {
-  IEventMemberRole,
-  RoleType,
-} from '../../../domain/member/event-member-role/event-member-role.model';
-
-export interface IEventMemberRoleSchema extends IEventMemberRole, Document {}
+import { Schema } from 'mongoose';
+import { RoleType } from '../../../domain/member/event-member-role/event-member-role.model';
 
 export const EventMemberRoleSchema: Schema = new Schema({
   type: {
@@ -20,5 +15,3 @@ export const EventMemberRoleSchema: Schema = new Schema({
     required: false,
   },
 });
-
-export default model<IEventMemberRoleSchema>('EventMemberRole', EventMemberRoleSchema);
