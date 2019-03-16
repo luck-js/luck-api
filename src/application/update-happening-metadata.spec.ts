@@ -6,6 +6,7 @@ import { UpdateHappeningMetadata } from './update-happening-metadata';
 import { MEMBER_PARTICIPATIONS_INITIAL_MOCK } from '../domain/member-participation/member-participation.mock';
 import { HAPPENING_INITIAL_LIST_MOCK } from '../domain/happening/happening.mock';
 import { DIContainer } from '../infrastructure/di-container';
+import { IHappeningMetadata } from '../domain/happening/happening.model';
 
 describe('UpdateHappeningMetadata', function() {
   let updateHappeningMetadata: UpdateHappeningMetadata;
@@ -36,5 +37,25 @@ describe('UpdateHappeningMetadata', function() {
         assert.strictEqual(happeningView.name, newName);
         done();
       });
+  });
+
+  it('executed method with not complete payload should returned error', function(done) {
+    const memberParticipationId = MEMBER_PARTICIPATIONS_INITIAL_MOCK[0].id;
+    const happeningMetadata = <IHappeningMetadata>{
+      name: 'newName',
+    };
+    updateHappeningMetadata.execute(memberParticipationId, happeningMetadata).subscribe(
+      () => {},
+      error => {
+        assert.throws(() => {
+          throw error;
+        });
+        done();
+      },
+      () => {
+        assert.fail();
+        done();
+      },
+    );
   });
 });
