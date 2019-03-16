@@ -98,7 +98,7 @@ export class MemberParticipationController {
   }
 
   createPublishedHappening(req: Request, res: Response) {
-    const happening = req.body;
+    const { happening } = req.body;
     const { id } = req.params;
     this.createPublishedHappeningApplication
       .execute(id, happening)
