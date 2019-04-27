@@ -42,7 +42,7 @@ router
   .post((req: Request, res: Response) => memberParticipationController.publishHappening(req, res));
 
 router
-  .route('/happening/generate-detailed-participant-list-information/:id')
+  .route('/published-happening/:id')
   .get((req: Request, res: Response) =>
     memberParticipationController.getPublishedHappening(req, res),
   )

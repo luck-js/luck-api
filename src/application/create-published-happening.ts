@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import { Observable } from 'rxjs';
 import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
 import { map, switchMap } from 'rxjs/operators';
-import { INewHappeningView } from './model/new-happening-view.model';
+import { INewPublishedHappeningView } from './model/published-happening-view.model';
 import { MemberParticipation } from '../domain/member-participation/member-participation';
 import { IPublishedHappeningView } from './model/published-happening-view.model';
 
@@ -12,7 +12,7 @@ export class CreatePublishedHappening {
 
   execute(
     id: string,
-    { name, description, participants }: INewHappeningView,
+    { name, description, participants }: INewPublishedHappeningView,
   ): Observable<IPublishedHappeningView> {
     const metadata = { name, description };
     return this.memberParticipationService.addParticipantMembers(id, participants).pipe(
