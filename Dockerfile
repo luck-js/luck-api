@@ -1,4 +1,4 @@
-FROM node:9.11.2
+FROM node:10.15.3
 
 MAINTAINER Karski Daniel
 
