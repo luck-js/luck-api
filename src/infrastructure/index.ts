@@ -45,7 +45,7 @@ export class Server {
    * @method api
    */
   public api() {
-    this.app.use('/api', api);
+    this.app.use('/api/v1', api);
 
     this.app.get('*', (req, res) => {
       res.json({ message: 'Welcome to Luck REST Api' });

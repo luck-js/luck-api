@@ -1,8 +1,7 @@
 # Luck-api
 
- <a href="https://opensource.org/licenses/MIT">
-    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License">
-</a>
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+![GitHub contributors](https://img.shields.io/github/contributors/luck-js/luck-api)
 
 #### For more information about this project, see the front-end [Luck app repository](https://github.com/luck-js/luck-ui)
 
