@@ -1,0 +1,95 @@
+language: node_js
+node_js:
+  - '10'
+
+env:
+  global:
+    - DEV_IMAGE_NAME=luckjs/ts-luck-api
+    - DEV_CONTAINER_NAME=luck-api_develop
+    - DEV_DB_CONTAINER_NAME=luck-mongo_develop
+    - DEV_VIRTUAL_HOST=api.testdevelop.luck.org.pl
+
+    - PROD_IMAGE_NAME=luckjs/luck-api
+    - PROD_CONTAINER_NAME=luck-api_master
+    - PROD_DB_CONTAINER_NAME=luck-mongo_master
+    - PROD_VIRTUAL_HOST=api.luck.org.pl
+
+build: &build
+  stage: build
+  services:
+    - docker
+  script:
+    - echo $IMAGE_NAME
+    - docker build . -t $IMAGE_NAME
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker push $IMAGE_NAME
+
+deploy: &deploy
+  stage: deploy
+  before_install:
+    - openssl aes-256-cbc -K $encrypted_a9d7ea149dca_key -iv $encrypted_a9d7ea149dca_iv
+      -in .travis/id_rsa.enc -out .travis/id_rsa -d
+    - eval "$(ssh-agent -s)"
+    - cp .travis/id_rsa ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-add ~/.ssh/id_rsa
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $HOST_IP > ~/.ssh/known_hosts
+  script: skip
+  deploy:
+   - provider: script
+     skip_cleanup: true
+     script: bash .travis/deploy.sh $HOST_IP $DOCKER_PASSWORD $DOCKER_USERNAME $IMAGE_NAME $CONTAINER_NAME $DB_NAME $CLIENT_URL $DB_CONTAINER_NAME
+     on:
+       branch: develop
+   - provider: script
+     skip_cleanup: true
+     script: bash .travis/deploy.sh $HOST_IP $DOCKER_PASSWORD $DOCKER_USERNAME $IMAGE_NAME $CONTAINER_NAME $DB_NAME $CLIENT_URL $DB_CONTAINER_NAME
+     on:
+       branch: master
+
+stages:
+  - test
+  - build
+  - deploy
+
+jobs:
+  include:
+    - stage: test
+      cache:
+        directories:
+          - node_modules
+      install: npm install mocha ts-node
+      script: npm run-script test
+
+    - <<: *build
+      name: 'dev build'
+      if: branch = develop
+      env: IMAGE_NAME=$DEV_IMAGE_NAME
+
+    - <<: *build
+      name: 'prod build'
+      if: branch = master
+      env: IMAGE_NAME=$PROD_IMAGE_NAME
+
+    - <<: *deploy
+      name: 'dev deploy'
+      if: branch = develop
+      env:
+        - DB_NAME=luck
+        - DB_CONTAINER_NAME=$DEV_DB_CONTAINER_NAME
+        - IMAGE_NAME=$DEV_IMAGE_NAME
+        - CONTAINER_NAME=$DEV_CONTAINER_NAME
+        - CLIENT_URL=https://testdevelop.luck.org.pl
+        - VIRTUAL_HOST=$DEV_VIRTUAL_HOST
+
+    - <<: *deploy
+      name: 'prod deploy'
+      if: branch = master
+      env:
+        - DB_NAME=luck
+        - DB_CONTAINER_NAME=$PROD_DB_CONTAINER_NAME
+        - IMAGE_NAME=$PROD_IMAGE_NAME
+        - CONTAINER_NAME=$PROD_CONTAINER_NAME
+        - CLIENT_URL=https://luck.org.pl
+        - VIRTUAL_HOST=PROD_VIRTUAL_HOST
