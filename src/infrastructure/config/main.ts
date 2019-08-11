@@ -14,7 +14,7 @@ interface Config {
 const config: Config = {
   secret: '',
   database: process.env.DATABASE_URL,
-  port: process.env.PORT,
+  port: process.env.PORT || '9000',
   serverHost: `http://${os.hostname()}`,
   clientURL: process.env.CLIENT_URL,
 };
