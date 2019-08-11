@@ -1,17 +1,14 @@
-FROM node:9.11.2
+FROM node:10.15.3
 
-MAINTAINER Karski Daniel
+WORKDIR /usr/src/luck-api
 
-ENV DATABASE_URL="mongodb://mongo/luck"
-ENV PORT=80
-ENV CLIENT_URL="www.luck.org.pl"
-
-COPY . /var/luck-api
-
-WORKDIR /var/luck-api
+COPY package.json package.json
+COPY package-lock.json package-lock.json
 
 RUN npm install
 
-EXPOSE $PORT
+COPY . .
+
+EXPOSE 9000
 
 ENTRYPOINT ["npm", "run", "watch"]
