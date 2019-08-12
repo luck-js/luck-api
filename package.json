@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --colors -r ts-node/register \"./src/**/*.spec.ts\"",
+    "test-coverage": "nyc --reporter=lcov --reporter=text mocha --colors -r ts-node/register \"./src/**/*.spec.ts\" --recursive && cat coverage/lcov.info | codacy-coverage --token",
     "lint": "tslint --outputAbsolutePaths -c tslint.json \"./src/**/*.ts\"",
     "lint-fix": "tslint --fix \"./src/**/*.ts\"",
     "build": "tsc && node bin/index.js",
@@ -60,8 +61,16 @@
     "typescript": "^3.3.3333"
   },
   "devDependencies": {
+    "codacy-coverage": "^3.4.0",
+    "@istanbuljs/nyc-config-typescript": "^0.1.3",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.5",
-    "prettier": "^1.16.4"
+    "mocha-lcov-reporter": "^1.3.0",
+    "nyc": "^14.1.1",
+    "prettier": "^1.16.4",
+    "source-map-support": "^0.5.13"
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript"
   }
 }
