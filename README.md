@@ -2,6 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 ![GitHub contributors](https://img.shields.io/github/contributors/luck-js/luck-api)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4d0551b7c8fd4cb09133f9e518707030)](https://www.codacy.com/app/dkarski/luck-api?utm_source=github.com&utm_medium=referral&utm_content=luck-js/luck-api&utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/4d0551b7c8fd4cb09133f9e518707030)](https://www.codacy.com/app/dkarski/luck-api?utm_source=github.com&utm_medium=referral&utm_content=luck-js/luck-api&utm_campaign=Badge_Coverage)
+[![Build Status](https://travis-ci.org/luck-js/luck-api.svg?branch=master)](https://travis-ci.org/luck-js/luck-api)
 
 #### For more information about this project, see the front-end [Luck app repository](https://github.com/luck-js/luck-ui)
 

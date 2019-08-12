@@ -56,6 +56,17 @@ stages:
 jobs:
   include:
     - stage: test
+      name: 'production test coverage'
+      if: branch = master
+      cache:
+        directories:
+          - node_modules
+      install: npm install mocha ts-node codacy-coverage @istanbuljs/nyc-config-typescript mocha-lcov-reporter nyc source-map-support
+      script: npm run-script test-coverage $CODACY_TOKEN
+
+    - stage: test
+      name: 'test'
+      if: branch != master
       cache:
         directories:
           - node_modules

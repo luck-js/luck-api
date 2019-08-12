@@ -16,5 +16,24 @@
     "emitDecoratorMetadata": true
   },
   "include": ["./*.ts", "**/*.ts", "src/**/*.ts"],
+  "nyc": {
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ],
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
   "exclude": ["node_modules"]
 }
