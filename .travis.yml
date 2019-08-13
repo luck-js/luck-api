@@ -98,7 +98,7 @@ jobs:
         - IMAGE_NAME=$PROD_IMAGE_NAME
         - CONTAINER_NAME=$PROD_CONTAINER_NAME
         - CLIENT_URL=https://luck.org.pl
-        - VIRTUAL_HOST=PROD_VIRTUAL_HOST
+        - VIRTUAL_HOST=$PROD_VIRTUAL_HOST
       deploy:
         - provider: script
           skip_cleanup: true
