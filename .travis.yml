@@ -19,7 +19,7 @@ env:
 jobs:
   include:
     - stage: test
-      if: branch = master
+      if: branch = master OR tag =~ ^v.*$
       cache:
         directories:
           - node_modules
@@ -40,7 +40,7 @@ jobs:
       env: IMAGE_NAME=$DEV_IMAGE_NAME
 
     - <<: *build
-      if: branch = master
+      if: branch = master OR tag =~ ^v.*$
       env: IMAGE_NAME=$PROD_IMAGE_NAME
 
 
@@ -62,7 +62,7 @@ jobs:
         - DB_CONTAINER_NAME=$DEV_DB_CONTAINER_NAME
         - IMAGE_NAME=$DEV_IMAGE_NAME
         - CONTAINER_NAME=$DEV_CONTAINER_NAME
-        - CLIENT_URL=https://testdevelop.luck.org.pl
+        - CLIENT_URL=https://app.testdevelop.luck.org.pl
         - VIRTUAL_HOST=$DEV_VIRTUAL_HOST
       deploy:
         - provider: script
@@ -72,13 +72,13 @@ jobs:
             branch: develop
 
     - <<: *deploy
-      if: branch = master
+      if: branch = master OR tag =~ ^v.*$
       env:
         - DB_NAME=luck
         - DB_CONTAINER_NAME=$PROD_DB_CONTAINER_NAME
         - IMAGE_NAME=$PROD_IMAGE_NAME
         - CONTAINER_NAME=$PROD_CONTAINER_NAME
-        - CLIENT_URL=https://luck.org.pl
+        - CLIENT_URL=https://app.luck.org.pl
         - VIRTUAL_HOST=$PROD_VIRTUAL_HOST
       deploy:
         - provider: script
