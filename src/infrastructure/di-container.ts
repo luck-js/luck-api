@@ -22,6 +22,7 @@ import { UpdateHappeningMetadata } from '../application/update-happening-metadat
 import { AddParticipantMember } from '../application/add-participant-member';
 import { PublishHappening } from '../application/publish-happening';
 import { CreatePublishedHappening } from '../application/create-published-happening';
+import { CreateNewPublishedHappening } from '../application/create-new-published-happening';
 import { GetPublishedHappening } from '../application/get-published-happening';
 import { IMemberRepository } from '../domain/member/member.repository';
 import { IHappeningRepository } from '../domain/happening/happening.repository';
@@ -205,6 +206,19 @@ DIContainer.bind<CreatePublishedHappening>(IDENTIFIER.CreatePublishedHappening).
   },
 );
 
+DIContainer.bind<CreateNewPublishedHappening>(
+  IDENTIFIER.CreateNewPublishedHappening,
+).toDynamicValue((context: interfaces.Context) => {
+  const createPublishedHappening = context.container.get<CreatePublishedHappening>(
+    IDENTIFIER.CreatePublishedHappening,
+  );
+  const createMemberParticipation = context.container.get<CreateMemberParticipation>(
+    IDENTIFIER.CreateMemberParticipation,
+  );
+
+  return new CreateNewPublishedHappening(createPublishedHappening, createMemberParticipation);
+});
+
 DIContainer.bind<GetPublishedHappening>(IDENTIFIER.GetPublishedHappening).toDynamicValue(
   (context: interfaces.Context) => {
     const memberParticipationService = context.container.get<MemberParticipationService>(
@@ -238,6 +252,10 @@ DIContainer.bind<MemberParticipationController>(
     IDENTIFIER.CreatePublishedHappening,
   );
 
+  const createNewPublishedHappening = context.container.get<CreateNewPublishedHappening>(
+    IDENTIFIER.CreateNewPublishedHappening,
+  );
+
   const getPublishedHappening = context.container.get<GetPublishedHappening>(
     IDENTIFIER.GetPublishedHappening,
   );
@@ -252,6 +270,7 @@ DIContainer.bind<MemberParticipationController>(
     addParticipantMember,
     publishHappening,
     createPublishedHappening,
+    createNewPublishedHappening,
     getPublishedHappening,
   );
 });
