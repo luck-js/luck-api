@@ -22,6 +22,7 @@ const IDENTIFIER = {
   AddParticipantMember: Symbol.for('AddParticipantMember'),
   PublishHappening: Symbol.for('PublishHappening'),
   CreatePublishedHappening: Symbol.for('CreatePublishedHappening'),
+  CreateNewPublishedHappening: Symbol.for('CreateNewPublishedHappening'),
   GetPublishedHappening: Symbol.for('GetPublishedHappening'),
 
   MemberParticipationController: Symbol.for('MemberParticipationController'),

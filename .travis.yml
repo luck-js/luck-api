@@ -62,7 +62,7 @@ jobs:
         - DB_CONTAINER_NAME=$DEV_DB_CONTAINER_NAME
         - IMAGE_NAME=$DEV_IMAGE_NAME
         - CONTAINER_NAME=$DEV_CONTAINER_NAME
-        - CLIENT_URL=https://app.testdevelop.luck.org.pl
+        - CLIENT_URL=https://testdevelop.luck.org.pl
         - VIRTUAL_HOST=$DEV_VIRTUAL_HOST
       deploy:
         - provider: script
@@ -78,7 +78,7 @@ jobs:
         - DB_CONTAINER_NAME=$PROD_DB_CONTAINER_NAME
         - IMAGE_NAME=$PROD_IMAGE_NAME
         - CONTAINER_NAME=$PROD_CONTAINER_NAME
-        - CLIENT_URL=https://app.luck.org.pl
+        - CLIENT_URL=https://luck.org.pl
         - VIRTUAL_HOST=$PROD_VIRTUAL_HOST
       deploy:
         - provider: script

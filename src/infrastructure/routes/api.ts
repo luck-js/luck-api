@@ -42,6 +42,12 @@ router
   .post((req: Request, res: Response) => memberParticipationController.publishHappening(req, res));
 
 router
+  .route('/published-happening')
+  .post((req: Request, res: Response) =>
+    memberParticipationController.createNewPublishedHappening(req, res),
+  );
+
+router
   .route('/published-happening/:id')
   .get((req: Request, res: Response) =>
     memberParticipationController.getPublishedHappening(req, res),
