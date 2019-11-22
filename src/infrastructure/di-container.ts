@@ -265,6 +265,8 @@ DIContainer.bind<MemberParticipationController>(
     IDENTIFIER.CreateNewPublishedHappening,
   );
 
+  const getHappenings = context.container.get<GetHappenings>(IDENTIFIER.GetHappenings);
+
   const getPublishedHappening = context.container.get<GetPublishedHappening>(
     IDENTIFIER.GetPublishedHappening,
   );
@@ -280,6 +282,7 @@ DIContainer.bind<MemberParticipationController>(
     publishHappening,
     createPublishedHappening,
     createNewPublishedHappening,
+    getHappenings,
     getPublishedHappening,
   );
 });

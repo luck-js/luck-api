@@ -20,6 +20,9 @@ router
   .get((req: Request, res: Response) => memberParticipationController.getMatchedMember(req, res));
 
 router
+  .route('/happening')
+  .get((req: Request, res: Response) => memberParticipationController.getHappenings(req, res));
+router
   .route('/happening/create')
   .post((req: Request, res: Response) =>
     memberParticipationController.createMemberParticipation(req, res),

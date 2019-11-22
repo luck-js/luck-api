@@ -8,8 +8,9 @@ import { CreateMemberParticipation } from '../application/create-member-particip
 import { UpdateHappeningMetadata } from '../application/update-happening-metadata';
 import { AddParticipantMember } from '../application/add-participant-member';
 import { PublishHappening } from '../application/publish-happening';
-import { CreateNewPublishedHappening } from '../application/create-new-published-happening';
 import { CreatePublishedHappening } from '../application/create-published-happening';
+import { CreateNewPublishedHappening } from '../application/create-new-published-happening';
+import { GetHappenings } from '../application/get-happenings';
 import { GetPublishedHappening } from '../application/get-published-happening';
 
 @injectable()
@@ -23,6 +24,7 @@ export class MemberParticipationController {
     private publishHappeningApplication: PublishHappening,
     private createPublishedHappeningApplication: CreatePublishedHappening,
     private createNewPublishedHappeningApplication: CreateNewPublishedHappening,
+    private getHappeningsApplication: GetHappenings,
     private getPublishedHappeningApplication: GetPublishedHappening,
   ) {}
 
@@ -107,6 +109,17 @@ export class MemberParticipationController {
       .pipe(
         take(1),
         map(publishedHappeningView => res.json(publishedHappeningView)),
+        catchError(val => this.sendError(res, 400, val)),
+      )
+      .subscribe();
+  }
+
+  getHappenings(req: Request, res: Response) {
+    this.getHappeningsApplication
+      .execute()
+      .pipe(
+        take(1),
+        map(happenings => res.json(happenings)),
         catchError(val => this.sendError(res, 400, val)),
       )
       .subscribe();
