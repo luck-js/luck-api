@@ -18,7 +18,7 @@ export class CreatePublishedHappening {
     return this.memberParticipationService.addParticipantMembers(id, participants).pipe(
       switchMap(() => this.memberParticipationService.publishHappening(id)),
       switchMap(() => this.memberParticipationService.updateHappeningMetadata(id, metadata)),
-      switchMap(() => this.memberParticipationService.getListByHappeningId(id)),
+      switchMap(() => this.memberParticipationService.getListById(id)),
       map(memberParticipations => mapToPublishedHappeningView(memberParticipations)),
     );
   }

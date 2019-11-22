@@ -65,7 +65,7 @@ export class MemberParticipationService {
     );
   }
 
-  getListByHappeningId(id: string): Observable<MemberParticipation[]> {
+  getListById(id: string): Observable<MemberParticipation[]> {
     return this.memberParticipationRepository.getByIndex(id).pipe(
       switchMap(memberParticipation =>
         this.memberParticipationRepository.getByHappeningIndex(memberParticipation.happeningId),

@@ -11,7 +11,7 @@ export class GetPublishedHappening {
 
   execute(id: string): Observable<IPublishedHappeningView> {
     return this.memberParticipationService
-      .getListByHappeningId(id)
+      .getListById(id)
       .pipe(map(memberParticipations => mapToPublishedHappeningView(memberParticipations)));
   }
 }
