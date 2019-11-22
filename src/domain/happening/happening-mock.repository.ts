@@ -16,6 +16,10 @@ export class HappeningMockRepository implements IHappeningRepository {
     return of(this.list.find(happening => happening.id === id));
   }
 
+  getAll(): Observable<IHappening[]> {
+    return of([...this.list]);
+  }
+
   update(happening: IHappening): Observable<IHappening> {
     this.list = this.list.reduce((state, prevHappening) => {
       prevHappening =

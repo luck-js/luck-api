@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import { Happening } from './happening';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { HappeningFactory } from './happening.factory';
 import { map, mapTo, switchMap } from 'rxjs/operators';
 import { MemberService } from '../member/member.service';
@@ -42,6 +42,12 @@ export class HappeningService {
     return this.happeningRepository
       .getByIndex(id)
       .pipe(switchMap(happening => mapToHappening(happening)));
+  }
+
+  getAll(): Observable<Happening[]> {
+    return this.happeningRepository
+      .getAll()
+      .pipe(switchMap(happenings => forkJoin(happenings.map(({ id }) => this.get(id)))));
   }
 
   private addMembers(members: Member[]): Observable<Member[]> {

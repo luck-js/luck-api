@@ -27,7 +27,7 @@ import { GetPublishedHappening } from '../application/get-published-happening';
 import { IMemberRepository } from '../domain/member/member.repository';
 import { IHappeningRepository } from '../domain/happening/happening.repository';
 import { IMemberParticipationRepository } from '../domain/member-participation/member-participation.repository';
-import { GetPublishedHappenings } from '../application/get-published-happenings';
+import { GetHappenings } from '../application/get-happenings';
 
 const DIContainer = new Container();
 
@@ -230,13 +230,11 @@ DIContainer.bind<GetPublishedHappening>(IDENTIFIER.GetPublishedHappening).toDyna
   },
 );
 
-DIContainer.bind<GetPublishedHappenings>(IDENTIFIER.GetPublishedHappenings).toDynamicValue(
+DIContainer.bind<GetHappenings>(IDENTIFIER.GetHappenings).toDynamicValue(
   (context: interfaces.Context) => {
-    const memberParticipationService = context.container.get<MemberParticipationService>(
-      IDENTIFIER.MemberParticipationService,
-    );
+    const happeningService = context.container.get<HappeningService>(IDENTIFIER.HappeningService);
 
-    return new GetPublishedHappenings(memberParticipationService);
+    return new GetHappenings(happeningService);
   },
 );
 

@@ -6,5 +6,7 @@ export interface IHappeningRepository {
 
   getByIndex(id: string): Observable<IHappening>;
 
+  getAll(): Observable<IHappening[]>;
+
   update(happening: IHappening): Observable<IHappening>;
 }
