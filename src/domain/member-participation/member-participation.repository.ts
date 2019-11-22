@@ -8,5 +8,5 @@ export interface IMemberParticipationRepository {
 
   getByIndex(id: string): Observable<IMemberParticipation>;
 
-  getByHappeningIndex(id: string): Observable<IMemberParticipation[]>;
+  getAllByHappeningIndex(id: string): Observable<IMemberParticipation[]>;
 }

@@ -29,7 +29,7 @@ export class MemberParticipationMockRepository implements IMemberParticipationRe
     return of(memberParticipation);
   }
 
-  getByHappeningIndex(happeningId: string): Observable<IMemberParticipation[]> {
+  getAllByHappeningIndex(happeningId: string): Observable<IMemberParticipation[]> {
     return of(
       this.list.filter(memberParticipation => memberParticipation.happeningId === happeningId),
     );

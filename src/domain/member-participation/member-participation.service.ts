@@ -65,14 +65,10 @@ export class MemberParticipationService {
     );
   }
 
-  getOrganiserParticipations(): Observable<MemberParticipation[]> {
-    return of([]);
-  }
-
   getListById(id: string): Observable<MemberParticipation[]> {
     return this.memberParticipationRepository.getByIndex(id).pipe(
       switchMap(memberParticipation =>
-        this.memberParticipationRepository.getByHappeningIndex(memberParticipation.happeningId),
+        this.memberParticipationRepository.getAllByHappeningIndex(memberParticipation.happeningId),
       ),
       switchMap(memberParticipations =>
         forkJoin(memberParticipations.map(memberParticipation => this.get(memberParticipation.id))),
