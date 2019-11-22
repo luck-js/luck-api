@@ -13,6 +13,7 @@ interface IPublishedHappeningView {
   name: string;
   description: string;
   participants: IParticipantsView[];
+  createdAt: string;
 }
 
 @injectable()
@@ -27,7 +28,7 @@ export class GetHappenings {
 }
 
 function mapToPublishedHappeningView(happening: Happening): IPublishedHappeningView {
-  const { name, description } = happening;
+  const { name, description, id, createdAt } = happening;
   const participants = happening
     .getMembers()
     .filter(member => member.eventMemberRole.abilityToRandom)
@@ -36,7 +37,8 @@ function mapToPublishedHappeningView(happening: Happening): IPublishedHappeningV
     }));
 
   return {
-    id: happening.id,
+    id,
+    createdAt,
     name,
     description,
     participants,

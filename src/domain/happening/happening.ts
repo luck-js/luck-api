@@ -5,6 +5,7 @@ import { RoleType } from '../member/event-member-role/event-member-role.model';
 export class Happening {
   constructor(
     public id: string = '',
+    public createdAt: string = '',
     public name: string = '',
     public description: string = '',
     public isPublish: boolean = false,

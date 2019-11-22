@@ -9,4 +9,5 @@ export interface IHappening extends IHappeningMetadata {
   description: string;
   isPublish: boolean;
   memberIds: string[];
+  createdAt: string;
 }

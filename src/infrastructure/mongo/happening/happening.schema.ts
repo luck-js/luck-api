@@ -27,6 +27,10 @@ const HappeningSchema: Schema = new Schema(
       type: [String],
       required: true,
     },
+    createdAt: {
+      type: String,
+      required: true,
+    },
   },
   { collection: 'happening' },
 );

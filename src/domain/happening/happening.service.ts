@@ -31,11 +31,20 @@ export class HappeningService {
   }
 
   get(id: string): Observable<Happening> {
-    const mapToHappening = ({ id, name, description, isPublish, memberIds }: IHappening) => {
+    const mapToHappening = ({
+      id,
+      name,
+      description,
+      isPublish,
+      memberIds,
+      createdAt,
+    }: IHappening) => {
       return this.memberService
         .getList(memberIds)
         .pipe(
-          map(members => this.happeningFactory.recreate(id, name, description, isPublish, members)),
+          map(members =>
+            this.happeningFactory.recreate(id, createdAt, name, description, isPublish, members),
+          ),
         );
     };
 
@@ -59,7 +68,14 @@ export class HappeningService {
   }
 }
 
-function mapToEntity({ id, description, isPublish, members, name }: Happening): IHappening {
+function mapToEntity({
+  id,
+  description,
+  isPublish,
+  members,
+  name,
+  createdAt,
+}: Happening): IHappening {
   const memberIds = members.map(member => member.id);
-  return { id, description, isPublish, memberIds, name };
+  return { id, description, isPublish, memberIds, name, createdAt };
 }
