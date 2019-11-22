@@ -20,6 +20,7 @@ const IDENTIFIER = {
   GetMatchedMember: Symbol.for('GetMatchedMember'),
   UpdateHappeningMetadata: Symbol.for('UpdateHappeningMetadata'),
   AddParticipantMember: Symbol.for('AddParticipantMember'),
+  GetPublishedHappenings: Symbol.for('GetPublishedHappenings'),
   PublishHappening: Symbol.for('PublishHappening'),
   CreatePublishedHappening: Symbol.for('CreatePublishedHappening'),
   CreateNewPublishedHappening: Symbol.for('CreateNewPublishedHappening'),
