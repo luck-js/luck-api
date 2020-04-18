@@ -4,6 +4,7 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 
 import api from './routes/api';
+import noteApi from '../application-note/api';
 import config from './config/main';
 
 export class Server {
@@ -46,6 +47,7 @@ export class Server {
    */
   public api() {
     this.app.use('/api/v1', api);
+    this.app.use('/api/v2', noteApi);
 
     this.app.get('*', (req, res) => {
       res.json({ message: 'Welcome to Luck REST Api' });
@@ -61,7 +63,7 @@ export class Server {
   public middleware() {
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: false }));
-    this.app.use(cors({ origin: config.clientURL }));
+    this.app.use(cors());
   }
 }
 
