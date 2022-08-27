@@ -24,7 +24,7 @@ jobs:
         directories:
           - node_modules
       install: npm install mocha ts-node codacy-coverage @istanbuljs/nyc-config-typescript mocha-lcov-reporter nyc source-map-support
-      script: npm run-script test-coverage $CODACY_TOKEN
+      script: npm run-script test
 
 
     - &build
