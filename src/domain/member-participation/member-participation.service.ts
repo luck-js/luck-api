@@ -10,6 +10,7 @@ import { MemberFactory } from '../member/member.factory';
 import { HappeningFactory } from '../happening/happening.factory';
 import { MatchingMemberService } from '../matching-member.service';
 import { IMemberParticipationRepository } from './member-participation.repository';
+import { Happening } from '../happening/happening';
 
 @injectable()
 export class MemberParticipationService {
@@ -45,12 +46,6 @@ export class MemberParticipationService {
     const memberParticipation = await this.memberParticipationRepository.getByIndex(id);
     const happening = await this.happeningService.get(memberParticipation.happeningId).toPromise();
 
-    const recreateMemberParticipation = (memberParticipation, happening) => {
-      const id = memberParticipation.id;
-      const member = happening.getMember(memberParticipation.memberId);
-      return this.memberParticipationFactory.recreate(id, member, happening);
-    };
-
     return recreateMemberParticipation(memberParticipation, happening);
   }
 
@@ -59,15 +54,11 @@ export class MemberParticipationService {
     const memberParticipations = await this.memberParticipationRepository.getAllByHappeningIndex(
       memberParticipation.happeningId,
     );
+    const happening = await this.happeningService.get(memberParticipation.happeningId).toPromise();
 
-    const list = [];
-
-    for await (const memberParticipation of memberParticipations) {
-      const item = await this.get(memberParticipation.id);
-      list.push(item);
-    }
-
-    return list;
+    return memberParticipations.map(memberParticipation =>
+      recreateMemberParticipation(memberParticipation, happening),
+    );
   }
 
   async updateHappeningMetadata(
@@ -144,4 +135,13 @@ function mapToEntity({ id, member, happening }: MemberParticipation): IMemberPar
     memberId: member.id,
     happeningId: happening.id,
   };
+}
+
+function recreateMemberParticipation(
+  memberParticipation: IMemberParticipation,
+  happening: Happening,
+): MemberParticipation {
+  const id = memberParticipation.id;
+  const member = happening.getMember(memberParticipation.memberId);
+  return this.memberParticipationFactory.recreate(id, member, happening);
 }
