@@ -19,7 +19,7 @@ env:
 jobs:
   include:
     - stage: test
-      if: branch = master OR tag =~ ^v.*$
+      if: branch = master
       cache:
         directories:
           - node_modules
@@ -40,7 +40,7 @@ jobs:
       env: IMAGE_NAME=$DEV_IMAGE_NAME
 
     - <<: *build
-      if: branch = master OR tag =~ ^v.*$
+      if: branch = master
       env: IMAGE_NAME=$PROD_IMAGE_NAME
 
 
@@ -72,7 +72,7 @@ jobs:
             branch: develop
 
     - <<: *deploy
-      if: branch = master OR tag =~ ^v.*$
+      if: branch = master
       env:
         - DB_NAME=luck
         - DB_CONTAINER_NAME=$PROD_DB_CONTAINER_NAME
@@ -86,4 +86,3 @@ jobs:
           script: bash .travis/deploy.sh $HOST_IP $DOCKER_PASSWORD $DOCKER_USERNAME $IMAGE_NAME $CONTAINER_NAME $DB_NAME $CLIENT_URL $DB_CONTAINER_NAME
           on:
             branch: master
-            tags: true
