@@ -18,7 +18,7 @@ describe('UpdateHappeningMetadata', function() {
     );
   });
 
-  it('executed method should returned modified happening value', function(done) {
+  it('executed method should returned modified happening value', async function() {
     const memberParticipation = MEMBER_PARTICIPATIONS_INITIAL_MOCK[0];
     const happening = HAPPENING_INITIAL_LIST_MOCK.find(
       happening => happening.id === memberParticipation.happeningId,
@@ -26,36 +26,28 @@ describe('UpdateHappeningMetadata', function() {
     const newDescription = 'newDescription';
     const newName = 'newName';
 
-    updateHappeningMetadata
-      .execute(memberParticipation.id, { name: newName, description: newDescription })
-      .subscribe(happeningView => {
-        assert.notStrictEqual(happeningView.name, happening.name);
-        assert.strictEqual(happeningView.description, newDescription);
-        assert.strictEqual(happeningView.isPublish, happening.isPublish);
-        assert.strictEqual(happeningView.id, happening.id);
-        assert.notStrictEqual(happeningView.description, happening.description);
-        assert.strictEqual(happeningView.name, newName);
-        done();
-      });
+    const happeningView = await updateHappeningMetadata.execute(memberParticipation.id, {
+      name: newName,
+      description: newDescription,
+    });
+
+    assert.notStrictEqual(happeningView.name, happening.name);
+    assert.strictEqual(happeningView.description, newDescription);
+    assert.strictEqual(happeningView.isPublish, happening.isPublish);
+    assert.strictEqual(happeningView.id, happening.id);
+    assert.notStrictEqual(happeningView.description, happening.description);
+    assert.strictEqual(happeningView.name, newName);
   });
 
-  it('executed method with not complete payload should returned error', function(done) {
+  it('executed method with not complete payload should returned error', async function() {
     const memberParticipationId = MEMBER_PARTICIPATIONS_INITIAL_MOCK[0].id;
     const happeningMetadata = <IHappeningMetadata>{
       name: 'newName',
     };
-    updateHappeningMetadata.execute(memberParticipationId, happeningMetadata).subscribe(
-      () => {},
-      error => {
-        assert.throws(() => {
-          throw error;
-        });
-        done();
-      },
-      () => {
-        assert.fail();
-        done();
-      },
-    );
+    try {
+      await updateHappeningMetadata.execute(memberParticipationId, happeningMetadata);
+    } catch (e) {
+      assert.strictEqual(e.message, 'happeningMetadata is not complete');
+    }
   });
 });

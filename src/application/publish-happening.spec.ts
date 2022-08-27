@@ -14,27 +14,19 @@ describe('PublishHappening', function() {
     publishHappening = DIContainer.get<PublishHappening>(IDENTIFIER.PublishHappening);
   });
 
-  it('executed method not should any error', function(done) {
+  it('executed method not should any error', async function() {
     const memberParticipationId = MEMBER_PARTICIPATIONS_INITIAL_MOCK[0].id;
-    publishHappening.execute(memberParticipationId).subscribe(() => done());
+    await publishHappening.execute(memberParticipationId);
   });
 
-  it('executed method should error by called publish happening event', function(done) {
+  it('executed method should error by called publish happening event', async function() {
     const memberParticipationPublished = MEMBER_PARTICIPATIONS_INITIAL_MOCK.find(
       memberParticipation => memberParticipation.id === '45d3247e-ffff-4af9-b481-7f578fe7cb9f',
     );
-    publishHappening.execute(memberParticipationPublished.id).subscribe(
-      () => {},
-      error => {
-        assert.throws(() => {
-          throw error;
-        });
-        done();
-      },
-      () => {
-        assert.fail();
-        done();
-      },
-    );
+    try {
+      await publishHappening.execute(memberParticipationPublished.id);
+    } catch (e) {
+      assert.strictEqual(e.message, 'Happening is publishing');
+    }
   });
 });

@@ -1,7 +1,5 @@
 import { injectable } from 'inversify';
-import { Observable } from 'rxjs';
 import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
-import { map } from 'rxjs/operators';
 import { MemberParticipation } from '../domain/member-participation/member-participation';
 import { IPublishedHappeningView } from './model/published-happening-view.model';
 
@@ -9,10 +7,9 @@ import { IPublishedHappeningView } from './model/published-happening-view.model'
 export class GetPublishedHappening {
   constructor(private memberParticipationService: MemberParticipationService) {}
 
-  execute(id: string): Observable<IPublishedHappeningView> {
-    return this.memberParticipationService
-      .getListById(id)
-      .pipe(map(memberParticipations => mapToPublishedHappeningView(memberParticipations)));
+  async execute(id: string): Promise<IPublishedHappeningView> {
+    const memberParticipations = await this.memberParticipationService.getListById(id)
+    return mapToPublishedHappeningView(memberParticipations)
   }
 }
 

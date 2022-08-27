@@ -1,7 +1,5 @@
 import { injectable } from 'inversify';
-import { Observable } from 'rxjs';
 import { MemberParticipationService } from '../domain/member-participation/member-participation.service';
-import { map } from 'rxjs/operators';
 import { Member } from '../domain/member/member';
 import { IMemberView } from './model/member-view.model';
 
@@ -9,10 +7,9 @@ import { IMemberView } from './model/member-view.model';
 export class AddParticipantMember {
   constructor(private relationMemberHappeningService: MemberParticipationService) {}
 
-  execute(id: string, name: string): Observable<IMemberView> {
-    return this.relationMemberHappeningService
-      .addParticipantMember(id, name)
-      .pipe(map(member => mapToMemberView(member)));
+  async execute(id: string, name: string): Promise<IMemberView> {
+    const member = await this.relationMemberHappeningService.addParticipantMember(id, name);
+    return mapToMemberView(member);
   }
 }
 

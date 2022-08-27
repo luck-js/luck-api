@@ -6,7 +6,7 @@ import { MemberParticipationService } from '../domain/member-participation/membe
 export class PublishHappening {
   constructor(private relationMemberHappeningService: MemberParticipationService) {}
 
-  execute(id: string): Observable<void> {
+  execute(id: string): Promise<void> {
     return this.relationMemberHappeningService.publishHappening(id);
   }
 }

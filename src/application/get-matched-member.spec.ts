@@ -15,59 +15,35 @@ describe('GetMatchedMember', function() {
     getMatchedMember = DIContainer.get<GetMatchedMember>(IDENTIFIER.GetMatchedMember);
   });
 
-  it('getMatchedMember execute in initial happening state should throw error', function(done) {
+  it('getMatchedMember execute in initial happening state should throw error', async function() {
     const memberParticipation = MEMBER_PARTICIPATIONS_INITIAL_MOCK[1];
-    getMatchedMember.execute(memberParticipation.id).subscribe(
-      () => {},
-      error => {
-        assert.throws(() => {
-          throw error;
-        });
-        done();
-      },
-      () => {
-        assert.fail();
-        done();
-      },
-    );
+    try {
+      await getMatchedMember.execute(memberParticipation.id);
+    } catch (e) {
+      assert.strictEqual(e.message, "Happening isn't publishing");
+    }
   });
 
-  it('getMatchedMember execute for organiser should throw error even happening is published', function(done) {
+  it('getMatchedMember execute for organiser should throw error even happening is published', async function() {
     const organiserMemberParticipation = MEMBER_PARTICIPATIONS_INITIAL_MOCK.find(
       memberParticipation => memberParticipation.id === '45d3247e-ffff-4af9-b481-7f578fe7cb9f',
     );
-    getMatchedMember.execute(organiserMemberParticipation.id).subscribe(
-      () => {},
-      error => {
-        assert.throws(() => {
-          throw error;
-        });
-        done();
-      },
-      () => {
-        assert.fail();
-        done();
-      },
-    );
+    try {
+      await getMatchedMember.execute(organiserMemberParticipation.id);
+    } catch (e) {
+      assert.strictEqual(e.message, "Organiser isn't ability to random");
+    }
   });
 
-  it('getMatchedMember should view value for happening published and participant member', function(done) {
+  it('getMatchedMember should view value for happening published and participant member', async function() {
     const participantMemberParticipation = MEMBER_PARTICIPATIONS_INITIAL_MOCK.find(
       memberParticipation => memberParticipation.id === '0d0596af-gggg-4b96-8443-5663d775a79b',
     );
     const me = MEMBER_INITIAL_LIST_MOCK.find(
       member => member.id === participantMemberParticipation.memberId,
     );
-    getMatchedMember.execute(participantMemberParticipation.id).subscribe(
-      matchedMemberView => {
-        assert.strictEqual(matchedMemberView.me.id, me.id);
-        assert.strictEqual(typeof matchedMemberView.matchedMember.id, 'string');
-      },
-      () => {
-        assert.fail();
-        done();
-      },
-      () => done(),
-    );
+    const matchedMemberView = await getMatchedMember.execute(participantMemberParticipation.id);
+    assert.strictEqual(matchedMemberView.me.id, me.id);
+    assert.strictEqual(typeof matchedMemberView.matchedMember.id, 'string');
   });
 });
