@@ -1,6 +1,4 @@
 import { injectable } from 'inversify';
-import { combineLatest, forkJoin, Observable, of } from 'rxjs';
-import { map, mapTo, switchMap } from 'rxjs/operators';
 import { MemberParticipationFactory } from './member-participation.factory';
 import { Member } from '../member/member';
 import { RoleType } from '../member/event-member-role/event-member-role.model';
@@ -12,6 +10,7 @@ import { MemberFactory } from '../member/member.factory';
 import { HappeningFactory } from '../happening/happening.factory';
 import { MatchingMemberService } from '../matching-member.service';
 import { IMemberParticipationRepository } from './member-participation.repository';
+import { Happening } from '../happening/happening';
 
 @injectable()
 export class MemberParticipationService {
@@ -24,88 +23,72 @@ export class MemberParticipationService {
     private memberParticipationFactory: MemberParticipationFactory,
   ) {}
 
-  create(): Observable<MemberParticipation> {
+  async create(): Promise<MemberParticipation> {
     const happening = this.happeningFactory.create();
     const member = happening.addMember(this.memberFactory.create(RoleType.ORGANISER));
     const memberParticipation = this.memberParticipationFactory.create(member, happening);
 
-    return this.happeningService
-      .add(memberParticipation.happening)
-      .pipe(switchMap(() => this.add(memberParticipation)));
+    await this.happeningService.add(memberParticipation.happening).toPromise();
+    return this.add(memberParticipation);
   }
 
-  add(memberParticipation: MemberParticipation): Observable<MemberParticipation> {
-    return this.memberParticipationRepository
-      .add(mapToEntity(memberParticipation))
-      .pipe(mapTo(memberParticipation));
+  async add(memberParticipation: MemberParticipation): Promise<MemberParticipation> {
+    await this.memberParticipationRepository.add(mapToEntity(memberParticipation));
+    return memberParticipation;
   }
 
-  update(memberParticipation: MemberParticipation): Observable<MemberParticipation> {
-    return this.memberParticipationRepository
-      .update(mapToEntity(memberParticipation))
-      .pipe(mapTo(memberParticipation));
+  async update(memberParticipation: MemberParticipation): Promise<MemberParticipation> {
+    await this.memberParticipationRepository.update(mapToEntity(memberParticipation));
+    return memberParticipation;
   }
 
-  get(id: string): Observable<MemberParticipation> {
-    const memberParticipation$ = this.memberParticipationRepository.getByIndex(id);
-    const happening$ = memberParticipation$.pipe(
-      switchMap(memberParticipation => this.happeningService.get(memberParticipation.happeningId)),
-    );
+  async get(id: string): Promise<MemberParticipation> {
+    const memberParticipation = await this.memberParticipationRepository.getByIndex(id);
+    const happening = await this.happeningService.get(memberParticipation.happeningId).toPromise();
 
-    const recreateMemberParticipation = (memberParticipation, happening) => {
-      const id = memberParticipation.id;
-      const member = happening.getMember(memberParticipation.memberId);
-      return this.memberParticipationFactory.recreate(id, member, happening);
-    };
-
-    return combineLatest([memberParticipation$, happening$]).pipe(
-      map(([memberParticipation, happening]) =>
-        recreateMemberParticipation(memberParticipation, happening),
-      ),
+    return recreateMemberParticipation(
+      this.memberParticipationFactory,
+      memberParticipation,
+      happening,
     );
   }
 
-  getListById(id: string): Observable<MemberParticipation[]> {
-    return this.memberParticipationRepository.getByIndex(id).pipe(
-      switchMap(memberParticipation =>
-        this.memberParticipationRepository.getAllByHappeningIndex(memberParticipation.happeningId),
-      ),
-      switchMap(memberParticipations =>
-        forkJoin(memberParticipations.map(memberParticipation => this.get(memberParticipation.id))),
-      ),
+  async getListById(id: string): Promise<MemberParticipation[]> {
+    const memberParticipation = await this.memberParticipationRepository.getByIndex(id);
+    const memberParticipations = await this.memberParticipationRepository.getAllByHappeningIndex(
+      memberParticipation.happeningId,
+    );
+    const happening = await this.happeningService.get(memberParticipation.happeningId).toPromise();
+
+    return memberParticipations.map(memberParticipation =>
+      recreateMemberParticipation(this.memberParticipationFactory, memberParticipation, happening),
     );
   }
 
-  updateHappeningMetadata(
+  async updateHappeningMetadata(
     id: string,
     happeningMetadata: IHappeningMetadata,
-  ): Observable<MemberParticipation> {
-    return this.get(id).pipe(
-      switchMap(memberParticipation => {
-        memberParticipation.updateHappeningMetadata(happeningMetadata);
-        return this.happeningService
-          .update(memberParticipation.happening)
-          .pipe(mapTo(memberParticipation));
-      }),
-    );
+  ): Promise<MemberParticipation> {
+    const memberParticipation = await this.get(id);
+    memberParticipation.updateHappeningMetadata(happeningMetadata);
+    await this.happeningService.update(memberParticipation.happening).toPromise();
+
+    return memberParticipation;
   }
 
-  publishHappening(id: string): Observable<void> {
+  async publishHappening(id: string): Promise<void> {
     const matchMember = (members: Member[]) => {
       return this.matchingMemberService.matchMembers(members);
     };
 
-    return this.get(id).pipe(
-      switchMap(memberParticipation => {
-        memberParticipation.updateMembers(matchMember(memberParticipation.happening.getMembers()));
-        memberParticipation.publishHappening();
-        return this.happeningService.update(memberParticipation.happening);
-      }),
-      mapTo(null),
-    );
+    const memberParticipation = await this.get(id);
+
+    memberParticipation.updateMembers(matchMember(memberParticipation.happening.getMembers()));
+    memberParticipation.publishHappening();
+    await this.happeningService.update(memberParticipation.happening).toPromise();
   }
 
-  addParticipantMember(id: string, name: string): Observable<Member> {
+  async addParticipantMember(id: string, name: string): Promise<Member> {
     const createMemberParticipation = happening => {
       const participantMember = happening.addMember(
         this.memberFactory.create(RoleType.PARTICIPANT, name),
@@ -114,19 +97,16 @@ export class MemberParticipationService {
       return this.memberParticipationFactory.create(participantMember, happening);
     };
 
-    return this.get(id).pipe(
-      switchMap(memberParticipation => {
-        const newMemberParticipation = createMemberParticipation(memberParticipation.happening);
-        return this.happeningService
-          .update(memberParticipation.happening)
-          .pipe(mapTo(newMemberParticipation));
-      }),
-      switchMap(memberParticipation => this.add(memberParticipation)),
-      map(memberParticipation => memberParticipation.getMember()),
-    );
+    const memberParticipation = await this.get(id);
+
+    const newMemberParticipation = createMemberParticipation(memberParticipation.happening);
+
+    await this.happeningService.update(memberParticipation.happening).toPromise();
+    await this.add(newMemberParticipation);
+    return newMemberParticipation.getMember();
   }
 
-  addParticipantMembers(id: string, participants: { name: string }[]): Observable<Member[]> {
+  async addParticipantMembers(id: string, participants: { name: string }[]): Promise<Member[]> {
     const createMemberParticipation = (happening, name) => {
       const participantMember = happening.addMember(
         this.memberFactory.create(RoleType.PARTICIPANT, name),
@@ -135,20 +115,21 @@ export class MemberParticipationService {
       return this.memberParticipationFactory.create(participantMember, happening);
     };
 
-    return this.get(id).pipe(
-      switchMap(memberParticipation => {
-        const memberParticipations = participants.map(({ name }) =>
-          createMemberParticipation(memberParticipation.happening, name),
-        );
-        return this.happeningService
-          .update(memberParticipation.happening)
-          .pipe(mapTo(memberParticipations));
-      }),
-      switchMap(memberParticipations =>
-        forkJoin(memberParticipations.map(memberParticipation => this.add(memberParticipation))),
-      ),
-      map((memberParticipations: MemberParticipation[]) => memberParticipations[0].getMembers()),
+    const memberParticipation = await this.get(id);
+
+    const memberParticipations = participants.map(({ name }) =>
+      createMemberParticipation(memberParticipation.happening, name),
     );
+    await this.happeningService.update(memberParticipation.happening).toPromise();
+
+    const list = [];
+
+    for await (const memberParticipation of memberParticipations) {
+      const item = await this.add(memberParticipation);
+      list.push(item);
+    }
+
+    return memberParticipations[0].getMembers();
   }
 }
 
@@ -158,4 +139,14 @@ function mapToEntity({ id, member, happening }: MemberParticipation): IMemberPar
     memberId: member.id,
     happeningId: happening.id,
   };
+}
+
+function recreateMemberParticipation(
+  memberParticipationFactory: MemberParticipationFactory,
+  memberParticipation: IMemberParticipation,
+  happening: Happening,
+): MemberParticipation {
+  const id = memberParticipation.id;
+  const member = happening.getMember(memberParticipation.memberId);
+  return memberParticipationFactory.recreate(id, member, happening);
 }

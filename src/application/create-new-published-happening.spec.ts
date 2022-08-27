@@ -17,7 +17,7 @@ describe('CreateNewPublishedHappening', function() {
     );
   });
 
-  it('executed method should returned modified happening value', function(done) {
+  it('executed method should returned modified happening value', async function() {
     const memberParticipation = MEMBER_PARTICIPATIONS_INITIAL_MOCK[0];
     const happening = HAPPENING_INITIAL_LIST_MOCK.find(
       happening => happening.id === memberParticipation.happeningId,
@@ -32,22 +32,19 @@ describe('CreateNewPublishedHappening', function() {
       { name: newSecondParticipantMemberName },
     ];
 
-    createNewPublishedHappening
-      .execute({
-        name: newName,
-        description: newDescription,
-        participants: participants,
-      })
-      .subscribe(happeningView => {
-        assert.strictEqual(happeningView.name, newName);
-        assert.notStrictEqual(happeningView.name, happening.name);
-        assert.strictEqual(happeningView.description, newDescription);
-        assert.notStrictEqual(happeningView.description, happening.description);
-        done();
-      });
+    const happeningView = await createNewPublishedHappening.execute({
+      name: newName,
+      description: newDescription,
+      participants: participants,
+    });
+
+    assert.strictEqual(happeningView.name, newName);
+    assert.notStrictEqual(happeningView.name, happening.name);
+    assert.strictEqual(happeningView.description, newDescription);
+    assert.notStrictEqual(happeningView.description, happening.description);
   });
 
-  it('executed method return members list with unique links', function(done) {
+  it('executed method return members list with unique links', async function() {
     const newDescription = 'newDescription';
     const newName = 'newName';
     const newOneParticipantMemberName = 'addedOneParticipantMember';
@@ -58,19 +55,16 @@ describe('CreateNewPublishedHappening', function() {
       { name: newSecondParticipantMemberName },
     ];
 
-    createNewPublishedHappening
-      .execute({
-        name: newName,
-        description: newDescription,
-        participants: participants,
-      })
-      .subscribe(publishedHappeningView => {
-        publishedHappeningView.participants.reduce((stateUniqueLinks, participant) => {
-          assert.ok(!stateUniqueLinks.some(uniqueLink => uniqueLink === participant.uniqueLink));
-          stateUniqueLinks.push(participant.uniqueLink);
-          return stateUniqueLinks;
-        }, []);
-        done();
-      });
+    const publishedHappeningView = await createNewPublishedHappening.execute({
+      name: newName,
+      description: newDescription,
+      participants: participants,
+    });
+
+    publishedHappeningView.participants.reduce((stateUniqueLinks, participant) => {
+      assert.ok(!stateUniqueLinks.some(uniqueLink => uniqueLink === participant.uniqueLink));
+      stateUniqueLinks.push(participant.uniqueLink);
+      return stateUniqueLinks;
+    }, []);
   });
 });

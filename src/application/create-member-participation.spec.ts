@@ -15,11 +15,8 @@ describe('CreateMemberParticipation', function() {
     );
   });
 
-  it('executed method return memberParticipation view value object', function(done) {
-    createMemberParticipation.execute().subscribe(memberParticipationId => {
-      assert.strictEqual(typeof memberParticipationId, 'string');
-
-      done();
-    });
+  it('executed method return memberParticipation view value object', async function() {
+    const memberParticipationId = await createMemberParticipation.execute();
+    assert.strictEqual(typeof memberParticipationId, 'string');
   });
 });

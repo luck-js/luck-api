@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import IDENTIFIER from '../infrastructure/identifiers';
 import { AddParticipantMember } from './add-participant-member';
-
 import { MEMBER_PARTICIPATIONS_INITIAL_MOCK } from '../domain/member-participation/member-participation.mock';
 import * as assert from 'assert';
 import { ApplicationContainerModule } from './application.container-module';
@@ -15,16 +14,15 @@ describe('AddParticipantMember', function() {
     addParticipantMember = DIContainer.get<AddParticipantMember>(IDENTIFIER.AddParticipantMember);
   });
 
-  it('executed method return member view value object', function(done) {
+  it('executed method return member view value object', async function() {
     const memberParticipationId = MEMBER_PARTICIPATIONS_INITIAL_MOCK[0].id;
     const newParticipantMemberName = 'addedParticipantMember';
-    addParticipantMember
-      .execute(memberParticipationId, newParticipantMemberName)
-      .subscribe(memberView => {
-        assert.strictEqual(memberView.name, newParticipantMemberName);
-        assert.strictEqual(typeof memberView.id, 'string');
+    const memberView = await addParticipantMember.execute(
+      memberParticipationId,
+      newParticipantMemberName,
+    );
 
-        done();
-      });
+    assert.strictEqual(memberView.name, newParticipantMemberName);
+    assert.strictEqual(typeof memberView.id, 'string');
   });
 });

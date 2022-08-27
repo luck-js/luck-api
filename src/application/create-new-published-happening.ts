@@ -1,10 +1,12 @@
 import { injectable } from 'inversify';
-import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
 import { INewPublishedHappeningView } from './model/published-happening-view.model';
 import { IPublishedHappeningView } from './model/published-happening-view.model';
 import { CreatePublishedHappening } from './create-published-happening';
 import { CreateMemberParticipation } from './create-member-participation';
+
+interface IPublishedHappeningView2 extends IPublishedHappeningView {
+  id: string;
+}
 
 @injectable()
 export class CreateNewPublishedHappening {
@@ -13,17 +15,14 @@ export class CreateNewPublishedHappening {
     private createMemberParticipation: CreateMemberParticipation,
   ) {}
 
-  execute(
+  async execute(
     newPublishedHappeningView: INewPublishedHappeningView,
-  ): Observable<IPublishedHappeningView> {
-    return this.createMemberParticipation
-      .execute()
-      .pipe(
-        switchMap(id =>
-          this.createPublishedHappening
-            .execute(id, newPublishedHappeningView)
-            .pipe(map(publishedHappeningView => ({ id, ...publishedHappeningView }))),
-        ),
-      );
+  ): Promise<IPublishedHappeningView2> {
+    const id = await this.createMemberParticipation.execute();
+    const publishedHappeningView = await this.createPublishedHappening.execute(
+      id,
+      newPublishedHappeningView,
+    );
+    return { id, ...publishedHappeningView };
   }
 }

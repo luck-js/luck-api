@@ -5,8 +5,6 @@ import { MEMBER_PARTICIPATIONS_INITIAL_MOCK } from '../domain/member-participati
 import * as assert from 'assert';
 import { ApplicationContainerModule } from './application.container-module';
 import { DIContainer } from '../infrastructure/di-container';
-import { combineLatest } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
 import { GetPublishedHappening } from './get-published-happening';
 
 describe('Test Cases', function() {
@@ -21,48 +19,30 @@ describe('Test Cases', function() {
     );
   });
 
-  it('Add new participants and check state by get publishedHappeningView', function(done) {
+  it('Add new participants and check state by get publishedHappeningView', async function() {
     const memberParticipationId = MEMBER_PARTICIPATIONS_INITIAL_MOCK[0].id;
     const newOneParticipantMemberName = 'addedOneParticipantMember';
-    const addedOneParticipantMember$ = addParticipantMember.execute(
+    const addedOneParticipantMember = await addParticipantMember.execute(
       memberParticipationId,
       newOneParticipantMemberName,
     );
 
     const newSecondParticipantMemberName = 'addedSecondParticipantMember';
-    const addedSecondParticipantMember$ = addParticipantMember.execute(
+    const addedSecondParticipantMember = await addParticipantMember.execute(
       memberParticipationId,
       newSecondParticipantMemberName,
     );
 
-    const addedParticipantMembers$ = combineLatest([
-      addedOneParticipantMember$,
-      addedSecondParticipantMember$,
-    ]);
+    const addedParticipantMembers = [addedOneParticipantMember, addedSecondParticipantMember];
 
-    const getPublishedHappening$ = getPublishedHappening.execute(memberParticipationId);
+    const publishedHappeningView = await getPublishedHappening.execute(memberParticipationId);
 
-    const mergeSource = (addedParticipantMembers$, getPublishedHappening$) => {
-      return addedParticipantMembers$.pipe(
-        switchMap(addedParticipantMembers =>
-          getPublishedHappening$.pipe(
-            map(publishedHappeningView => [addedParticipantMembers, publishedHappeningView]),
-          ),
+    assert.ok(
+      addedParticipantMembers.some(addedParticipantMember =>
+        publishedHappeningView.participants.some(
+          participant => participant.name === addedParticipantMember.name,
         ),
-      );
-    };
-
-    mergeSource(addedParticipantMembers$, getPublishedHappening$).subscribe(
-      ([addedParticipantMembers, publishedHappeningView]) => {
-        assert.ok(
-          addedParticipantMembers.some(addedParticipantMember =>
-            publishedHappeningView.participants.some(
-              participant => participant.name === addedParticipantMember.name,
-            ),
-          ),
-        );
-        done();
-      },
+      ),
     );
   });
 });

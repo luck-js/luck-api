@@ -28,90 +28,83 @@ export class MemberParticipationController {
     private getPublishedHappeningApplication: GetPublishedHappening,
   ) {}
 
-  createMemberParticipation(req: Request, res: Response) {
-    this.createMemberParticipationApplication
-      .execute()
-      .pipe(
-        take(1),
-        map(memberParticipation => res.json(memberParticipation)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();
+  async createMemberParticipation(req: Request, res: Response) {
+    try {
+      const memberParticipation = await this.createMemberParticipationApplication.execute();
+      res.json(memberParticipation);
+    } catch (error) {
+      this.sendError(res, 400, error);
+    }
   }
 
-  getMemberParticipation(req: Request, res: Response) {
+  async getMemberParticipation(req: Request, res: Response) {
     const { id } = req.params;
-    this.getMemberParticipationApplication
-      .execute(id)
-      .pipe(
-        take(1),
-        map(memberParticipation => res.json(memberParticipation)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();
+    try {
+      const memberParticipation = await this.getMemberParticipationApplication.execute(id);
+      res.json(memberParticipation);
+    } catch (error) {
+      this.sendError(res, 400, error);
+    }
   }
 
-  getMatchedMember(req: Request, res: Response) {
+  async getMatchedMember(req: Request, res: Response) {
     const { id } = req.params;
-    this.getMatchedMemberApplication
-      .execute(id)
-      .pipe(
-        take(1),
-        map(matchedMember => res.json(matchedMember)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();
+
+    try {
+      const matchedMember = await this.getMatchedMemberApplication.execute(id);
+      res.json(matchedMember);
+    } catch (error) {
+      this.sendError(res, 400, error);
+    }
   }
 
-  editHappeningMetadata(req: Request, res: Response) {
+  async editHappeningMetadata(req: Request, res: Response) {
     const { id } = req.params;
     const option = req.body;
-    this.updateHappeningMetadataApplication
-      .execute(id, option)
-      .pipe(
-        take(1),
-        map(happening => res.json(happening)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();
+
+    try {
+      const happening = await this.updateHappeningMetadataApplication.execute(id, option);
+      res.json(happening);
+    } catch (error) {
+      this.sendError(res, 400, error);
+    }
   }
 
-  addParticipantMember(req: Request, res: Response) {
+  async addParticipantMember(req: Request, res: Response) {
     const { id } = req.params;
     const { name } = req.body;
-    this.addParticipantMemberApplication
-      .execute(id, name)
-      .pipe(
-        take(1),
-        map(participant => res.json(participant)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();
+
+    try {
+      const participant = await this.addParticipantMemberApplication.execute(id, name);
+      res.json(participant);
+    } catch (error) {
+      this.sendError(res, 400, error);
+    }
   }
 
-  publishHappening(req: Request, res: Response) {
+  async publishHappening(req: Request, res: Response) {
     const { id } = req.params;
-    this.publishHappeningApplication
-      .execute(id)
-      .pipe(
-        take(1),
-        map(() => res.sendStatus(200)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();
+
+    try {
+      const memberParticipation = await this.publishHappeningApplication.execute(id);
+      res.json(memberParticipation);
+    } catch (error) {
+      this.sendError(res, 400, error);
+    }
   }
 
-  createPublishedHappening(req: Request, res: Response) {
+  async createPublishedHappening(req: Request, res: Response) {
     const { happening } = req.body;
     const { id } = req.params;
-    this.createPublishedHappeningApplication
-      .execute(id, happening)
-      .pipe(
-        take(1),
-        map(publishedHappeningView => res.json(publishedHappeningView)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();
+    try {
+      const publishedHappeningView = await this.createPublishedHappeningApplication.execute(
+        id,
+        happening,
+      );
+      res.json(publishedHappeningView);
+    } catch (error) {
+      this.sendError(res, 400, error);
+    }
   }
 
   getHappenings(req: Request, res: Response) {
@@ -125,28 +118,26 @@ export class MemberParticipationController {
       .subscribe();
   }
 
-  createNewPublishedHappening(req: Request, res: Response) {
+  async createNewPublishedHappening(req: Request, res: Response) {
     const { happening } = req.body;
-    this.createNewPublishedHappeningApplication
-      .execute(happening)
-      .pipe(
-        take(1),
-        map(publishedHappeningView => res.json(publishedHappeningView)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();
+    try {
+      const publishedHappeningView = await this.createNewPublishedHappeningApplication.execute(
+        happening,
+      );
+      res.json(publishedHappeningView);
+    } catch (error) {
+      this.sendError(res, 400, error);
+    }
   }
 
-  getPublishedHappening(req: Request, res: Response) {
+  async getPublishedHappening(req: Request, res: Response) {
     const { id } = req.params;
-    this.getPublishedHappeningApplication
-      .execute(id)
-      .pipe(
-        take(1),
-        map(publishedHappening => res.json(publishedHappening)),
-        catchError(val => this.sendError(res, 400, val)),
-      )
-      .subscribe();
+    try {
+      const publishedHappening = await this.getPublishedHappeningApplication.execute(id);
+      res.json(publishedHappening);
+    } catch (error) {
+      this.sendError(res, 400, error);
+    }
   }
 
   private sendError(res: Response, code: number, text: string): Observable<null> {

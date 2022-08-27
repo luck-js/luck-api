@@ -18,7 +18,7 @@ describe('GetMemberParticipation', function() {
     );
   });
 
-  it('executed method return memberParticipation view value object', function(done) {
+  it('executed method return memberParticipation view value object', async function() {
     const memberParticipationId = MEMBER_PARTICIPATIONS_INITIAL_MOCK[0].id;
 
     const happeningName = HAPPENING_INITIAL_LIST_MOCK[0].name;
@@ -28,16 +28,13 @@ describe('GetMemberParticipation', function() {
     const memberName = ORGANISER_INITIAL_MOCK.name;
     const memberId = ORGANISER_INITIAL_MOCK.id;
 
-    getMemberParticipation.execute(memberParticipationId).subscribe(memberParticipationView => {
-      assert.strictEqual(memberParticipationView.happening.id, happeningId);
-      assert.strictEqual(memberParticipationView.happening.description, happeningDescription);
-      assert.strictEqual(memberParticipationView.happening.name, happeningName);
-      assert.strictEqual(memberParticipationView.happening.isPublish, false);
+    const memberParticipationView = await getMemberParticipation.execute(memberParticipationId);
+    assert.strictEqual(memberParticipationView.happening.id, happeningId);
+    assert.strictEqual(memberParticipationView.happening.description, happeningDescription);
+    assert.strictEqual(memberParticipationView.happening.name, happeningName);
+    assert.strictEqual(memberParticipationView.happening.isPublish, false);
 
-      assert.strictEqual(memberParticipationView.member.id, memberId);
-      assert.strictEqual(memberParticipationView.member.name, memberName);
-
-      done();
-    });
+    assert.strictEqual(memberParticipationView.member.id, memberId);
+    assert.strictEqual(memberParticipationView.member.name, memberName);
   });
 });
