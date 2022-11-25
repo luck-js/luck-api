@@ -5,8 +5,8 @@ import { MemberParticipationService } from '../domain/member-participation/membe
 export class CreateMemberParticipation {
   constructor(private relationMemberHappeningService: MemberParticipationService) {}
 
-  async execute(): Promise<string> {
-    const memberParticipation = await this.relationMemberHappeningService.create()
+  async execute(id?: string): Promise<string> {
+    const memberParticipation = await this.relationMemberHappeningService.create(id)
     return memberParticipation.id
   }
 }

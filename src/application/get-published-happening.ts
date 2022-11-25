@@ -8,8 +8,9 @@ export class GetPublishedHappening {
   constructor(private memberParticipationService: MemberParticipationService) {}
 
   async execute(id: string): Promise<IPublishedHappeningView> {
-    const memberParticipations = await this.memberParticipationService.getListById(id)
-    return mapToPublishedHappeningView(memberParticipations)
+    console.log('id: ', id);
+    const memberParticipations = await this.memberParticipationService.getListById(id);
+    return mapToPublishedHappeningView(memberParticipations);
   }
 }
 

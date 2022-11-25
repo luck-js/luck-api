@@ -8,8 +8,8 @@ import { Member } from '../member/member';
 export class MemberParticipationFactory {
   constructor(private uuidGenerationService: UuidGenerationService) {}
 
-  create(member: Member, happening: Happening): MemberParticipation {
-    const id = this.uuidGenerationService.createNewUuid();
+  create(member: Member, happening: Happening, oId?: string): MemberParticipation {
+    const id = oId !== undefined ? oId : this.uuidGenerationService.createNewUuid();
 
     return new MemberParticipation(id, member, happening);
   }

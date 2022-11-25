@@ -23,10 +23,10 @@ export class MemberParticipationService {
     private memberParticipationFactory: MemberParticipationFactory,
   ) {}
 
-  async create(): Promise<MemberParticipation> {
+  async create(id?: string): Promise<MemberParticipation> {
     const happening = this.happeningFactory.create();
     const member = happening.addMember(this.memberFactory.create(RoleType.ORGANISER));
-    const memberParticipation = this.memberParticipationFactory.create(member, happening);
+    const memberParticipation = this.memberParticipationFactory.create(member, happening, id);
 
     await this.happeningService.add(memberParticipation.happening).toPromise();
     return this.add(memberParticipation);
