@@ -1,15 +1,15 @@
-import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
+import express from 'express';
+import MongoDb from './core/database/mongo-db';
+import Routes from './core/webserver/routes';
+import Application from './core/webserver/application';
+import Server from './core/webserver/server';
 
-dotenv.config();
+const expressApp = express();
 
-const app: Express = express();
-const port = process.env.PORT;
+const mongoDb = new MongoDb();
+const routes = new Routes(expressApp);
+const server = new Server(expressApp);
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Express + TypeScript Server');
-});
+const application = new Application(mongoDb, routes, server);
 
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-});
+application.bootstrap();

@@ -14,6 +14,7 @@
     "airbnb-typescript/base"
   ],
   "rules": {
-    "no-console": 1
+    "no-console": 1,
+    "class-methods-use-this": 1
   }
 }
