@@ -1,15 +1,15 @@
-import { Application } from 'express';
-import MemberRouter from '../../member/member.router';
+import { Application, Router } from 'express';
+import MemberRouterFactory from '../../member/member-router.factory';
 
 class Routes {
-  private memberRouter: MemberRouter;
+  private readonly memberRouter: Router;
 
   constructor(private app: Application) {
-    this.memberRouter = new MemberRouter();
+    this.memberRouter = MemberRouterFactory.create();
   }
 
   setup() {
-    this.app.use('/api/v1/Member', this.memberRouter.setup());
+    this.app.use('/api/v1/member', this.memberRouter);
   }
 }
 
