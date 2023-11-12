@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "bin",
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "target": "es5",
+    "lib": ["es6", "dom"],
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["reflect-metadata", "node", "mocha"],
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": ["./*.ts", "**/*.ts", "src/**/*.ts"],
+  "nyc": {
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ],
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+  "exclude": ["node_modules"]
+}

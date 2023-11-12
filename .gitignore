@@ -1,0 +1,17 @@
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+
+# misc
+.DS_Store
+.env
+.env.default
+/bin
+
+id_rsa.pub
+id_rsa
+
+.nyc_output
+coverage
