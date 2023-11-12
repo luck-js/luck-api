@@ -5,7 +5,6 @@ class MemberController {
   constructor(private memberService: MemberService) {}
 
   async getAll(req: Request, res: Response) {
-    console.log('MemberController:getAll - init');
     try {
       const members = await this.memberService.getAll();
       res.json(members);

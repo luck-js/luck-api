@@ -1,5 +1,6 @@
 import { Application, Router } from 'express';
 import MemberRouterFactory from '../../member/member-router.factory';
+import RoutePaths from './routes.constans';
 
 class Routes {
   private readonly memberRouter: Router;
@@ -9,7 +10,7 @@ class Routes {
   }
 
   setup() {
-    this.app.use('/api/v1/member', this.memberRouter);
+    this.app.use(RoutePaths.member, this.memberRouter);
   }
 }
 

@@ -1,5 +1,6 @@
 import os from 'os';
 import dotenv from 'dotenv';
+import http from 'http';
 import MongoDb, { MongoDbConfig } from '../database/mongo-db';
 import Routes from './routes';
 import Server, { ServerConfig } from './server';
@@ -28,10 +29,10 @@ class Application {
     private server: Server,
   ) {}
 
-  bootstrap() {
+  bootstrap(): http.Server {
     this.mongoDb.connect(mongoDbConfig);
     this.routes.setup();
-    this.server.start(serverConfig);
+    return this.server.start(serverConfig);
   }
 }
 

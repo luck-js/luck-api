@@ -6,10 +6,15 @@ import Server from './core/webserver/server';
 
 const expressApp = express();
 
-const mongoDb = new MongoDb();
+export const mongoDb = new MongoDb();
 const routes = new Routes(expressApp);
 const server = new Server(expressApp);
 
 const application = new Application(mongoDb, routes, server);
 
-application.bootstrap();
+const applicationServer = application.bootstrap();
+
+/**
+ * for integration tests
+ */
+export default applicationServer;

@@ -4,8 +4,9 @@ import { Member } from './member.interface';
 class MemberService {
   constructor(private memberRepository: MemberRepository) {}
 
-  getAll(): Promise<Member[]> {
-    return this.memberRepository.getAll();
+  async getAll(): Promise<Member[]> {
+    const members = await this.memberRepository.getAll();
+    return members.map(({ id, name }) => ({ id, name }));
   }
 }
 
