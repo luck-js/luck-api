@@ -41,11 +41,6 @@ class HappeningService {
 
     return happening;
   }
-
-  async recreate(happeningRecord: HappeningRecord): Promise<void> {
-    await this.happeningRepository.add(happeningRecord);
-    return undefined;
-  }
 }
 
 export default HappeningService;

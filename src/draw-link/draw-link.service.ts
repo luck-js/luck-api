@@ -46,10 +46,6 @@ class DrawLinkService {
     await this.drawLinkRepository.addList(drawLinkRecords);
     return drawLinks;
   }
-  async recreateList(drawLinkRecords: DrawLinkRecord[]): Promise<void> {
-    await this.drawLinkRepository.addList(drawLinkRecords);
-    return undefined;
-  }
 }
 
 export default DrawLinkService;

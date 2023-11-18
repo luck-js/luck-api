@@ -26,8 +26,10 @@
     "{**/*,*}.{ts}": "prettier --write --ignore-unknown"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/body-parser": "^1.19.5",
     "@types/cors": "^2.8.16",
+    "axios": "^1.6.2",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
