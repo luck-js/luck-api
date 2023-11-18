@@ -7,6 +7,14 @@ export interface DrawLinkRecord {
   memberId: string;
 }
 
+export interface DrawLinkView {
+  id: string;
+  name: string;
+  description: string;
+  memberName: string;
+  matchedMemberName: string;
+}
+
 export interface DrawLink {
   id: string;
   happening: Happening;

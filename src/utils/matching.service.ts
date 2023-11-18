@@ -17,9 +17,11 @@ class MatchingService {
     matchedElementId: string,
   ): string[] {
     return matchedElements
-      .reduce((previousState, matchedElement) => {
-        return previousState.filter((el) => el.id !== matchedElement.matchedId);
-      }, inputMatchedElements)
+      .reduce(
+        (previousState, matchedElement) =>
+          previousState.filter((el) => el.id !== matchedElement.matchedId),
+        inputMatchedElements,
+      )
       .map((el) => el.id)
       .filter((id) => id !== matchedElementId);
   }

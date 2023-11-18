@@ -6,6 +6,7 @@ export interface MemberRecord {
 
 export interface NewMember extends MemberRecord {
   id?: string;
+  matchedMemberId?: string;
 }
 
 export interface Member extends MemberRecord {}

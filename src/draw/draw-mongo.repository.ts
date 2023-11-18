@@ -11,6 +11,7 @@ class DrawMongoRepository implements DrawRepository {
       return Promise.resolve(null);
     }
   }
+
   add(draw: DrawRecord): Promise<DrawRecord> {
     return new DrawModel(draw).save();
   }

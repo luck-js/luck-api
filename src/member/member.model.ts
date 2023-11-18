@@ -13,6 +13,9 @@ const MemberSchema: Schema = new Schema(
       unique: true,
       index: true,
     },
+    matchedMemberId: {
+      type: String,
+    },
     name: {
       type: String,
       required: false,

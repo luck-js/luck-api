@@ -3,6 +3,15 @@ import { DrawLinkRecord } from './draw-link.interface';
 import DrawLinkModel from './draw-link.model';
 
 class DrawLinkMongoRepository implements DrawLinkRepository {
+  findById(id: string): Promise<DrawLinkRecord | null> {
+    try {
+      return DrawLinkModel.findOne({ id }).exec();
+    } catch (error) {
+      console.error('Error while retrieving the draw:', error);
+      return Promise.resolve(null);
+    }
+  }
+
   findByIds(ids: string[]): Promise<DrawLinkRecord[]> {
     try {
       return DrawLinkModel.find({ id: { $in: ids } }).exec();
@@ -11,6 +20,7 @@ class DrawLinkMongoRepository implements DrawLinkRepository {
       return Promise.resolve([]);
     }
   }
+
   addList(drawLinks: DrawLinkRecord[]): Promise<DrawLinkRecord[]> {
     return DrawLinkModel.insertMany(drawLinks);
   }
