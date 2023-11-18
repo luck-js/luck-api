@@ -16,7 +16,7 @@
   "scripts": {
     "prepare": "husky install",
     "test": "echo \"no unit test specified\"",
-    "test:integration": "jest --config=jest.config.integration-test.json --detectOpenHandles",
+    "test:integration": "jest --config=jest.config.integration-test.json",
     "lint": "eslint . --ext .ts",
     "build": "npx tsc",
     "start": "node dist/index.js",
