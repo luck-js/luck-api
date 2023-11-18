@@ -1,6 +1,6 @@
 import { DrawLinkRepository } from './draw-link.repository';
 import HappeningService from '../happening/happening.service';
-import { DrawLink, NewDrawLink } from './draw-link.interface';
+import { DrawLink, DrawLinkRecord, NewDrawLink } from './draw-link.interface';
 import DrawLinkFactory from './draw-link.factory';
 import DrawLinkMapper from './draw-link.mapper';
 
@@ -45,6 +45,10 @@ class DrawLinkService {
 
     await this.drawLinkRepository.addList(drawLinkRecords);
     return drawLinks;
+  }
+  async recreateList(drawLinkRecords: DrawLinkRecord[]): Promise<void> {
+    await this.drawLinkRepository.addList(drawLinkRecords);
+    return undefined;
   }
 }
 

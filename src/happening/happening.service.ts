@@ -1,5 +1,5 @@
 import { HappeningRepository } from './happening.repository';
-import { Happening, NewHappening } from './happening.interface';
+import { Happening, HappeningRecord, NewHappening } from './happening.interface';
 import HappeningFactory from './happening.factory';
 import MemberService from '../member/member.service';
 import HappeningMapper from './happening.mapper';
@@ -40,6 +40,11 @@ class HappeningService {
     await this.happeningRepository.add(happeningRecord);
 
     return happening;
+  }
+
+  async recreate(happeningRecord: HappeningRecord): Promise<void> {
+    await this.happeningRepository.add(happeningRecord);
+    return undefined;
   }
 }
 
