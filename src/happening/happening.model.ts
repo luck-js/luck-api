@@ -1,7 +1,7 @@
 import { Document, model, Schema } from 'mongoose';
-import { Happening } from './happening.interface';
+import { HappeningRecord } from './happening.interface';
 
-interface HappeningDocument extends Happening, Document {
+interface HappeningDocument extends HappeningRecord, Document {
   id: string;
 }
 
@@ -18,10 +18,6 @@ const HappeningSchema: Schema = new Schema(
     description: {
       type: String,
       required: false,
-    },
-    isPublish: {
-      type: Boolean,
-      required: true,
     },
     memberIds: {
       type: [String],

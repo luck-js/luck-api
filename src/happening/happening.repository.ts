@@ -1,5 +1,5 @@
-import { Happening } from './happening.interface';
+import { HappeningRecord } from './happening.interface';
 
 export interface HappeningRepository {
-  getAll(): Promise<Happening[]>;
+  add(happening: HappeningRecord): Promise<HappeningRecord>;
 }

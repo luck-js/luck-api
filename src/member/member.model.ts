@@ -1,7 +1,7 @@
 import { Document, model, Schema } from 'mongoose';
-import { Member } from './member.interface';
+import { MemberRecord } from './member.interface';
 
-interface MemberDocument extends Member, Document {
+interface MemberDocument extends MemberRecord, Document {
   id: string;
 }
 

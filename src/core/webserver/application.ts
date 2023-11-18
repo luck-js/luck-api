@@ -23,16 +23,13 @@ const serverConfig: ServerConfig = {
 };
 
 class Application {
-  constructor(
-    private mongoDb: MongoDb,
-    private routes: Routes,
-    private server: Server,
-  ) {}
+  constructor(private mongoDb: MongoDb, private routes: Routes, private server: Server) {}
 
   bootstrap(): http.Server {
     this.mongoDb.connect(mongoDbConfig);
+    const server = this.server.start(serverConfig);
     this.routes.setup();
-    return this.server.start(serverConfig);
+    return server;
   }
 }
 

@@ -1,10 +1,10 @@
 import { MemberRepository } from './member.repository';
-import { Member } from './member.interface';
+import { MemberRecord } from './member.interface';
 import MemberModel from './member.model';
 
 class MemberMongoRepository implements MemberRepository {
-  getAll(): Promise<Member[]> {
-    return MemberModel.find().exec();
+  addList(members: MemberRecord[]): Promise<MemberRecord[]> {
+    return MemberModel.insertMany(members);
   }
 }
 

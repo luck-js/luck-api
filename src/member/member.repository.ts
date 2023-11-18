@@ -1,5 +1,5 @@
-import { Member } from './member.interface';
+import { MemberRecord } from './member.interface';
 
 export interface MemberRepository {
-  getAll(): Promise<Member[]>;
+  addList(drawLinks: MemberRecord[]): Promise<MemberRecord[]>;
 }

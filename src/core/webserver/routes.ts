@@ -1,20 +1,16 @@
 import { Application, Router } from 'express';
-import MemberRouterFactory from '../../member/member-router.factory';
 import RoutePaths from './routes.constans';
-import HappeningRouterFactory from '../../happening/happening-router.factory';
+import DrawRouterFactory from '../../draw/draw-router.factory';
 
 class Routes {
-  private readonly memberRouter: Router;
-  private readonly happeningRouter: Router;
+  private readonly drawRouterFactory: Router;
 
   constructor(private app: Application) {
-    this.memberRouter = MemberRouterFactory.create();
-    this.happeningRouter = HappeningRouterFactory.create();
+    this.drawRouterFactory = DrawRouterFactory.create();
   }
 
   setup() {
-    this.app.use(RoutePaths.member, this.memberRouter);
-    this.app.use(RoutePaths.happening, this.happeningRouter);
+    this.app.use(RoutePaths.draw, this.drawRouterFactory);
   }
 }
 

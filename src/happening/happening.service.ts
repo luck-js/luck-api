@@ -1,12 +1,27 @@
 import { HappeningRepository } from './happening.repository';
-import { HappeningView } from './happening.interface';
+import { Happening, NewHappening } from './happening.interface';
+import HappeningFactory from './happening.factory';
+import MemberService from '../member/member.service';
+import HappeningMapper from './happening.mapper';
 
 class HappeningService {
-  constructor(private happeningRepository: HappeningRepository) {}
+  constructor(
+    private memberService: MemberService,
+    private happeningRepository: HappeningRepository,
+  ) {}
 
-  async getAll(): Promise<HappeningView[]> {
-    const happenings = await this.happeningRepository.getAll();
-    return happenings.map(({ id }) => ({ id }));
+  async create(newHappening: NewHappening): Promise<Happening> {
+    const members = await this.memberService.createList(newHappening.members);
+    const happening = HappeningFactory.create({
+      members,
+      name: newHappening.name,
+      description: newHappening.description,
+    });
+    const happeningRecord = HappeningMapper.toRecord(happening);
+
+    await this.happeningRepository.add(happeningRecord);
+
+    return happening;
   }
 }
 
