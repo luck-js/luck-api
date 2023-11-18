@@ -10,6 +10,8 @@ const DrawLinkSchema: Schema = new Schema(
     id: {
       type: String,
       required: true,
+      unique: true,
+      index: true,
     },
     happeningId: {
       type: String,

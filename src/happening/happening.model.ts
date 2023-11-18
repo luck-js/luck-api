@@ -10,6 +10,8 @@ const HappeningSchema: Schema = new Schema(
     id: {
       type: String,
       required: true,
+      unique: true,
+      index: true,
     },
     name: {
       type: String,

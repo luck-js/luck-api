@@ -6,6 +6,10 @@ import MemberMapper from './member.mapper';
 class MemberService {
   constructor(private memberRepository: MemberRepository) {}
 
+  async findByIds(ids: string[]): Promise<Member[]> {
+    return this.memberRepository.findByIds(ids);
+  }
+
   async createList(newMembers: NewMember[]): Promise<Member[]> {
     const members = newMembers.map(MemberFactory.create);
     const records = members.map(MemberMapper.toRecord);

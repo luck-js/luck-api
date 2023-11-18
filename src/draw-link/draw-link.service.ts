@@ -10,6 +10,19 @@ class DrawLinkService {
     private drawLinkRepository: DrawLinkRepository,
   ) {}
 
+  async getList(ids: string[]): Promise<DrawLink[]> {
+    const drawLinkRecords = await this.drawLinkRepository.findByIds(ids);
+    const happening = await this.happeningService.findById(drawLinkRecords[0].happeningId);
+
+    if (happening === null) {
+      return [];
+    }
+
+    return drawLinkRecords.map((drawLinkRecord) =>
+      DrawLinkMapper.toEntity(happening, drawLinkRecord),
+    );
+  }
+
   async createList(newDrawLinks: NewDrawLink[]): Promise<DrawLink[]> {
     const drawLinks = newDrawLinks.map(DrawLinkFactory.create);
     const drawLinkRecords = drawLinks.map(DrawLinkMapper.toRecord);

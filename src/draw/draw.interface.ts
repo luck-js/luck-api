@@ -16,6 +16,7 @@ export interface Draw {
 }
 
 export interface DrawView {
+  id: string;
   name: string;
   description: string;
   members: DrawMemberView[];

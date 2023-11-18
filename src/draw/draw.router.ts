@@ -10,6 +10,9 @@ class DrawRouter {
     this.router.route('/').post((req: Request, res: Response) => {
       this.drawController.create(req, res);
     });
+    this.router.route('/:id').get((req: Request, res: Response) => {
+      this.drawController.get(req, res);
+    });
 
     return this.router;
   }

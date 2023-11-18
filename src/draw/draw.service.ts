@@ -14,6 +14,21 @@ class DrawService {
     private drawRepository: DrawRepository,
   ) {}
 
+  async findById(id: string): Promise<Draw | null> {
+    const drawRecord = await this.drawRepository.findById(id);
+
+    if (drawRecord === null) {
+      return null;
+    }
+
+    const drawLinks = await this.drawLinkService.getList(drawRecord.drawLinkIds);
+
+    return {
+      id,
+      drawLinks,
+    };
+  }
+
   async create(newDraw: NewDrawView): Promise<Draw> {
     const members = newDraw.members.map(MemberFactory.create);
     const matchedMembers = MatchingMemberService.matchMembers(members);

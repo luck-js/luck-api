@@ -10,6 +10,8 @@ const DrawSchema: Schema = new Schema(
     id: {
       type: String,
       required: true,
+      unique: true,
+      index: true,
     },
     drawLinkIds: {
       type: [String],

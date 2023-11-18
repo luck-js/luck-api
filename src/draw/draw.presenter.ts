@@ -12,6 +12,7 @@ class DrawPresenter {
   static mapToDrawView(draw: Draw): DrawView {
     const { happening } = draw.drawLinks[0];
     return {
+      id: draw.id,
       name: happening.name,
       description: happening.description,
       members: DrawPresenter.mapToDrawMemberView(draw.drawLinks),
