@@ -40,28 +40,20 @@
 
 ## Setup
 
-This application uses mongo
-
-1. Clone this repository using `git clone`
-2. Install dependencies using `npm install`
-3. Setup mongo database (either local or hosted)
-4. Create `.env` file based on `.env.example`. For local mongodb, you can just copy over example contents to actual `.env`, and everything should work.
-5. If using local mongo, remember to start the db with `mongod` in a separate process
-6. Run `npm run watch`, and start developing!
+TBD...
 
 ## Production Build
 
-To create production build, simply run `npm run build`. It will compile the project to javascript, and start the production server.
+TBD...
 
 ## Endpoints Documentation
 
-Currently there is no documentation available, but in the future we plan to add one (e.g. swagger).
+TBD...
 
 ## Authors and License
 
 **Luck** was created by [Daniel Karski](https://github.com/dkarski). Desig nand mocks of the application are by [Mateusz Karski](https://www.behance.net/user/?username=MateuszKarski).
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4d0551b7c8fd4cb09133f9e518707030)](https://www.codacy.com/app/dkarski/luck-api?utm_source=github.com&utm_medium=referral&utm_content=luck-js/luck-api&utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.org/luck-js/luck-api.svg?branch=master)](https://travis-ci.org/luck-js/luck-api)
 [![GitHub issues](https://img.shields.io/github/issues/luck-js/luck-api)](https://github.com/luck-js/luck-api/issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
