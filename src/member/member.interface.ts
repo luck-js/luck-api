@@ -4,9 +4,14 @@ export interface MemberRecord {
   matchedMemberId?: string;
 }
 
-export interface NewMember extends MemberRecord {
+export interface NewMember {
   id?: string;
+  name: string;
   matchedMemberId?: string;
 }
 
-export interface Member extends MemberRecord {}
+export interface Member {
+  name: string;
+  id: string;
+  matchedMemberId?: string;
+}
