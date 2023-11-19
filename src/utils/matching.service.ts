@@ -1,57 +1,54 @@
+export interface Element {
+  id: string;
+}
+
 export interface MatchedElement {
   id: string;
   matchedId: string;
 }
 
 class MatchingService {
-  private static isChanceOfConflict(toRandomIds: string[], lastElementId: string): boolean {
-    return toRandomIds.some((id) => id === lastElementId);
-  }
-  private static getRandomId(toRandomIds: string[]): string {
-    return toRandomIds[Math.floor(Math.random() * toRandomIds.length)];
-  }
+  private static areIdsUnique(elements: Element[]): boolean {
+    const idSet = new Set<string>();
 
-  private static pullOutToRandomIds(
-    matchedElements: MatchedElement[],
-    inputMatchedElements: MatchedElement[],
-    matchedElementId: string,
-  ): string[] {
-    return matchedElements
-      .reduce(
-        (previousState, matchedElement) =>
-          previousState.filter((el) => el.id !== matchedElement.matchedId),
-        inputMatchedElements,
-      )
-      .map((el) => el.id)
-      .filter((id) => id !== matchedElementId);
+    return elements.every((element) => !idSet.has(element.id) && idSet.add(element.id));
   }
 
-  static matchElements<Type extends MatchedElement>(inputMatchedElements: Type[]): Type[] {
-    return inputMatchedElements.reduce((matchedElements, matchedElement, index) => {
-      let randomId;
+  private static randomId(ids: string[]): string {
+    return ids[Math.floor(Math.random() * ids.length)];
+  }
 
-      const toRandomIds = MatchingService.pullOutToRandomIds(
-        matchedElements,
-        inputMatchedElements,
-        matchedElement.id,
-      );
-      const preLastMatchedElementIndex = inputMatchedElements.length - 2;
-      const isChanceOfConflictFlagFn = () => {
-        const lastMatchedElement = inputMatchedElements[inputMatchedElements.length - 1];
-        const id = lastMatchedElement && lastMatchedElement.id;
-        return MatchingService.isChanceOfConflict(toRandomIds, id);
-      };
+  static matchElements<T extends Element>(elements: T[]): (T & MatchedElement)[] {
+    if (elements.length < 2) {
+      throw new Error('Not enough elements to match');
+    }
 
-      if (preLastMatchedElementIndex === index && isChanceOfConflictFlagFn()) {
-        randomId = inputMatchedElements[inputMatchedElements.length - 1].id;
-      } else {
-        randomId = MatchingService.getRandomId(toRandomIds);
+    if (!MatchingService.areIdsUnique(elements)) {
+      throw new Error("List of element IDs aren't unique");
+    }
+
+    const usedIds = new Set<string>();
+    const matchedElements: (T & MatchedElement)[] = [];
+
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements[i];
+
+      const availableIds = elements.map((e) => e.id).filter((e) => e !== element.id);
+      const unusedIds = availableIds.filter((id) => !usedIds.has(id));
+
+      if (unusedIds.length === 0) {
+        return MatchingService.matchElements(elements);
       }
 
-      matchedElements.push({ ...matchedElement, matchedId: randomId });
+      const matchedId = MatchingService.randomId(unusedIds);
 
-      return matchedElements;
-    }, [] as Type[]);
+      usedIds.add(matchedId);
+
+      matchedElements.push({ matchedId, ...element });
+    }
+
+    return matchedElements;
   }
 }
 

@@ -1,5 +1,5 @@
 import { HappeningRepository } from './happening.repository';
-import { Happening, HappeningRecord, NewHappening } from './happening.interface';
+import { Happening, NewHappening } from './happening.interface';
 import HappeningFactory from './happening.factory';
 import MemberService from '../member/member.service';
 import HappeningMapper from './happening.mapper';

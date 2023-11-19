@@ -2,7 +2,7 @@ import { DrawRepository } from './draw.repository';
 import { Draw, NewDrawView } from './draw.interface';
 import HappeningService from '../happening/happening.service';
 import DrawLinkService from '../draw-link/draw-link.service';
-import MatchingMemberService from '../utils/matching-member.service';
+import MatchingMemberService from '../member/matching-member.service';
 import MemberFactory from '../member/member.factory';
 import DrawFactory from './draw.factory';
 import DrawLinkMapper from './draw.mapper';

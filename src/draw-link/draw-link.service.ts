@@ -1,6 +1,6 @@
 import { DrawLinkRepository } from './draw-link.repository';
 import HappeningService from '../happening/happening.service';
-import { DrawLink, DrawLinkRecord, NewDrawLink } from './draw-link.interface';
+import { DrawLink, NewDrawLink } from './draw-link.interface';
 import DrawLinkFactory from './draw-link.factory';
 import DrawLinkMapper from './draw-link.mapper';
 
